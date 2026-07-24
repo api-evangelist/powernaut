@@ -1,0 +1,310 @@
+openapi: 3.0.0
+info:
+  title: Powernaut authentication API
+  description: '
+
+    # Getting Started
+
+
+    Welcome to the Powernaut API Reference!
+
+
+    Our API offers a robust and secure way to connect your flexible resources to flexibility buyers such as energy utilities/suppliers and system operators.
+
+
+    This OpenAPI documentation is designed to provide a comprehensive and easy-to-understand guide for developers who are integrating their systems with Powernaut’s platform.
+
+
+    By leveraging our API, you can seamlessly offer flexibility in several electricity markets, opening up additional revenue streams
+
+    for your resources while contributing to a greener and more efficient electricity grid.
+
+    '
+  version: 1.0.0
+  contact:
+    name: Powernaut Support
+    url: https://powernaut.io
+    email: support@powernaut.io
+  license:
+    name: Creative Commons Attribution-ShareAlike 4.0 International
+    url: https://creativecommons.org/licenses/by-sa/4.0/
+servers:
+- url: https://api.sandbox.powernaut.io
+  description: Sandbox
+- url: https://api.powernaut.io
+  description: Production
+tags:
+- name: authentication
+  description: Authenticating with the Powernaut platform.
+  x-displayName: Authentication
+paths:
+  /v1/auth/token:
+    post:
+      description: 'Gets an authentication access token, to be used to authenticate calls to all other endpoints.
+
+
+        Include this token in the headers of all other endpoint calls:
+
+
+        ```
+
+        Authorization: Bearer <token>
+
+        ```'
+      operationId: GetToken
+      parameters:
+      - name: authorization
+        required: true
+        in: header
+        description: 'Header value for HTTP Basic authentication.
+
+
+          To encode the credentials:
+
+          1. Concatenate the url encoded client id and secret with a colon (`:`) in between: `clientid:client_secret`
+
+          2. Encode the result with Base64: `base64(clientid:client_secret)`
+
+          3. Include the result in the `Authorization` header prefixed with `Basic `.
+
+
+          Example:
+
+
+          ```
+
+          Authorization: Basic Y2xpZW50X2lkOmNsaWVudF9zZWNyZXQ=
+
+          ```'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenDto'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '403':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenDto_SW52YWxpZCBjcmVkZW50aWFscw'
+      security:
+      - token: []
+      summary: Get a token
+      tags:
+      - authentication
+      x-codeSamples:
+      - source: "import requests\n\nurl = \"https://api.powernaut.io/v1/auth/token\"\n\npayload = {}\nheaders = {\n  'Accept': 'application/json'\n}\n\nresponse = requests.request(\"POST\", url, headers=headers, data=payload)\n\nprint(response.text)\n"
+        lang: python
+        label: Python
+      - source: "const myHeaders = new Headers();\nmyHeaders.append(\"Accept\", \"application/json\");\n\nconst requestOptions = {\n  method: \"POST\",\n  headers: myHeaders,\n  redirect: \"follow\"\n};\n\nfetch(\"https://api.powernaut.io/v1/auth/token\", requestOptions)\n  .then((response) => response.text())\n  .then((result) => console.log(result))\n  .catch((error) => console.error(error));"
+        lang: javascript
+        label: JavaScript
+      - source: "OkHttpClient client = new OkHttpClient().newBuilder()\n  .build();\nMediaType mediaType = MediaType.parse(\"text/plain\");\nRequestBody body = RequestBody.create(mediaType, \"\");\nRequest request = new Request.Builder()\n  .url(\"https://api.powernaut.io/v1/auth/token\")\n  .method(\"POST\", body)\n  .addHeader(\"Accept\", \"application/json\")\n  .build();\nResponse response = client.newCall(request).execute();"
+        lang: java
+        label: Java
+      - source: "package main\n\nimport (\n  \"fmt\"\n  \"net/http\"\n  \"io/ioutil\"\n)\n\nfunc main() {\n\n  url := \"https://api.powernaut.io/v1/auth/token\"\n  method := \"POST\"\n\n  client := &http.Client {\n  }\n  req, err := http.NewRequest(method, url, nil)\n\n  if err != nil {\n    fmt.Println(err)\n    return\n  }\n  req.Header.Add(\"Accept\", \"application/json\")\n\n  res, err := client.Do(req)\n  if err != nil {\n    fmt.Println(err)\n    return\n  }\n  defer res.Body.Close()\n\n  body, err := ioutil.ReadAll(res.Body)\n  if err != nil {\n    fmt.Println(err)\n    return\n  }\n  fmt.Println(string(body))\n}"
+        lang: go
+        label: Go
+      - source: 'var client = new HttpClient();
+
+          var request = new HttpRequestMessage(HttpMethod.Post, "https://api.powernaut.io/v1/auth/token");
+
+          request.Headers.Add("Accept", "application/json");
+
+          var response = await client.SendAsync(request);
+
+          response.EnsureSuccessStatusCode();
+
+          Console.WriteLine(await response.Content.ReadAsStringAsync());
+
+          '
+        lang: csharp
+        label: C#
+      - source: 'curl --location --request POST ''https://api.powernaut.io/v1/auth/token'' \
+
+          --header ''Accept: application/json'''
+        lang: curl
+        label: cURL
+components:
+  schemas:
+    ForbiddenDto_SW52YWxpZCBjcmVkZW50aWFscw:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Invalid credentials
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
+    TokenDto:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: The access token
+        expires_in:
+          type: number
+          description: The lifetime of the token, in seconds
+          example: 3600
+        token_type:
+          type: string
+          description: The token type, only `Bearer` is supported
+          example: Bearer
+          enum:
+          - Bearer
+      required:
+      - access_token
+      - expires_in
+      - token_type
+    BadRequestExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example:
+          - Invalid datetime
+          - Invalid page size
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
+      required:
+      - message
+      - error
+      - status_code
+  securitySchemes:
+    cloud-cloud:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+      description: A bearer token obtained from the token endpoint.
+    token:
+      type: http
+      scheme: basic
+      description: Your client id and secret to obtain a bearer token for cloud-cloud authentication.
+    edge-cloud:
+      type: http
+      scheme: basic
+      description: Basic credentials used for edge-cloud authentication. They can be obtained when creating a site.
+x-webhooks:
+  bidAccepted:
+    post:
+      operationId: WebhookBidAccepted
+      description: 'During bidding, you can set a webhook to receive activation events on.
+
+
+        ### Fetching details
+
+
+        To make webhooks easy to implement, while also being secure, a webhook contains only a single reference to the bid that was accepted. You should use this reference to fetch the activation details by looking up the accepted bid.
+
+
+        See [this endpoint](#tag/managing_bids/operation/GetBid) for details on how to look up activation details.
+
+
+        ### Retries
+
+
+        You should reply with a `2XX` status code, indicating you have successfully activated the asset.
+
+        You can also reply with a `406` status code if you notice that the activation cannot be delivered upon for some reason (e.g. a suddenly disconnected car).
+
+
+        We will retry your webhook up to 3 times in case you:
+
+
+        1. Do not reply with a `2XX` or `406` status code or,
+
+        2. We do not get a successful reply within 5 seconds
+
+
+        Our portal shows a log of both successful and failed webhook calls.
+
+
+        '
+      summary: Receive an accepted bid
+      tags:
+      - accepting_bids
+      security: []
+      parameters:
+      - name: X-Powernaut-Webhook-Version
+        description: A version indicator for this webhook, used to track changes to the webhook implementation. At the moment, this is always `v1`.
+        example: v1
+        in: header
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BidAcceptedDto'
+      responses:
+        '202':
+          description: Successfully processed
+x-tagGroups:
+- name: Authentication
+  tags:
+  - authentication
+- name: Managing resources
+  tags:
+  - sites
+  - resources
+- name: Markets
+  tags:
+  - markets
+- name: Reporting flexibility
+  tags:
+  - baselining
+  - creating_bids
+  - metrics
+- name: Activating flexibility
+  tags:
+  - accepting_bids
+- name: Managing bids
+  tags:
+  - managing_bids
+- name: Forecasting
+  tags:
+  - getting_forecasts
+  - uploading_forecasts
+  - events
+- name: Sensor data
+  tags:
+  - sensor_data
+- name: Historical Data
+  tags:
+  - historical_data

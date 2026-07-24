@@ -1,0 +1,342 @@
+openapi: 3.0.0
+info:
+  title: Powernaut authentication metrics API
+  description: '
+
+    # Getting Started
+
+
+    Welcome to the Powernaut API Reference!
+
+
+    Our API offers a robust and secure way to connect your flexible resources to flexibility buyers such as energy utilities/suppliers and system operators.
+
+
+    This OpenAPI documentation is designed to provide a comprehensive and easy-to-understand guide for developers who are integrating their systems with Powernaut’s platform.
+
+
+    By leveraging our API, you can seamlessly offer flexibility in several electricity markets, opening up additional revenue streams
+
+    for your resources while contributing to a greener and more efficient electricity grid.
+
+    '
+  version: 1.0.0
+  contact:
+    name: Powernaut Support
+    url: https://powernaut.io
+    email: support@powernaut.io
+  license:
+    name: Creative Commons Attribution-ShareAlike 4.0 International
+    url: https://creativecommons.org/licenses/by-sa/4.0/
+servers:
+- url: https://api.sandbox.powernaut.io
+  description: Sandbox
+- url: https://api.powernaut.io
+  description: Production
+tags:
+- name: metrics
+  description: Metrics reported by resources and sites
+  x-displayName: Metrics
+paths:
+  /v1/connect/sites/{id}/metrics:
+    get:
+      description: 'Retrieves the actual real-time data for this site '
+      operationId: ActualPowerMetricsSite
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Identifier of the site you want to get real-time data for.
+        schema:
+          type: string
+          format: uuid
+      - name: start
+        required: true
+        in: query
+        description: 'Start of window (ISO 8601). Must be a perfect minute without seconds or milliseconds precision.
+
+
+          **Note**: To avoid timezone issues, we perform an additional check for the presence of timezone information. You should always include either UTC with `Z`, or an offset like `+01:00`.'
+        schema:
+          type: string
+      - name: amount
+        required: true
+        in: query
+        description: Number of timesteps to be included in the time window.
+        schema:
+          minimum: 1
+          maximum: 48
+          type: number
+      - name: granularity
+        required: true
+        in: query
+        description: 'The granularity to fetch the state for, i.e. the time length of each element.
+
+
+          It cannot be smaller than 1 minute, and cannot contain sub-minute precision.
+
+
+          The expected format is <a href="https://en.wikipedia.org/wiki/ISO_8601#Durations" target="_blank">ISO8601</a>.'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Real-time data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsDto'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+        '404':
+          description: Site does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA'
+      security:
+      - cloud-cloud: []
+      summary: Real-time data
+      tags:
+      - metrics
+components:
+  schemas:
+    BadRequestExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example:
+          - Invalid datetime
+          - Invalid page size
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
+      required:
+      - message
+      - error
+      - status_code
+    NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Site does not exist
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
+    UnauthorizedExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Unauthorized
+        error:
+          type: string
+          description: Unauthorized
+          example: Unauthorized
+        status_code:
+          type: number
+          description: '401'
+          example: 401
+      required:
+      - message
+      - error
+      - status_code
+    ForbiddenExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Insufficient permissions
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
+    MetricsDto:
+      type: object
+      properties:
+        items:
+          type: array
+          description: 'The real-time data, in kilowatts (kW).
+
+
+            The length of the list corresponds to the amount of intervals requested. The granularity of the data is the same as the one requested.
+
+
+            A `null` value indicates that no data was available for that interval.'
+          example:
+          - '5.1'
+          - '5.2'
+          - null
+          - '5.3'
+          maxItems: 48
+          minItems: 1
+          items:
+            type: string
+            format: decimal
+            pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+            nullable: true
+      required:
+      - items
+  securitySchemes:
+    cloud-cloud:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+      description: A bearer token obtained from the token endpoint.
+    token:
+      type: http
+      scheme: basic
+      description: Your client id and secret to obtain a bearer token for cloud-cloud authentication.
+    edge-cloud:
+      type: http
+      scheme: basic
+      description: Basic credentials used for edge-cloud authentication. They can be obtained when creating a site.
+x-webhooks:
+  bidAccepted:
+    post:
+      operationId: WebhookBidAccepted
+      description: 'During bidding, you can set a webhook to receive activation events on.
+
+
+        ### Fetching details
+
+
+        To make webhooks easy to implement, while also being secure, a webhook contains only a single reference to the bid that was accepted. You should use this reference to fetch the activation details by looking up the accepted bid.
+
+
+        See [this endpoint](#tag/managing_bids/operation/GetBid) for details on how to look up activation details.
+
+
+        ### Retries
+
+
+        You should reply with a `2XX` status code, indicating you have successfully activated the asset.
+
+        You can also reply with a `406` status code if you notice that the activation cannot be delivered upon for some reason (e.g. a suddenly disconnected car).
+
+
+        We will retry your webhook up to 3 times in case you:
+
+
+        1. Do not reply with a `2XX` or `406` status code or,
+
+        2. We do not get a successful reply within 5 seconds
+
+
+        Our portal shows a log of both successful and failed webhook calls.
+
+
+        '
+      summary: Receive an accepted bid
+      tags:
+      - accepting_bids
+      security: []
+      parameters:
+      - name: X-Powernaut-Webhook-Version
+        description: A version indicator for this webhook, used to track changes to the webhook implementation. At the moment, this is always `v1`.
+        example: v1
+        in: header
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BidAcceptedDto'
+      responses:
+        '202':
+          description: Successfully processed
+x-tagGroups:
+- name: Authentication
+  tags:
+  - authentication
+- name: Managing resources
+  tags:
+  - sites
+  - resources
+- name: Markets
+  tags:
+  - markets
+- name: Reporting flexibility
+  tags:
+  - baselining
+  - creating_bids
+  - metrics
+- name: Activating flexibility
+  tags:
+  - accepting_bids
+- name: Managing bids
+  tags:
+  - managing_bids
+- name: Forecasting
+  tags:
+  - getting_forecasts
+  - uploading_forecasts
+  - events
+- name: Sensor data
+  tags:
+  - sensor_data
+- name: Historical Data
+  tags:
+  - historical_data

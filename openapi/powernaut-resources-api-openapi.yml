@@ -1,0 +1,1052 @@
+openapi: 3.0.0
+info:
+  title: Powernaut authentication resources API
+  description: '
+
+    # Getting Started
+
+
+    Welcome to the Powernaut API Reference!
+
+
+    Our API offers a robust and secure way to connect your flexible resources to flexibility buyers such as energy utilities/suppliers and system operators.
+
+
+    This OpenAPI documentation is designed to provide a comprehensive and easy-to-understand guide for developers who are integrating their systems with Powernaut’s platform.
+
+
+    By leveraging our API, you can seamlessly offer flexibility in several electricity markets, opening up additional revenue streams
+
+    for your resources while contributing to a greener and more efficient electricity grid.
+
+    '
+  version: 1.0.0
+  contact:
+    name: Powernaut Support
+    url: https://powernaut.io
+    email: support@powernaut.io
+  license:
+    name: Creative Commons Attribution-ShareAlike 4.0 International
+    url: https://creativecommons.org/licenses/by-sa/4.0/
+servers:
+- url: https://api.sandbox.powernaut.io
+  description: Sandbox
+- url: https://api.powernaut.io
+  description: Production
+tags:
+- name: resources
+  description: 'Register, modify or delete flexible resources.
+
+
+    You can add flexible resources to each site, such as batteries, heat pumps, electric vehicles, ... They are the physical resource that can offer flexibility.
+
+
+    Each resource has an enrolment status for the markets it can participate in, which you can query.'
+  x-displayName: Resources
+paths:
+  /v1/connect/resources:
+    post:
+      description: 'Create a new resource.
+
+
+        A maximum of 10 resources can be created per site.'
+      operationId: CreateResource
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateResourceDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceDto'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+      security:
+      - edge-cloud: []
+      - cloud-cloud: []
+      summary: Create a resource
+      tags:
+      - resources
+      x-codeSamples:
+      - source: "import requests\nimport json\n\nurl = \"https://api.powernaut.io/v1/connect/resources\"\n\npayload = json.dumps({\n  \"type\": \"<string>\",\n  \"power\": {\n    \"active\": {\n      \"minimum\": \"<decimal>\",\n      \"maximum\": \"<decimal>\"\n    },\n    \"reactive\": {\n      \"minimum\": \"<decimal>\",\n      \"maximum\": \"<decimal>\"\n    }\n  },\n  \"site_id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"external_id\": \"<string>\",\n  \"capacity\": {\n    \"minimum\": \"<decimal>\",\n    \"maximum\": \"<decimal>\"\n  },\n  \"group_id\": \"<uuid>\",\n  \"parent_id\": \"<uuid>\",\n  \"webhooks\": {\n    \"accepted\": \"<uri>\"\n  }\n})\nheaders = {\n  'Content-Type': 'application/json',\n  'Accept': 'application/json',\n  'Authorization': 'Bearer <token>'\n}\n\nresponse = requests.request(\"POST\", url, headers=headers, data=payload)\n\nprint(response.text)\n"
+        lang: python
+        label: Python
+      - source: "const myHeaders = new Headers();\nmyHeaders.append(\"Content-Type\", \"application/json\");\nmyHeaders.append(\"Accept\", \"application/json\");\nmyHeaders.append(\"Authorization\", \"Bearer <token>\");\n\nconst raw = JSON.stringify({\n  \"type\": \"<string>\",\n  \"power\": {\n    \"active\": {\n      \"minimum\": \"<decimal>\",\n      \"maximum\": \"<decimal>\"\n    },\n    \"reactive\": {\n      \"minimum\": \"<decimal>\",\n      \"maximum\": \"<decimal>\"\n    }\n  },\n  \"site_id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"external_id\": \"<string>\",\n  \"capacity\": {\n    \"minimum\": \"<decimal>\",\n    \"maximum\": \"<decimal>\"\n  },\n  \"group_id\": \"<uuid>\",\n  \"parent_id\": \"<uuid>\",\n  \"webhooks\": {\n    \"accepted\": \"<uri>\"\n  }\n});\n\nconst requestOptions = {\n  method: \"POST\",\n  headers: myHeaders,\n  body: raw,\n  redirect: \"follow\"\n};\n\nfetch(\"https://api.powernaut.io/v1/connect/resources\", requestOptions)\n  .then((response) => response.text())\n  .then((result) => console.log(result))\n  .catch((error) => console.error(error));"
+        lang: javascript
+        label: JavaScript
+      - source: "OkHttpClient client = new OkHttpClient().newBuilder()\n  .build();\nMediaType mediaType = MediaType.parse(\"application/json\");\nRequestBody body = RequestBody.create(mediaType, \"{\\n  \\\"type\\\": \\\"<string>\\\",\\n  \\\"power\\\": {\\n    \\\"active\\\": {\\n      \\\"minimum\\\": \\\"<decimal>\\\",\\n      \\\"maximum\\\": \\\"<decimal>\\\"\\n    },\\n    \\\"reactive\\\": {\\n      \\\"minimum\\\": \\\"<decimal>\\\",\\n      \\\"maximum\\\": \\\"<decimal>\\\"\\n    }\\n  },\\n  \\\"site_id\\\": \\\"<uuid>\\\",\\n  \\\"name\\\": \\\"<string>\\\",\\n  \\\"external_id\\\": \\\"<string>\\\",\\n  \\\"capacity\\\": {\\n    \\\"minimum\\\": \\\"<decimal>\\\",\\n    \\\"maximum\\\": \\\"<decimal>\\\"\\n  },\\n  \\\"group_id\\\": \\\"<uuid>\\\",\\n  \\\"parent_id\\\": \\\"<uuid>\\\",\\n  \\\"webhooks\\\": {\\n    \\\"accepted\\\": \\\"<uri>\\\"\\n  }\\n}\");\nRequest request = new Request.Builder()\n  .url(\"https://api.powernaut.io/v1/connect/resources\")\n  .method(\"POST\", body)\n  .addHeader(\"Content-Type\", \"application/json\")\n  .addHeader(\"Accept\", \"application/json\")\n  .addHeader(\"Authorization\", \"Bearer <token>\")\n  .build();\nResponse response = client.newCall(request).execute();"
+        lang: java
+        label: Java
+      - source: "package main\n\nimport (\n  \"fmt\"\n  \"strings\"\n  \"net/http\"\n  \"io/ioutil\"\n)\n\nfunc main() {\n\n  url := \"https://api.powernaut.io/v1/connect/resources\"\n  method := \"POST\"\n\n  payload := strings.NewReader(`{\n  \"type\": \"<string>\",\n  \"power\": {\n    \"active\": {\n      \"minimum\": \"<decimal>\",\n      \"maximum\": \"<decimal>\"\n    },\n    \"reactive\": {\n      \"minimum\": \"<decimal>\",\n      \"maximum\": \"<decimal>\"\n    }\n  },\n  \"site_id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"external_id\": \"<string>\",\n  \"capacity\": {\n    \"minimum\": \"<decimal>\",\n    \"maximum\": \"<decimal>\"\n  },\n  \"group_id\": \"<uuid>\",\n  \"parent_id\": \"<uuid>\",\n  \"webhooks\": {\n    \"accepted\": \"<uri>\"\n  }\n}`)\n\n  client := &http.Client {\n  }\n  req, err := http.NewRequest(method, url, payload)\n\n  if err != nil {\n    fmt.Println(err)\n    return\n  }\n  req.Header.Add(\"Content-Type\", \"application/json\")\n  req.Header.Add(\"Accept\", \"application/json\")\n  req.Header.Add(\"Authorization\", \"Bearer <token>\")\n\n  res, err := client.Do(req)\n  if err != nil {\n    fmt.Println(err)\n    return\n  }\n  defer res.Body.Close()\n\n  body, err := ioutil.ReadAll(res.Body)\n  if err != nil {\n    fmt.Println(err)\n    return\n  }\n  fmt.Println(string(body))\n}"
+        lang: go
+        label: Go
+      - source: 'var client = new HttpClient();
+
+          var request = new HttpRequestMessage(HttpMethod.Post, "https://api.powernaut.io/v1/connect/resources");
+
+          request.Headers.Add("Accept", "application/json");
+
+          request.Headers.Add("Authorization", "Bearer <token>");
+
+          var content = new StringContent("{\n  \"type\": \"<string>\",\n  \"power\": {\n    \"active\": {\n      \"minimum\": \"<decimal>\",\n      \"maximum\": \"<decimal>\"\n    },\n    \"reactive\": {\n      \"minimum\": \"<decimal>\",\n      \"maximum\": \"<decimal>\"\n    }\n  },\n  \"site_id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"external_id\": \"<string>\",\n  \"capacity\": {\n    \"minimum\": \"<decimal>\",\n    \"maximum\": \"<decimal>\"\n  },\n  \"group_id\": \"<uuid>\",\n  \"parent_id\": \"<uuid>\",\n  \"webhooks\": {\n    \"accepted\": \"<uri>\"\n  }\n}", null, "application/json");
+
+          request.Content = content;
+
+          var response = await client.SendAsync(request);
+
+          response.EnsureSuccessStatusCode();
+
+          Console.WriteLine(await response.Content.ReadAsStringAsync());
+
+          '
+        lang: csharp
+        label: C#
+      - source: "curl --location 'https://api.powernaut.io/v1/connect/resources' \\\n--header 'Content-Type: application/json' \\\n--header 'Accept: application/json' \\\n--header 'Authorization: Bearer <token>' \\\n--data '{\n  \"type\": \"<string>\",\n  \"power\": {\n    \"active\": {\n      \"minimum\": \"<decimal>\",\n      \"maximum\": \"<decimal>\"\n    },\n    \"reactive\": {\n      \"minimum\": \"<decimal>\",\n      \"maximum\": \"<decimal>\"\n    }\n  },\n  \"site_id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"external_id\": \"<string>\",\n  \"capacity\": {\n    \"minimum\": \"<decimal>\",\n    \"maximum\": \"<decimal>\"\n  },\n  \"group_id\": \"<uuid>\",\n  \"parent_id\": \"<uuid>\",\n  \"webhooks\": {\n    \"accepted\": \"<uri>\"\n  }\n}'"
+        lang: curl
+        label: cURL
+    get:
+      description: Gets all resources available to your current authorised scope, or for a site specifically.
+      operationId: FindAllResources
+      parameters:
+      - name: site_id
+        required: false
+        in: query
+        description: Identifier of the site to fetch resources for.
+        schema:
+          type: string
+          format: uuid
+      - name: connection_point_id
+        required: false
+        in: query
+        description: 'Identifier of the site to fetch resources for.
+
+
+          **Note**: This is deprecated, use `site_id` instead.'
+        deprecated: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: All resources
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectionPointResourcesListDto'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+      security:
+      - edge-cloud: []
+      - cloud-cloud: []
+      summary: Get all resources
+      tags:
+      - resources
+      x-codeSamples:
+      - source: "import requests\n\nurl = \"https://api.powernaut.io/v1/connect/resources\"\n\npayload = {}\nheaders = {\n  'Accept': 'application/json',\n  'Authorization': 'Bearer <token>'\n}\n\nresponse = requests.request(\"GET\", url, headers=headers, data=payload)\n\nprint(response.text)\n"
+        lang: python
+        label: Python
+      - source: "const myHeaders = new Headers();\nmyHeaders.append(\"Accept\", \"application/json\");\nmyHeaders.append(\"Authorization\", \"Bearer <token>\");\n\nconst requestOptions = {\n  method: \"GET\",\n  headers: myHeaders,\n  redirect: \"follow\"\n};\n\nfetch(\"https://api.powernaut.io/v1/connect/resources\", requestOptions)\n  .then((response) => response.text())\n  .then((result) => console.log(result))\n  .catch((error) => console.error(error));"
+        lang: javascript
+        label: JavaScript
+      - source: "OkHttpClient client = new OkHttpClient().newBuilder()\n  .build();\nMediaType mediaType = MediaType.parse(\"text/plain\");\nRequestBody body = RequestBody.create(mediaType, \"\");\nRequest request = new Request.Builder()\n  .url(\"https://api.powernaut.io/v1/connect/resources\")\n  .method(\"GET\", body)\n  .addHeader(\"Accept\", \"application/json\")\n  .addHeader(\"Authorization\", \"Bearer <token>\")\n  .build();\nResponse response = client.newCall(request).execute();"
+        lang: java
+        label: Java
+      - source: "package main\n\nimport (\n  \"fmt\"\n  \"net/http\"\n  \"io/ioutil\"\n)\n\nfunc main() {\n\n  url := \"https://api.powernaut.io/v1/connect/resources\"\n  method := \"GET\"\n\n  client := &http.Client {\n  }\n  req, err := http.NewRequest(method, url, nil)\n\n  if err != nil {\n    fmt.Println(err)\n    return\n  }\n  req.Header.Add(\"Accept\", \"application/json\")\n  req.Header.Add(\"Authorization\", \"Bearer <token>\")\n\n  res, err := client.Do(req)\n  if err != nil {\n    fmt.Println(err)\n    return\n  }\n  defer res.Body.Close()\n\n  body, err := ioutil.ReadAll(res.Body)\n  if err != nil {\n    fmt.Println(err)\n    return\n  }\n  fmt.Println(string(body))\n}"
+        lang: go
+        label: Go
+      - source: 'var client = new HttpClient();
+
+          var request = new HttpRequestMessage(HttpMethod.Get, "https://api.powernaut.io/v1/connect/resources");
+
+          request.Headers.Add("Accept", "application/json");
+
+          request.Headers.Add("Authorization", "Bearer <token>");
+
+          var response = await client.SendAsync(request);
+
+          response.EnsureSuccessStatusCode();
+
+          Console.WriteLine(await response.Content.ReadAsStringAsync());
+
+          '
+        lang: csharp
+        label: C#
+      - source: 'curl --location ''https://api.powernaut.io/v1/connect/resources'' \
+
+          --header ''Accept: application/json'' \
+
+          --header ''Authorization: Bearer <token>'''
+        lang: curl
+        label: cURL
+  /v1/connect/resources/{id}:
+    get:
+      description: Gets a resource by its unique ID.
+      operationId: GetResource
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Identifier of the resource.
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: The resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceDto'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+        '404':
+          description: Resource does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundDto_UmVzb3VyY2UgZG9lcyBub3QgZXhpc3Q'
+      security:
+      - edge-cloud: []
+      - cloud-cloud: []
+      summary: Get a resource
+      tags:
+      - resources
+    patch:
+      description: 'Update a resource by its unique ID.
+
+
+        Only the properties you provide will be updated. Use `null` to unset a property.'
+      operationId: UpdateResource
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Identifier of the resource you want to update.
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateResourceDto'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceDto'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+        '404':
+          description: Resource does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundDto_UmVzb3VyY2UgZG9lcyBub3QgZXhpc3Q'
+      security:
+      - edge-cloud: []
+      - cloud-cloud: []
+      summary: Update a resource
+      tags:
+      - resources
+    delete:
+      description: 'Delete a resource
+
+
+        **Important**: This action is irreversible and will remove all associated future bids and baselines.'
+      operationId: RemoveResource
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Identifier of the resource you want to delete.
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+        '404':
+          description: Resource does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundDto_UmVzb3VyY2UgZG9lcyBub3QgZXhpc3Q'
+      security:
+      - edge-cloud: []
+      - cloud-cloud: []
+      summary: Delete a resource
+      tags:
+      - resources
+  /v1/connect/resources/{id}/activations:
+    get:
+      description: Gets the activations for a resource.
+      operationId: GetActivationsForResource
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Identifier of the resource you want to get activations for.
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        required: false
+        in: query
+        description: Page number
+        schema:
+          type: number
+      - name: page_size
+        required: false
+        in: query
+        description: Page size
+        schema:
+          type: number
+      - name: start
+        required: false
+        in: query
+        description: An optional date from which to start filtering activations (ISO 8601)
+        schema:
+          type: string
+      - name: end
+        required: false
+        in: query
+        description: An optional date until which to filter activations (ISO 8601)
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A paginated list of activations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderActivationSummaryListDto'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+        '404':
+          description: Resource does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundDto_UmVzb3VyY2UgZG9lcyBub3QgZXhpc3Q'
+      security:
+      - edge-cloud: []
+      - cloud-cloud: []
+      summary: Get activations
+      tags:
+      - resources
+components:
+  schemas:
+    BadRequestExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example:
+          - Invalid datetime
+          - Invalid page size
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
+      required:
+      - message
+      - error
+      - status_code
+    UnauthorizedExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Unauthorized
+        error:
+          type: string
+          description: Unauthorized
+          example: Unauthorized
+        status_code:
+          type: number
+          description: '401'
+          example: 401
+      required:
+      - message
+      - error
+      - status_code
+    UpdateResourceDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Human-readable name for this resource. Useful for reporting, but not required.
+          example: Home Battery
+          minLength: 1
+        external_id:
+          type: string
+          description: Reference of the resource in external system (gateway, API, ...), used for mapping identifiers.
+          example: NCC-1701
+          minLength: 1
+          nullable: true
+        type:
+          type: string
+          description: Type of energy resource (battery, heat pump, solar, etc.).
+          enum:
+          - static_battery
+          - heat_pump
+          - electric_vehicle
+          - electric_vehicle_charging_point
+          - photovoltaic
+          - wind
+          - group
+          - other
+          - meter
+          example: static_battery
+        power:
+          description: Power constraints for this resource.
+          allOf:
+          - $ref: '#/components/schemas/ResourcePowerDto'
+        capacity:
+          description: 'Capacity constraints for this resource (in kWh).
+
+
+            This property is currently only required for battery resources.'
+          allOf:
+          - $ref: '#/components/schemas/ResourcePowerConstraints'
+        parent_id:
+          type: string
+          description: 'Identifier of the physical parent resource in the site topology.
+
+
+            Set this field to `null` to remove the parent relationship.
+
+
+            Constraints:
+
+            - Parent must exist and belong to the same site
+
+            - Only meter-type resources can be parents
+
+            - Group resources cannot have a parent
+
+            - Hierarchy is limited to 10 levels deep'
+          format: uuid
+          nullable: true
+        webhooks:
+          description: Webhooks related to this resource, for example to be notified about the acceptance of a bid for this resource.
+          allOf:
+          - $ref: '#/components/schemas/ResourceWebhooksDto'
+        group_id:
+          type: string
+          description: 'Identifier of the resource group that this resource should belong to.
+
+
+            Set this field to `null` to remove a resource from its existing group.'
+          format: uuid
+          nullable: true
+    CreateResourceDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Human-readable name for this resource. Useful for reporting, but not required.
+          example: Home Battery
+          minLength: 1
+        external_id:
+          type: string
+          description: Reference of the resource in external system (gateway, API, ...), used for mapping identifiers.
+          example: NCC-1701
+          minLength: 1
+          nullable: true
+        type:
+          type: string
+          description: Type of energy resource (battery, heat pump, solar, etc.).
+          enum:
+          - static_battery
+          - heat_pump
+          - electric_vehicle
+          - electric_vehicle_charging_point
+          - photovoltaic
+          - wind
+          - group
+          - other
+          - meter
+          example: static_battery
+        power:
+          description: Power constraints for this resource.
+          allOf:
+          - $ref: '#/components/schemas/ResourcePowerDto'
+        capacity:
+          description: 'Capacity constraints for this resource (in kWh).
+
+
+            This property is currently only required for battery resources.'
+          allOf:
+          - $ref: '#/components/schemas/ResourcePowerConstraints'
+        site_id:
+          type: string
+          description: Identifier for the site that this resource is part of.
+          format: uuid
+        group_id:
+          type: string
+          description: 'Identifier of the resource group that this resource should belong to.
+
+
+            Only provide this when you want to immediately associate the resource with an existing group on the same site.'
+          format: uuid
+        parent_id:
+          type: string
+          description: 'Identifier of the physical parent resource in the site topology.
+
+
+            Constraints:
+
+            - Parent must exist and belong to the same site
+
+            - Only meter-type resources can be parents
+
+            - Group resources cannot have a parent
+
+            - Hierarchy is limited to 10 levels deep'
+          format: uuid
+          nullable: true
+        webhooks:
+          description: Webhooks related to this resource, for example to be notified about the acceptance of a bid for this resource.
+          allOf:
+          - $ref: '#/components/schemas/ResourceWebhooksDto'
+      required:
+      - type
+      - power
+      - site_id
+    ResourcePowerConstraints:
+      type: object
+      properties:
+        minimum:
+          type: string
+          description: Minimum level
+          example: '-5.1'
+          format: decimal
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+        maximum:
+          type: string
+          description: Maximum level
+          example: '5.1'
+          format: decimal
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+      required:
+      - minimum
+      - maximum
+    ResourcePowerDto:
+      type: object
+      properties:
+        active:
+          description: 'Active power constraints (minimum, maximum) this resource can import/export (in kW).
+
+
+            Positive values indicate consumption, negative values indicate production.
+
+
+            A battery would typically have a value set for both an active import and export.'
+          allOf:
+          - $ref: '#/components/schemas/ResourcePowerConstraints'
+        reactive:
+          description: 'Reactive power constraints (minimum, maximum) this resource can import/export (in kVAR).
+
+
+            Positive values indicate lag, negative values indicate lead.'
+          allOf:
+          - $ref: '#/components/schemas/ResourcePowerConstraints'
+      required:
+      - active
+    ProviderActivationSummaryListDto:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total amount of results that match the query
+          minimum: 0
+        items:
+          description: Activations for the current page
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderActivationSummaryDto'
+      required:
+      - total
+      - items
+    ConnectionPointResourcesListDto:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total amount of results that match the query
+          minimum: 0
+        items:
+          description: Paginated items
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceDto'
+      required:
+      - total
+      - items
+    ResourceWebhooksDto:
+      type: object
+      properties:
+        accepted:
+          type: string
+          description: 'Webhook at which you''d like to receive a notification of acceptance for bids made for this resource. For more information on the webhook content, see [the specifications](#tag/accepting_bids/operation/WebhookBidAccepted).
+
+
+            This is optional, and if not provided, activation via MQTT will be used instead. For more information on other notification options, see [this guide](/guides/connect/activating-flexibility/activating).'
+          example: https://domain.tld/path
+          format: uri
+    ForbiddenExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Insufficient permissions
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
+    EnergyDto:
+      type: object
+      properties:
+        delivered:
+          type: string
+          description: 'The actual energy delivered by the resource, in `kWh` or `kVARh`, verified by real-time metering.
+
+            It can be negative if, for example, a resources increases its consumption when a decrease was requested.
+
+
+            This is only available after the activation has been verified, which happens a few minutes after the activation''s time window.'
+          format: decimal
+          example: '5.1'
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+          nullable: true
+        requested:
+          type: string
+          description: The energy requested by the activation, in `kWh` or `kVARh`, based on an initial estimate of available flexibility.
+          format: decimal
+          example: '5.1'
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+        extra_delivered:
+          type: string
+          description: Extra energy delivered beyond the requested amount for procurements without a delivery limit (in `kWh` or `kVARh`). `null` before verification or for procurements with a fixed delivery limit (where overdelivery is not tracked).
+          format: decimal
+          example: '1.2'
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+          nullable: true
+      required:
+      - delivered
+      - requested
+      - extra_delivered
+    NotFoundDto_UmVzb3VyY2UgZG9lcyBub3QgZXhpc3Q:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Resource does not exist
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
+    ProviderActivationSummaryDto:
+      type: object
+      properties:
+        start:
+          type: string
+          description: The start time of the activation (ISO 8601).
+          format: date-time
+          example: '2024-03-15T10:30:00Z'
+        end:
+          type: string
+          description: The end time of the activation (ISO 8601).
+          format: date-time
+          example: '2024-03-15T10:30:00Z'
+        value:
+          type: string
+          description: The value of the activation, in `kW` or `kVAR`.
+          format: decimal
+          example: '5.1'
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+        energy:
+          description: The energy of the activation
+          allOf:
+          - $ref: '#/components/schemas/EnergyDto'
+        direction:
+          type: string
+          description: The direction of the activation.
+          enum:
+          - upward
+          - downward
+          example: upward
+        resource_id:
+          type: string
+          description: The ID of the resource for this activation.
+          example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        resource_type:
+          type: string
+          description: The type of the resource (only steerable types; meter resources cannot be activated).
+          enum:
+          - static_battery
+          - heat_pump
+          - electric_vehicle
+          - electric_vehicle_charging_point
+          - photovoltaic
+          - wind
+          - group
+          - other
+          example: static_battery
+        site_id:
+          type: string
+          description: The ID of the site of the resource.
+          example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        bid_id:
+          type: string
+          description: The ID of the bid resulting in this activation.
+          example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+      required:
+      - start
+      - end
+      - value
+      - energy
+      - direction
+      - resource_id
+      - resource_type
+      - site_id
+      - bid_id
+    ResourceDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Human-readable name for this resource. Useful for reporting, but not required.
+          example: Home Battery
+          minLength: 1
+        type:
+          type: string
+          description: Type of energy resource (battery, heat pump, solar, etc.).
+          enum:
+          - static_battery
+          - heat_pump
+          - electric_vehicle
+          - electric_vehicle_charging_point
+          - photovoltaic
+          - wind
+          - group
+          - other
+          - meter
+          example: static_battery
+        capacity:
+          description: 'Capacity constraints for this resource (in kWh).
+
+
+            This property is currently only required for battery resources.'
+          allOf:
+          - $ref: '#/components/schemas/ResourcePowerConstraints'
+        site_id:
+          type: string
+          description: Identifier for the site that this resource is part of.
+          format: uuid
+        parent_id:
+          type: string
+          description: 'Identifier of the physical parent resource in the site topology.
+
+
+            Used to model hierarchical resource relationships (up to 10 levels deep).'
+          format: uuid
+          nullable: true
+        webhooks:
+          description: Webhooks related to this resource, for example to be notified about the acceptance of a bid for this resource.
+          allOf:
+          - $ref: '#/components/schemas/ResourceWebhooksDto'
+        id:
+          type: string
+          description: Unique identifier for the resource
+          format: uuid
+        external_id:
+          type: string
+          description: Reference of the resource in external system (gateway, API, ...), used for mapping identifiers.
+          example: NCC-1701
+          nullable: true
+        group_id:
+          type: string
+          description: Identifier of the group this resource belongs to.
+          format: uuid
+          nullable: true
+        power:
+          description: Power constraints for this resource.
+          allOf:
+          - $ref: '#/components/schemas/ResourcePowerDto'
+        created_at:
+          type: string
+          description: Timestamp for creation of the resource (ISO 8601)
+          format: date-time
+          example: '2024-01-05T11:30:15Z'
+        modified_at:
+          type: string
+          description: Timestamp for last modification of the resource (ISO 8601)
+          format: date-time
+          example: '2024-01-05T11:30:15Z'
+        last_seen_at:
+          type: string
+          description: Timestamp for last metric received from the resource (ISO 8601)
+          format: date-time
+          example: '2025-01-07T15:08:22Z'
+          nullable: true
+      required:
+      - type
+      - site_id
+      - id
+      - power
+      - created_at
+      - modified_at
+      - last_seen_at
+  securitySchemes:
+    cloud-cloud:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+      description: A bearer token obtained from the token endpoint.
+    token:
+      type: http
+      scheme: basic
+      description: Your client id and secret to obtain a bearer token for cloud-cloud authentication.
+    edge-cloud:
+      type: http
+      scheme: basic
+      description: Basic credentials used for edge-cloud authentication. They can be obtained when creating a site.
+x-webhooks:
+  bidAccepted:
+    post:
+      operationId: WebhookBidAccepted
+      description: 'During bidding, you can set a webhook to receive activation events on.
+
+
+        ### Fetching details
+
+
+        To make webhooks easy to implement, while also being secure, a webhook contains only a single reference to the bid that was accepted. You should use this reference to fetch the activation details by looking up the accepted bid.
+
+
+        See [this endpoint](#tag/managing_bids/operation/GetBid) for details on how to look up activation details.
+
+
+        ### Retries
+
+
+        You should reply with a `2XX` status code, indicating you have successfully activated the asset.
+
+        You can also reply with a `406` status code if you notice that the activation cannot be delivered upon for some reason (e.g. a suddenly disconnected car).
+
+
+        We will retry your webhook up to 3 times in case you:
+
+
+        1. Do not reply with a `2XX` or `406` status code or,
+
+        2. We do not get a successful reply within 5 seconds
+
+
+        Our portal shows a log of both successful and failed webhook calls.
+
+
+        '
+      summary: Receive an accepted bid
+      tags:
+      - accepting_bids
+      security: []
+      parameters:
+      - name: X-Powernaut-Webhook-Version
+        description: A version indicator for this webhook, used to track changes to the webhook implementation. At the moment, this is always `v1`.
+        example: v1
+        in: header
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BidAcceptedDto'
+      responses:
+        '202':
+          description: Successfully processed
+x-tagGroups:
+- name: Authentication
+  tags:
+  - authentication
+- name: Managing resources
+  tags:
+  - sites
+  - resources
+- name: Markets
+  tags:
+  - markets
+- name: Reporting flexibility
+  tags:
+  - baselining
+  - creating_bids
+  - metrics
+- name: Activating flexibility
+  tags:
+  - accepting_bids
+- name: Managing bids
+  tags:
+  - managing_bids
+- name: Forecasting
+  tags:
+  - getting_forecasts
+  - uploading_forecasts
+  - events
+- name: Sensor data
+  tags:
+  - sensor_data
+- name: Historical Data
+  tags:
+  - historical_data

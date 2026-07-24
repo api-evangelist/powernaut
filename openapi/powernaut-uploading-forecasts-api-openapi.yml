@@ -1,0 +1,519 @@
+openapi: 3.0.0
+info:
+  title: Powernaut authentication uploading_forecasts API
+  description: '
+
+    # Getting Started
+
+
+    Welcome to the Powernaut API Reference!
+
+
+    Our API offers a robust and secure way to connect your flexible resources to flexibility buyers such as energy utilities/suppliers and system operators.
+
+
+    This OpenAPI documentation is designed to provide a comprehensive and easy-to-understand guide for developers who are integrating their systems with Powernaut’s platform.
+
+
+    By leveraging our API, you can seamlessly offer flexibility in several electricity markets, opening up additional revenue streams
+
+    for your resources while contributing to a greener and more efficient electricity grid.
+
+    '
+  version: 1.0.0
+  contact:
+    name: Powernaut Support
+    url: https://powernaut.io
+    email: support@powernaut.io
+  license:
+    name: Creative Commons Attribution-ShareAlike 4.0 International
+    url: https://creativecommons.org/licenses/by-sa/4.0/
+servers:
+- url: https://api.sandbox.powernaut.io
+  description: Sandbox
+- url: https://api.powernaut.io
+  description: Production
+tags:
+- name: uploading_forecasts
+  description: 'Sharing your forecasts helps us better understand your resources'' expected behaviour, leading to improved flexibility opportunities and optimised market participation.
+
+
+    See the [guide](/guides/connect/forecasting/uploading-forecasts) for more information.'
+  x-displayName: Uploading forecasts
+paths:
+  /v1/connect/sites/{id}/forecast:
+    post:
+      description: 'Upload external power forecasts for a site.
+
+
+        This endpoint is tolerant of past timestamps - they will be ignored rather than causing validation errors. The response includes both successfully inserted forecasts and any ignored forecasts.
+
+
+        **Validation:**
+
+        - All timestamps must be perfect quarter-hours (15-minute intervals)
+
+        - Forecasts in the past will be ignored (not inserted)
+
+        - Future forecasts can''t be submitted more than 48 hours in advance
+
+        - Site ID must exist and be accessible to the authenticated user
+
+        - Values must positive for offtake, negative for injection
+
+        - The `forecasting` feature must be enabled for this user.'
+      operationId: UploadSiteForecast
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Identifier of the site to upload forecast for.
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadConnectionPointForecastDto'
+      responses:
+        '201':
+          description: Forecast uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadForecastResponseDto'
+        '400':
+          description: Invalid forecast data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestDto_SW52YWxpZCBmb3JlY2FzdCBkYXRh'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedDto_Tm90IGF1dGhvcml6ZWQ'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenDto_Rm9yYmlkZGVu'
+        '404':
+          description: Site not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundDto_U2l0ZSBub3QgZm91bmQ'
+      security:
+      - cloud-cloud: []
+      summary: Submit site forecast
+      tags:
+      - uploading_forecasts
+  /v1/connect/resources/{id}/forecast:
+    post:
+      description: 'Upload external power forecasts for a specific resource.
+
+
+        This endpoint is tolerant of past timestamps - they will be ignored rather than causing validation errors. The response includes both successfully inserted forecasts and any ignored forecasts.
+
+
+        **Validation:**
+
+        - All timestamps must be perfect quarter-hours (15-minute intervals)
+
+        - Forecasts in the past will be ignored (not inserted)
+
+        - Future forecasts can''t be submitted more than 48 hours in advance
+
+        - Resource ID must exist and be accessible to the authenticated user
+
+        - Values must positive for consumption, negative for production
+
+        - Values must be within bounds for the resource''s min/max power constraints
+
+        - The `forecasting` feature must be enabled for this user.'
+      operationId: UploadResourceForecast
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Identifier of the resource to upload forecast for.
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadResourceForecastDto'
+      responses:
+        '201':
+          description: Forecast uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadForecastResponseDto'
+        '400':
+          description: Invalid forecast data or power values exceed resource constraints
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestDto_SW52YWxpZCBmb3JlY2FzdCBkYXRhIG9yIHBvd2VyIHZhbHVlcyBleGNlZWQgcmVzb3VyY2UgY29uc3RyYWludHM'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedDto_Tm90IGF1dGhvcml6ZWQ'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenDto_Rm9yYmlkZGVu'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundDto_UmVzb3VyY2Ugbm90IGZvdW5k'
+      security:
+      - edge-cloud: []
+      - cloud-cloud: []
+      summary: Submit resource forecast
+      tags:
+      - uploading_forecasts
+components:
+  schemas:
+    NotFoundDto_U2l0ZSBub3QgZm91bmQ:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Site not found
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
+    UploadResourceForecastDto:
+      type: object
+      properties:
+        model_id:
+          type: string
+          description: 'Identifier for the specific forecast model used.
+
+            This helps track which model version or configuration was used for any given forecast.'
+          example: external-resource-model-v1
+          minLength: 1
+          maxLength: 100
+        items:
+          description: Array of forecast data points (maximum 192 points for 48 hours at 15-minute intervals). All timestamps must be perfect quarter-hours. Past timestamps will be ignored.
+          minItems: 1
+          maxItems: 192
+          type: array
+          items:
+            $ref: '#/components/schemas/ForecastDataPointUploadDto'
+      required:
+      - model_id
+      - items
+    UploadForecastResponseDto:
+      type: object
+      properties:
+        inserted:
+          description: Successfully inserted forecast data points
+          type: array
+          items:
+            $ref: '#/components/schemas/ForecastDataPointUploadDto'
+        ignored:
+          description: Forecast data points that were ignored (e.g., those in the past)
+          example: []
+          type: array
+          items:
+            $ref: '#/components/schemas/ForecastDataPointUploadDto'
+      required:
+      - inserted
+      - ignored
+    UnauthorizedDto_Tm90IGF1dGhvcml6ZWQ:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Not authorized
+        error:
+          type: string
+          description: Unauthorized
+          example: Unauthorized
+        status_code:
+          type: number
+          description: '401'
+          example: 401
+      required:
+      - message
+      - error
+      - status_code
+    BadRequestDto_SW52YWxpZCBmb3JlY2FzdCBkYXRhIG9yIHBvd2VyIHZhbHVlcyBleGNlZWQgcmVzb3VyY2UgY29uc3RyYWludHM:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Invalid forecast data or power values exceed resource constraints
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
+      required:
+      - message
+      - error
+      - status_code
+    BadRequestDto_SW52YWxpZCBmb3JlY2FzdCBkYXRh:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Invalid forecast data
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
+      required:
+      - message
+      - error
+      - status_code
+    ForbiddenDto_Rm9yYmlkZGVu:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Forbidden
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
+    ForecastDataPointUploadDto:
+      type: object
+      properties:
+        start:
+          type: string
+          description: 'Forecast start time (ISO 8601). Must be a perfect quarter-hour without seconds or milliseconds precision.
+
+            Note: To avoid timezone issues, we perform an additional check for the presence of timezone information. You should always include either UTC with Z, or an offset like +01:00.'
+          example: '2024-07-01T14:00:00Z'
+          format: date-time
+        end:
+          type: string
+          description: 'Forecast end time (ISO 8601). Must be a perfect quarter-hour without seconds or milliseconds precision.
+
+            Note: To avoid timezone issues, we perform an additional check for the presence of timezone information. You should always include either UTC with Z, or an offset like +01:00.'
+          example: '2024-07-01T14:15:00Z'
+          format: date-time
+        value:
+          type: string
+          description: Forecasted power value in kW (positive = consumption, negative = production)
+          example: '5.200000'
+          format: decimal
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+      required:
+      - start
+      - end
+      - value
+    NotFoundDto_UmVzb3VyY2Ugbm90IGZvdW5k:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Resource not found
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
+    UploadConnectionPointForecastDto:
+      type: object
+      properties:
+        model_id:
+          type: string
+          description: 'Identifier for the specific forecast model used.
+
+            This helps track which model version or configuration was used for any given forecast.'
+          example: external-model-v1
+          minLength: 1
+          maxLength: 100
+        items:
+          description: Array of forecast data points (maximum 192 points for 48 hours at 15-minute intervals). All timestamps must be perfect quarter-hours. Past timestamps will be ignored.
+          minItems: 1
+          maxItems: 192
+          type: array
+          items:
+            $ref: '#/components/schemas/ForecastDataPointUploadDto'
+      required:
+      - model_id
+      - items
+  securitySchemes:
+    cloud-cloud:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+      description: A bearer token obtained from the token endpoint.
+    token:
+      type: http
+      scheme: basic
+      description: Your client id and secret to obtain a bearer token for cloud-cloud authentication.
+    edge-cloud:
+      type: http
+      scheme: basic
+      description: Basic credentials used for edge-cloud authentication. They can be obtained when creating a site.
+x-webhooks:
+  bidAccepted:
+    post:
+      operationId: WebhookBidAccepted
+      description: 'During bidding, you can set a webhook to receive activation events on.
+
+
+        ### Fetching details
+
+
+        To make webhooks easy to implement, while also being secure, a webhook contains only a single reference to the bid that was accepted. You should use this reference to fetch the activation details by looking up the accepted bid.
+
+
+        See [this endpoint](#tag/managing_bids/operation/GetBid) for details on how to look up activation details.
+
+
+        ### Retries
+
+
+        You should reply with a `2XX` status code, indicating you have successfully activated the asset.
+
+        You can also reply with a `406` status code if you notice that the activation cannot be delivered upon for some reason (e.g. a suddenly disconnected car).
+
+
+        We will retry your webhook up to 3 times in case you:
+
+
+        1. Do not reply with a `2XX` or `406` status code or,
+
+        2. We do not get a successful reply within 5 seconds
+
+
+        Our portal shows a log of both successful and failed webhook calls.
+
+
+        '
+      summary: Receive an accepted bid
+      tags:
+      - accepting_bids
+      security: []
+      parameters:
+      - name: X-Powernaut-Webhook-Version
+        description: A version indicator for this webhook, used to track changes to the webhook implementation. At the moment, this is always `v1`.
+        example: v1
+        in: header
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BidAcceptedDto'
+      responses:
+        '202':
+          description: Successfully processed
+x-tagGroups:
+- name: Authentication
+  tags:
+  - authentication
+- name: Managing resources
+  tags:
+  - sites
+  - resources
+- name: Markets
+  tags:
+  - markets
+- name: Reporting flexibility
+  tags:
+  - baselining
+  - creating_bids
+  - metrics
+- name: Activating flexibility
+  tags:
+  - accepting_bids
+- name: Managing bids
+  tags:
+  - managing_bids
+- name: Forecasting
+  tags:
+  - getting_forecasts
+  - uploading_forecasts
+  - events
+- name: Sensor data
+  tags:
+  - sensor_data
+- name: Historical Data
+  tags:
+  - historical_data

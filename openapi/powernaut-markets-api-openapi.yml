@@ -1,0 +1,423 @@
+openapi: 3.0.0
+info:
+  title: Powernaut authentication markets API
+  description: '
+
+    # Getting Started
+
+
+    Welcome to the Powernaut API Reference!
+
+
+    Our API offers a robust and secure way to connect your flexible resources to flexibility buyers such as energy utilities/suppliers and system operators.
+
+
+    This OpenAPI documentation is designed to provide a comprehensive and easy-to-understand guide for developers who are integrating their systems with Powernaut’s platform.
+
+
+    By leveraging our API, you can seamlessly offer flexibility in several electricity markets, opening up additional revenue streams
+
+    for your resources while contributing to a greener and more efficient electricity grid.
+
+    '
+  version: 1.0.0
+  contact:
+    name: Powernaut Support
+    url: https://powernaut.io
+    email: support@powernaut.io
+  license:
+    name: Creative Commons Attribution-ShareAlike 4.0 International
+    url: https://creativecommons.org/licenses/by-sa/4.0/
+servers:
+- url: https://api.sandbox.powernaut.io
+  description: Sandbox
+- url: https://api.powernaut.io
+  description: Production
+tags:
+- name: markets
+  description: 'Markets are the electricity markets in which you can participate.
+
+    Each market has a set of eligibility criteria, which you can query to see if you can participate in a certain market.
+
+
+    Read our [guide](/guides/connect/markets) for more information.'
+  x-displayName: Markets
+paths:
+  /v1/connect/sites/{id}/markets:
+    get:
+      description: 'Retrieves the markets a site can have access to.
+
+
+        Whether a market is available or not depends on the combination of a few factors:
+
+
+        - Whether or not the owner of the site is contractually connected to the market via its supplier
+
+        - Whether or not the site is located in the market''s service area (geographically)
+
+
+        - Whether or not the site and its resources meet the market''s eligibility criteria (technical requirements)
+
+
+        The result contains all contractually available markets, with a `status` property indicating whether or not the site can access the market.
+
+
+        The different values of the market status of a site are:
+
+
+        - `active` - The site is active on this market.
+
+
+        - `ineligible` - The site is not eligible for this market (for example due to technical, or geographical reasons).
+
+
+        - `action_required` - Further action is required from the site to activate this market.
+
+
+        When the status is `action_required`, further action is required to activate the market. Look at the `action` property for more information.'
+      operationId: MarketsSite
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Identifier of the site you want to get markets for.
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Markets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  oneOf:
+                  - $ref: '#/components/schemas/MarketActiveDto'
+                    title: Active
+                  - $ref: '#/components/schemas/MarketUnavailableDto'
+                    title: Unavailable
+                  - $ref: '#/components/schemas/MarketActionRequiredDto'
+                    title: Action Required
+                  discriminator:
+                    propertyName: status
+                    mapping:
+                      active: '#/components/schemas/MarketActiveDto'
+                      unavailable: '#/components/schemas/MarketUnavailableDto'
+                      action_required: '#/components/schemas/MarketActionRequiredDto'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+        '404':
+          description: Site does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA'
+      security:
+      - cloud-cloud: []
+      summary: Site markets
+      tags:
+      - markets
+components:
+  schemas:
+    MarketActionConsentRequiredDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The end-consumer needs explicitly to consent to the market. Redirect the end-consumer to the URL in the `url` property to start the consent flow.
+          enum:
+          - consent_required
+          example: consent_required
+        url:
+          type: string
+          description: 'The URL to redirect to for the end-consumer to capture their consent.
+
+
+            The following query parameters are supported:
+
+
+            - `country`: An ISO 3166-1 alpha-2 country code. This will limit address suggestions to the given country, and adjust naming of grid identifiers accordingly.
+
+
+            - `locale`: An IETF BCP 47 locale code. Supported locales are `en`, `fr`, `nl`. This will adjust the language of the flow to the given locale.
+
+
+            - `redirect_url`: The URL to redirect to after the consent flow.
+
+
+            The flow will capture the customer''s consent and redirect back to the given redirect URL.'
+          example: https://app.powernaut.io/contract/{uuid}/sign?country=BE&language=nl&redirect_url=https://example.com
+      required:
+      - name
+      - url
+    BadRequestExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example:
+          - Invalid datetime
+          - Invalid page size
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
+      required:
+      - message
+      - error
+      - status_code
+    NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Site does not exist
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
+    UnauthorizedExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Unauthorized
+        error:
+          type: string
+          description: Unauthorized
+          example: Unauthorized
+        status_code:
+          type: number
+          description: '401'
+          example: 401
+      required:
+      - message
+      - error
+      - status_code
+    ForbiddenExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Insufficient permissions
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
+    MarketActionRequiredDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the market
+        status:
+          type: string
+          description: Further action is required from the end-consumer to activate this market. Look at the `action` property for more information.
+          example: action_required
+          enum:
+          - action_required
+        action:
+          description: The action required to activate the market.
+          oneOf:
+          - $ref: '#/components/schemas/MarketActionConsentRequiredDto'
+            title: Consent Required
+          discriminator:
+            propertyName: action
+            mapping:
+              consent_required: '#/components/schemas/MarketActionConsentRequiredDto'
+          allOf:
+          - $ref: '#/components/schemas/MarketActionConsentRequiredDto'
+      required:
+      - name
+      - status
+      - action
+    MarketActiveDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the market
+        status:
+          type: string
+          description: The site is active on this market.
+          example: active
+          enum:
+          - active
+      required:
+      - name
+      - status
+    MarketUnavailableDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the market
+        status:
+          type: string
+          description: This market is not eligible for the site (for example due to technical, or geographical reasons).
+          example: ineligible
+          enum:
+          - ineligible
+      required:
+      - name
+      - status
+  securitySchemes:
+    cloud-cloud:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+      description: A bearer token obtained from the token endpoint.
+    token:
+      type: http
+      scheme: basic
+      description: Your client id and secret to obtain a bearer token for cloud-cloud authentication.
+    edge-cloud:
+      type: http
+      scheme: basic
+      description: Basic credentials used for edge-cloud authentication. They can be obtained when creating a site.
+x-webhooks:
+  bidAccepted:
+    post:
+      operationId: WebhookBidAccepted
+      description: 'During bidding, you can set a webhook to receive activation events on.
+
+
+        ### Fetching details
+
+
+        To make webhooks easy to implement, while also being secure, a webhook contains only a single reference to the bid that was accepted. You should use this reference to fetch the activation details by looking up the accepted bid.
+
+
+        See [this endpoint](#tag/managing_bids/operation/GetBid) for details on how to look up activation details.
+
+
+        ### Retries
+
+
+        You should reply with a `2XX` status code, indicating you have successfully activated the asset.
+
+        You can also reply with a `406` status code if you notice that the activation cannot be delivered upon for some reason (e.g. a suddenly disconnected car).
+
+
+        We will retry your webhook up to 3 times in case you:
+
+
+        1. Do not reply with a `2XX` or `406` status code or,
+
+        2. We do not get a successful reply within 5 seconds
+
+
+        Our portal shows a log of both successful and failed webhook calls.
+
+
+        '
+      summary: Receive an accepted bid
+      tags:
+      - accepting_bids
+      security: []
+      parameters:
+      - name: X-Powernaut-Webhook-Version
+        description: A version indicator for this webhook, used to track changes to the webhook implementation. At the moment, this is always `v1`.
+        example: v1
+        in: header
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BidAcceptedDto'
+      responses:
+        '202':
+          description: Successfully processed
+x-tagGroups:
+- name: Authentication
+  tags:
+  - authentication
+- name: Managing resources
+  tags:
+  - sites
+  - resources
+- name: Markets
+  tags:
+  - markets
+- name: Reporting flexibility
+  tags:
+  - baselining
+  - creating_bids
+  - metrics
+- name: Activating flexibility
+  tags:
+  - accepting_bids
+- name: Managing bids
+  tags:
+  - managing_bids
+- name: Forecasting
+  tags:
+  - getting_forecasts
+  - uploading_forecasts
+  - events
+- name: Sensor data
+  tags:
+  - sensor_data
+- name: Historical Data
+  tags:
+  - historical_data

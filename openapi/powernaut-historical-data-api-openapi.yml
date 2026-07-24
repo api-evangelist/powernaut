@@ -1,0 +1,360 @@
+openapi: 3.0.0
+info:
+  title: Powernaut authentication historical_data API
+  description: '
+
+    # Getting Started
+
+
+    Welcome to the Powernaut API Reference!
+
+
+    Our API offers a robust and secure way to connect your flexible resources to flexibility buyers such as energy utilities/suppliers and system operators.
+
+
+    This OpenAPI documentation is designed to provide a comprehensive and easy-to-understand guide for developers who are integrating their systems with Powernaut’s platform.
+
+
+    By leveraging our API, you can seamlessly offer flexibility in several electricity markets, opening up additional revenue streams
+
+    for your resources while contributing to a greener and more efficient electricity grid.
+
+    '
+  version: 1.0.0
+  contact:
+    name: Powernaut Support
+    url: https://powernaut.io
+    email: support@powernaut.io
+  license:
+    name: Creative Commons Attribution-ShareAlike 4.0 International
+    url: https://creativecommons.org/licenses/by-sa/4.0/
+servers:
+- url: https://api.sandbox.powernaut.io
+  description: Sandbox
+- url: https://api.powernaut.io
+  description: Production
+tags:
+- name: historical_data
+  description: 'Upload historical meter data for your sites.
+
+
+    Use these endpoints to import historical consumption and production data via CSV files.'
+  x-displayName: Historical Data
+paths:
+  /v1/connect/historical-data/upload-url:
+    post:
+      description: Generates a pre-signed S3 PUT URL for uploading historical meter data as a CSV file.
+      operationId: CreateHistoricalDataUploadUrl
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUploadUrlApiDto'
+      responses:
+        '201':
+          description: Upload URL created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadUrlResponseDto'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+        '404':
+          description: Site not found or site does not have a connection point
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundDto_U2l0ZSBub3QgZm91bmQgb3Igc2l0ZSBkb2VzIG5vdCBoYXZlIGEgY29ubmVjdGlvbiBwb2ludA'
+      security:
+      - cloud-cloud: []
+      summary: Create a pre-signed upload URL
+      tags:
+      - historical_data
+      x-codeSamples:
+      - source: "import requests\nimport json\n\nurl = \"https://api.powernaut.io/v1/connect/historical-data/upload-url\"\n\npayload = json.dumps({\n  \"target_type\": \"<string>\",\n  \"target_id\": \"<uuid>\",\n  \"file_name\": \"<string>\"\n})\nheaders = {\n  'Content-Type': 'application/json',\n  'Accept': 'application/json',\n  'Authorization': 'Bearer <token>'\n}\n\nresponse = requests.request(\"POST\", url, headers=headers, data=payload)\n\nprint(response.text)\n"
+        lang: python
+        label: Python
+      - source: "const myHeaders = new Headers();\nmyHeaders.append(\"Content-Type\", \"application/json\");\nmyHeaders.append(\"Accept\", \"application/json\");\nmyHeaders.append(\"Authorization\", \"Bearer <token>\");\n\nconst raw = JSON.stringify({\n  \"target_type\": \"<string>\",\n  \"target_id\": \"<uuid>\",\n  \"file_name\": \"<string>\"\n});\n\nconst requestOptions = {\n  method: \"POST\",\n  headers: myHeaders,\n  body: raw,\n  redirect: \"follow\"\n};\n\nfetch(\"https://api.powernaut.io/v1/connect/historical-data/upload-url\", requestOptions)\n  .then((response) => response.text())\n  .then((result) => console.log(result))\n  .catch((error) => console.error(error));"
+        lang: javascript
+        label: JavaScript
+      - source: "OkHttpClient client = new OkHttpClient().newBuilder()\n  .build();\nMediaType mediaType = MediaType.parse(\"application/json\");\nRequestBody body = RequestBody.create(mediaType, \"{\\n  \\\"target_type\\\": \\\"<string>\\\",\\n  \\\"target_id\\\": \\\"<uuid>\\\",\\n  \\\"file_name\\\": \\\"<string>\\\"\\n}\");\nRequest request = new Request.Builder()\n  .url(\"https://api.powernaut.io/v1/connect/historical-data/upload-url\")\n  .method(\"POST\", body)\n  .addHeader(\"Content-Type\", \"application/json\")\n  .addHeader(\"Accept\", \"application/json\")\n  .addHeader(\"Authorization\", \"Bearer <token>\")\n  .build();\nResponse response = client.newCall(request).execute();"
+        lang: java
+        label: Java
+      - source: "package main\n\nimport (\n  \"fmt\"\n  \"strings\"\n  \"net/http\"\n  \"io/ioutil\"\n)\n\nfunc main() {\n\n  url := \"https://api.powernaut.io/v1/connect/historical-data/upload-url\"\n  method := \"POST\"\n\n  payload := strings.NewReader(`{\n  \"target_type\": \"<string>\",\n  \"target_id\": \"<uuid>\",\n  \"file_name\": \"<string>\"\n}`)\n\n  client := &http.Client {\n  }\n  req, err := http.NewRequest(method, url, payload)\n\n  if err != nil {\n    fmt.Println(err)\n    return\n  }\n  req.Header.Add(\"Content-Type\", \"application/json\")\n  req.Header.Add(\"Accept\", \"application/json\")\n  req.Header.Add(\"Authorization\", \"Bearer <token>\")\n\n  res, err := client.Do(req)\n  if err != nil {\n    fmt.Println(err)\n    return\n  }\n  defer res.Body.Close()\n\n  body, err := ioutil.ReadAll(res.Body)\n  if err != nil {\n    fmt.Println(err)\n    return\n  }\n  fmt.Println(string(body))\n}"
+        lang: go
+        label: Go
+      - source: 'var client = new HttpClient();
+
+          var request = new HttpRequestMessage(HttpMethod.Post, "https://api.powernaut.io/v1/connect/historical-data/upload-url");
+
+          request.Headers.Add("Accept", "application/json");
+
+          request.Headers.Add("Authorization", "Bearer <token>");
+
+          var content = new StringContent("{\n  \"target_type\": \"<string>\",\n  \"target_id\": \"<uuid>\",\n  \"file_name\": \"<string>\"\n}", null, "application/json");
+
+          request.Content = content;
+
+          var response = await client.SendAsync(request);
+
+          response.EnsureSuccessStatusCode();
+
+          Console.WriteLine(await response.Content.ReadAsStringAsync());
+
+          '
+        lang: csharp
+        label: C#
+      - source: "curl --location 'https://api.powernaut.io/v1/connect/historical-data/upload-url' \\\n--header 'Content-Type: application/json' \\\n--header 'Accept: application/json' \\\n--header 'Authorization: Bearer <token>' \\\n--data '{\n  \"target_type\": \"<string>\",\n  \"target_id\": \"<uuid>\",\n  \"file_name\": \"<string>\"\n}'"
+        lang: curl
+        label: cURL
+components:
+  schemas:
+    BadRequestExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example:
+          - Invalid datetime
+          - Invalid page size
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
+      required:
+      - message
+      - error
+      - status_code
+    UploadUrlResponseDto:
+      type: object
+      properties:
+        import_id:
+          type: string
+          description: Unique identifier for this import operation.
+          format: uuid
+        upload_url:
+          type: string
+          description: Pre-signed S3 PUT URL for uploading the CSV file.
+      required:
+      - import_id
+      - upload_url
+    UnauthorizedExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Unauthorized
+        error:
+          type: string
+          description: Unauthorized
+          example: Unauthorized
+        status_code:
+          type: number
+          description: '401'
+          example: 401
+      required:
+      - message
+      - error
+      - status_code
+    NotFoundDto_U2l0ZSBub3QgZm91bmQgb3Igc2l0ZSBkb2VzIG5vdCBoYXZlIGEgY29ubmVjdGlvbiBwb2ludA:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Site not found or site does not have a connection point
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
+    CreateUploadUrlApiDto:
+      type: object
+      properties:
+        target_type:
+          type: string
+          description: The type of target entity. Currently only `site` is supported.
+          example: site
+          enum:
+          - site
+        target_id:
+          type: string
+          description: The UUID of the target entity (site).
+          format: uuid
+        file_name:
+          type: string
+          description: The name of the CSV file to upload.
+          example: meter-data-2024.csv
+      required:
+      - target_type
+      - target_id
+      - file_name
+    ForbiddenExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Insufficient permissions
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
+  securitySchemes:
+    cloud-cloud:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+      description: A bearer token obtained from the token endpoint.
+    token:
+      type: http
+      scheme: basic
+      description: Your client id and secret to obtain a bearer token for cloud-cloud authentication.
+    edge-cloud:
+      type: http
+      scheme: basic
+      description: Basic credentials used for edge-cloud authentication. They can be obtained when creating a site.
+x-webhooks:
+  bidAccepted:
+    post:
+      operationId: WebhookBidAccepted
+      description: 'During bidding, you can set a webhook to receive activation events on.
+
+
+        ### Fetching details
+
+
+        To make webhooks easy to implement, while also being secure, a webhook contains only a single reference to the bid that was accepted. You should use this reference to fetch the activation details by looking up the accepted bid.
+
+
+        See [this endpoint](#tag/managing_bids/operation/GetBid) for details on how to look up activation details.
+
+
+        ### Retries
+
+
+        You should reply with a `2XX` status code, indicating you have successfully activated the asset.
+
+        You can also reply with a `406` status code if you notice that the activation cannot be delivered upon for some reason (e.g. a suddenly disconnected car).
+
+
+        We will retry your webhook up to 3 times in case you:
+
+
+        1. Do not reply with a `2XX` or `406` status code or,
+
+        2. We do not get a successful reply within 5 seconds
+
+
+        Our portal shows a log of both successful and failed webhook calls.
+
+
+        '
+      summary: Receive an accepted bid
+      tags:
+      - accepting_bids
+      security: []
+      parameters:
+      - name: X-Powernaut-Webhook-Version
+        description: A version indicator for this webhook, used to track changes to the webhook implementation. At the moment, this is always `v1`.
+        example: v1
+        in: header
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BidAcceptedDto'
+      responses:
+        '202':
+          description: Successfully processed
+x-tagGroups:
+- name: Authentication
+  tags:
+  - authentication
+- name: Managing resources
+  tags:
+  - sites
+  - resources
+- name: Markets
+  tags:
+  - markets
+- name: Reporting flexibility
+  tags:
+  - baselining
+  - creating_bids
+  - metrics
+- name: Activating flexibility
+  tags:
+  - accepting_bids
+- name: Managing bids
+  tags:
+  - managing_bids
+- name: Forecasting
+  tags:
+  - getting_forecasts
+  - uploading_forecasts
+  - events
+- name: Sensor data
+  tags:
+  - sensor_data
+- name: Historical Data
+  tags:
+  - historical_data

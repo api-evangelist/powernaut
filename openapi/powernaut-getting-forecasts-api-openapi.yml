@@ -1,0 +1,492 @@
+openapi: 3.0.0
+info:
+  title: Powernaut authentication getting_forecasts API
+  description: '
+
+    # Getting Started
+
+
+    Welcome to the Powernaut API Reference!
+
+
+    Our API offers a robust and secure way to connect your flexible resources to flexibility buyers such as energy utilities/suppliers and system operators.
+
+
+    This OpenAPI documentation is designed to provide a comprehensive and easy-to-understand guide for developers who are integrating their systems with Powernaut’s platform.
+
+
+    By leveraging our API, you can seamlessly offer flexibility in several electricity markets, opening up additional revenue streams
+
+    for your resources while contributing to a greener and more efficient electricity grid.
+
+    '
+  version: 1.0.0
+  contact:
+    name: Powernaut Support
+    url: https://powernaut.io
+    email: support@powernaut.io
+  license:
+    name: Creative Commons Attribution-ShareAlike 4.0 International
+    url: https://creativecommons.org/licenses/by-sa/4.0/
+servers:
+- url: https://api.sandbox.powernaut.io
+  description: Sandbox
+- url: https://api.powernaut.io
+  description: Production
+tags:
+- name: getting_forecasts
+  description: 'You can retrieve forecasts to help plan your flexibility offerings and understand expected power consumption or production patterns.
+
+
+    See the [guide](/guides/connect/forecasting/getting-forecasts) for more information.'
+  x-displayName: Getting forecasts
+paths:
+  /v1/connect/sites/{id}/forecast:
+    get:
+      operationId: GetForecastForSite
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Identifier of the site (UUID format).
+        schema:
+          type: string
+          format: uuid
+      - name: start
+        required: true
+        in: query
+        description: 'Start of window (ISO 8601). Must be a perfect quarter hour without seconds or milliseconds precision.
+
+
+          **Note**: To avoid timezone issues, we perform an additional check for the presence of timezone information. You should always include either UTC with `Z`, or an offset like `+01:00`.'
+        schema:
+          example: '2024-07-01T14:00:00Z'
+          type: string
+      - name: amount
+        required: true
+        in: query
+        description: The number of forecast data points to retrieve.
+        schema:
+          type: number
+      - name: granularity
+        required: true
+        in: query
+        description: 'The granularity to fetch the forecast for, i.e. the time length of each element.
+
+
+          Only 15-minute granularity is supported.
+
+
+          The expected format is <a href="https://en.wikipedia.org/wiki/ISO_8601#Durations" target="_blank">ISO8601</a>.'
+        schema:
+          example: PT15M
+          type: string
+      - name: signal
+        required: true
+        in: query
+        schema:
+          enum:
+          - net-meter
+          - baseload
+          type: string
+      responses:
+        '200':
+          description: An array of forecast data points.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForecastDto'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+        '404':
+          description: Forecast not found for this site.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundDto_Rm9yZWNhc3Qgbm90IGZvdW5kIGZvciB0aGlzIHNpdGUu'
+      security:
+      - cloud-cloud: []
+      summary: Retrieve forecasted signals for a specific site
+      tags:
+      - getting_forecasts
+  /v1/connect/resources/{id}/forecast:
+    get:
+      operationId: GetForecastForResource
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Identifier of the resource (UUID format).
+        schema:
+          type: string
+          format: uuid
+      - name: start
+        required: true
+        in: query
+        description: 'Start of window (ISO 8601). Must be a perfect quarter hour without seconds or milliseconds precision.
+
+
+          **Note**: To avoid timezone issues, we perform an additional check for the presence of timezone information. You should always include either UTC with `Z`, or an offset like `+01:00`.'
+        schema:
+          example: '2024-07-01T14:00:00Z'
+          type: string
+      - name: amount
+        required: true
+        in: query
+        description: The number of forecast data points to retrieve.
+        schema:
+          type: number
+      - name: granularity
+        required: true
+        in: query
+        description: 'The granularity to fetch the forecast for, i.e. the time length of each element.
+
+
+          Only 15-minute granularity is supported.
+
+
+          The expected format is <a href="https://en.wikipedia.org/wiki/ISO_8601#Durations" target="_blank">ISO8601</a>.'
+        schema:
+          example: PT15M
+          type: string
+      - name: signal
+        required: true
+        in: query
+        schema:
+          enum:
+          - net-resource
+          type: string
+      responses:
+        '200':
+          description: An array of forecast data points.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForecastDto'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+        '404':
+          description: Forecast not found for this resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundDto_Rm9yZWNhc3Qgbm90IGZvdW5kIGZvciB0aGlzIHJlc291cmNlLg'
+      security:
+      - edge-cloud: []
+      - cloud-cloud: []
+      summary: Retrieve forecasted signals for a specific resource
+      tags:
+      - getting_forecasts
+components:
+  schemas:
+    ForecastDto:
+      type: object
+      properties:
+        data:
+          description: List of forecast elements, one for each granularity requested. This will always contain the requested `amount` of elements.
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/ForecastElementDto'
+      required:
+      - data
+    BadRequestExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example:
+          - Invalid datetime
+          - Invalid page size
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
+      required:
+      - message
+      - error
+      - status_code
+    NotFoundDto_Rm9yZWNhc3Qgbm90IGZvdW5kIGZvciB0aGlzIHNpdGUu:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Forecast not found for this site.
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
+    UnauthorizedExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Unauthorized
+        error:
+          type: string
+          description: Unauthorized
+          example: Unauthorized
+        status_code:
+          type: number
+          description: '401'
+          example: 401
+      required:
+      - message
+      - error
+      - status_code
+    ForecastElementDto:
+      type: object
+      properties:
+        start:
+          type: string
+          description: The start datetime of the forecast interval (ISO 8601 format).
+          format: date-time
+        end:
+          type: string
+          description: The end datetime of the forecast interval (ISO 8601 format).
+          format: date-time
+        value:
+          type: string
+          description: The forecasted value.
+          nullable: true
+          example: '123.456789'
+        unit:
+          type: string
+          description: The unit of the forecasted value.
+          enum:
+          - W
+          - Wh
+          - kW
+          - kWh
+          - MW
+          - MWh
+          - GW
+          - GWh
+          - '%'
+          - ''
+          example: kW
+          nullable: true
+        last_updated:
+          type: string
+          description: The datetime when the forecast was last updated at the time of the query (ISO 8601 format).
+          format: date-time
+          nullable: true
+        model_id:
+          type: string
+          description: The identifier of the model that was used to generate this forecasted value.
+          nullable: true
+      required:
+      - start
+      - end
+      - value
+      - unit
+      - last_updated
+      - model_id
+    NotFoundDto_Rm9yZWNhc3Qgbm90IGZvdW5kIGZvciB0aGlzIHJlc291cmNlLg:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Forecast not found for this resource.
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
+    ForbiddenExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Insufficient permissions
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
+  securitySchemes:
+    cloud-cloud:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+      description: A bearer token obtained from the token endpoint.
+    token:
+      type: http
+      scheme: basic
+      description: Your client id and secret to obtain a bearer token for cloud-cloud authentication.
+    edge-cloud:
+      type: http
+      scheme: basic
+      description: Basic credentials used for edge-cloud authentication. They can be obtained when creating a site.
+x-webhooks:
+  bidAccepted:
+    post:
+      operationId: WebhookBidAccepted
+      description: 'During bidding, you can set a webhook to receive activation events on.
+
+
+        ### Fetching details
+
+
+        To make webhooks easy to implement, while also being secure, a webhook contains only a single reference to the bid that was accepted. You should use this reference to fetch the activation details by looking up the accepted bid.
+
+
+        See [this endpoint](#tag/managing_bids/operation/GetBid) for details on how to look up activation details.
+
+
+        ### Retries
+
+
+        You should reply with a `2XX` status code, indicating you have successfully activated the asset.
+
+        You can also reply with a `406` status code if you notice that the activation cannot be delivered upon for some reason (e.g. a suddenly disconnected car).
+
+
+        We will retry your webhook up to 3 times in case you:
+
+
+        1. Do not reply with a `2XX` or `406` status code or,
+
+        2. We do not get a successful reply within 5 seconds
+
+
+        Our portal shows a log of both successful and failed webhook calls.
+
+
+        '
+      summary: Receive an accepted bid
+      tags:
+      - accepting_bids
+      security: []
+      parameters:
+      - name: X-Powernaut-Webhook-Version
+        description: A version indicator for this webhook, used to track changes to the webhook implementation. At the moment, this is always `v1`.
+        example: v1
+        in: header
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BidAcceptedDto'
+      responses:
+        '202':
+          description: Successfully processed
+x-tagGroups:
+- name: Authentication
+  tags:
+  - authentication
+- name: Managing resources
+  tags:
+  - sites
+  - resources
+- name: Markets
+  tags:
+  - markets
+- name: Reporting flexibility
+  tags:
+  - baselining
+  - creating_bids
+  - metrics
+- name: Activating flexibility
+  tags:
+  - accepting_bids
+- name: Managing bids
+  tags:
+  - managing_bids
+- name: Forecasting
+  tags:
+  - getting_forecasts
+  - uploading_forecasts
+  - events
+- name: Sensor data
+  tags:
+  - sensor_data
+- name: Historical Data
+  tags:
+  - historical_data

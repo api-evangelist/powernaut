@@ -1,0 +1,1463 @@
+openapi: 3.0.0
+info:
+  title: Powernaut authentication sites API
+  description: '
+
+    # Getting Started
+
+
+    Welcome to the Powernaut API Reference!
+
+
+    Our API offers a robust and secure way to connect your flexible resources to flexibility buyers such as energy utilities/suppliers and system operators.
+
+
+    This OpenAPI documentation is designed to provide a comprehensive and easy-to-understand guide for developers who are integrating their systems with Powernaut’s platform.
+
+
+    By leveraging our API, you can seamlessly offer flexibility in several electricity markets, opening up additional revenue streams
+
+    for your resources while contributing to a greener and more efficient electricity grid.
+
+    '
+  version: 1.0.0
+  contact:
+    name: Powernaut Support
+    url: https://powernaut.io
+    email: support@powernaut.io
+  license:
+    name: Creative Commons Attribution-ShareAlike 4.0 International
+    url: https://creativecommons.org/licenses/by-sa/4.0/
+servers:
+- url: https://api.sandbox.powernaut.io
+  description: Sandbox
+- url: https://api.powernaut.io
+  description: Production
+tags:
+- name: sites
+  description: 'Register, modify or delete sites.
+
+
+    Sites are the start of everything, they are required to uniquely identify the end consumer''s connection to the grid. They define the meter point(s) for which flexibility is activated.
+
+
+    ⚠️ The `/v1/connect/connection-points` endpoints have moved to `/v1/connect/sites`. The original paths have been deprecated.'
+  x-displayName: Sites
+paths:
+  /v1/connect/sites:
+    post:
+      description: 'Create a new site.
+
+
+        The credentials returned can be used for edge-cloud authentication, if needed.'
+      operationId: CreateSite
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateConnectionPointDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectionPointWithCredentialsDto'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+      security:
+      - cloud-cloud: []
+      summary: Create a site
+      tags:
+      - sites
+      x-codeSamples:
+      - source: "import requests\nimport json\n\nurl = \"https://api.powernaut.io/v1/connect/sites\"\n\npayload = json.dumps({\n  \"location\": {\n    \"address\": \"<string>\"\n  },\n  \"supply_points\": [\n    {\n      \"grid_identifier\": \"<string>\",\n      \"direction\": \"bidirectional\"\n    },\n    {\n      \"grid_identifier\": \"<string>\",\n      \"direction\": \"bidirectional\"\n    }\n  ],\n  \"grid_identifier\": \"<string>\",\n  \"external_id\": \"<string>\",\n  \"infer_meter_data_from_resources\": False\n})\nheaders = {\n  'Content-Type': 'application/json',\n  'Accept': 'application/json',\n  'Authorization': 'Bearer <token>'\n}\n\nresponse = requests.request(\"POST\", url, headers=headers, data=payload)\n\nprint(response.text)\n"
+        lang: python
+        label: Python
+      - source: "const myHeaders = new Headers();\nmyHeaders.append(\"Content-Type\", \"application/json\");\nmyHeaders.append(\"Accept\", \"application/json\");\nmyHeaders.append(\"Authorization\", \"Bearer <token>\");\n\nconst raw = JSON.stringify({\n  \"location\": {\n    \"address\": \"<string>\"\n  },\n  \"supply_points\": [\n    {\n      \"grid_identifier\": \"<string>\",\n      \"direction\": \"bidirectional\"\n    },\n    {\n      \"grid_identifier\": \"<string>\",\n      \"direction\": \"bidirectional\"\n    }\n  ],\n  \"grid_identifier\": \"<string>\",\n  \"external_id\": \"<string>\",\n  \"infer_meter_data_from_resources\": false\n});\n\nconst requestOptions = {\n  method: \"POST\",\n  headers: myHeaders,\n  body: raw,\n  redirect: \"follow\"\n};\n\nfetch(\"https://api.powernaut.io/v1/connect/sites\", requestOptions)\n  .then((response) => response.text())\n  .then((result) => console.log(result))\n  .catch((error) => console.error(error));"
+        lang: javascript
+        label: JavaScript
+      - source: "OkHttpClient client = new OkHttpClient().newBuilder()\n  .build();\nMediaType mediaType = MediaType.parse(\"application/json\");\nRequestBody body = RequestBody.create(mediaType, \"{\\n  \\\"location\\\": {\\n    \\\"address\\\": \\\"<string>\\\"\\n  },\\n  \\\"supply_points\\\": [\\n    {\\n      \\\"grid_identifier\\\": \\\"<string>\\\",\\n      \\\"direction\\\": \\\"bidirectional\\\"\\n    },\\n    {\\n      \\\"grid_identifier\\\": \\\"<string>\\\",\\n      \\\"direction\\\": \\\"bidirectional\\\"\\n    }\\n  ],\\n  \\\"grid_identifier\\\": \\\"<string>\\\",\\n  \\\"external_id\\\": \\\"<string>\\\",\\n  \\\"infer_meter_data_from_resources\\\": false\\n}\");\nRequest request = new Request.Builder()\n  .url(\"https://api.powernaut.io/v1/connect/sites\")\n  .method(\"POST\", body)\n  .addHeader(\"Content-Type\", \"application/json\")\n  .addHeader(\"Accept\", \"application/json\")\n  .addHeader(\"Authorization\", \"Bearer <token>\")\n  .build();\nResponse response = client.newCall(request).execute();"
+        lang: java
+        label: Java
+      - source: "package main\n\nimport (\n  \"fmt\"\n  \"strings\"\n  \"net/http\"\n  \"io/ioutil\"\n)\n\nfunc main() {\n\n  url := \"https://api.powernaut.io/v1/connect/sites\"\n  method := \"POST\"\n\n  payload := strings.NewReader(`{\n  \"location\": {\n    \"address\": \"<string>\"\n  },\n  \"supply_points\": [\n    {\n      \"grid_identifier\": \"<string>\",\n      \"direction\": \"bidirectional\"\n    },\n    {\n      \"grid_identifier\": \"<string>\",\n      \"direction\": \"bidirectional\"\n    }\n  ],\n  \"grid_identifier\": \"<string>\",\n  \"external_id\": \"<string>\",\n  \"infer_meter_data_from_resources\": false\n}`)\n\n  client := &http.Client {\n  }\n  req, err := http.NewRequest(method, url, payload)\n\n  if err != nil {\n    fmt.Println(err)\n    return\n  }\n  req.Header.Add(\"Content-Type\", \"application/json\")\n  req.Header.Add(\"Accept\", \"application/json\")\n  req.Header.Add(\"Authorization\", \"Bearer <token>\")\n\n  res, err := client.Do(req)\n  if err != nil {\n    fmt.Println(err)\n    return\n  }\n  defer res.Body.Close()\n\n  body, err := ioutil.ReadAll(res.Body)\n  if err != nil {\n    fmt.Println(err)\n    return\n  }\n  fmt.Println(string(body))\n}"
+        lang: go
+        label: Go
+      - source: 'var client = new HttpClient();
+
+          var request = new HttpRequestMessage(HttpMethod.Post, "https://api.powernaut.io/v1/connect/sites");
+
+          request.Headers.Add("Accept", "application/json");
+
+          request.Headers.Add("Authorization", "Bearer <token>");
+
+          var content = new StringContent("{\n  \"location\": {\n    \"address\": \"<string>\"\n  },\n  \"supply_points\": [\n    {\n      \"grid_identifier\": \"<string>\",\n      \"direction\": \"bidirectional\"\n    },\n    {\n      \"grid_identifier\": \"<string>\",\n      \"direction\": \"bidirectional\"\n    }\n  ],\n  \"grid_identifier\": \"<string>\",\n  \"external_id\": \"<string>\",\n  \"infer_meter_data_from_resources\": false\n}", null, "application/json");
+
+          request.Content = content;
+
+          var response = await client.SendAsync(request);
+
+          response.EnsureSuccessStatusCode();
+
+          Console.WriteLine(await response.Content.ReadAsStringAsync());
+
+          '
+        lang: csharp
+        label: C#
+      - source: "curl --location 'https://api.powernaut.io/v1/connect/sites' \\\n--header 'Content-Type: application/json' \\\n--header 'Accept: application/json' \\\n--header 'Authorization: Bearer <token>' \\\n--data '{\n  \"location\": {\n    \"address\": \"<string>\"\n  },\n  \"supply_points\": [\n    {\n      \"grid_identifier\": \"<string>\",\n      \"direction\": \"bidirectional\"\n    },\n    {\n      \"grid_identifier\": \"<string>\",\n      \"direction\": \"bidirectional\"\n    }\n  ],\n  \"grid_identifier\": \"<string>\",\n  \"external_id\": \"<string>\",\n  \"infer_meter_data_from_resources\": false\n}'"
+        lang: curl
+        label: cURL
+    get:
+      description: Gets all sites available to your current authorised scope. Results are ordered based on creation date (most recent first).
+      operationId: FindAllSites
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Page number
+        schema:
+          type: number
+          minimum: 1
+          default: 1
+      - name: page_size
+        required: false
+        in: query
+        description: Page size
+        schema:
+          type: number
+          minimum: 1
+          default: 10
+      responses:
+        '200':
+          description: All sites
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectionPointListDto'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+      security:
+      - edge-cloud: []
+      - cloud-cloud: []
+      summary: Get all sites
+      tags:
+      - sites
+      x-codeSamples:
+      - source: "import requests\n\nurl = \"https://api.powernaut.io/v1/connect/sites?page=1&page_size=10\"\n\npayload = {}\nheaders = {\n  'Accept': 'application/json',\n  'Authorization': 'Bearer <token>'\n}\n\nresponse = requests.request(\"GET\", url, headers=headers, data=payload)\n\nprint(response.text)\n"
+        lang: python
+        label: Python
+      - source: "const myHeaders = new Headers();\nmyHeaders.append(\"Accept\", \"application/json\");\nmyHeaders.append(\"Authorization\", \"Bearer <token>\");\n\nconst requestOptions = {\n  method: \"GET\",\n  headers: myHeaders,\n  redirect: \"follow\"\n};\n\nfetch(\"https://api.powernaut.io/v1/connect/sites?page=1&page_size=10\", requestOptions)\n  .then((response) => response.text())\n  .then((result) => console.log(result))\n  .catch((error) => console.error(error));"
+        lang: javascript
+        label: JavaScript
+      - source: "OkHttpClient client = new OkHttpClient().newBuilder()\n  .build();\nMediaType mediaType = MediaType.parse(\"text/plain\");\nRequestBody body = RequestBody.create(mediaType, \"\");\nRequest request = new Request.Builder()\n  .url(\"https://api.powernaut.io/v1/connect/sites?page=1&page_size=10\")\n  .method(\"GET\", body)\n  .addHeader(\"Accept\", \"application/json\")\n  .addHeader(\"Authorization\", \"Bearer <token>\")\n  .build();\nResponse response = client.newCall(request).execute();"
+        lang: java
+        label: Java
+      - source: "package main\n\nimport (\n  \"fmt\"\n  \"net/http\"\n  \"io/ioutil\"\n)\n\nfunc main() {\n\n  url := \"https://api.powernaut.io/v1/connect/sites?page=1&page_size=10\"\n  method := \"GET\"\n\n  client := &http.Client {\n  }\n  req, err := http.NewRequest(method, url, nil)\n\n  if err != nil {\n    fmt.Println(err)\n    return\n  }\n  req.Header.Add(\"Accept\", \"application/json\")\n  req.Header.Add(\"Authorization\", \"Bearer <token>\")\n\n  res, err := client.Do(req)\n  if err != nil {\n    fmt.Println(err)\n    return\n  }\n  defer res.Body.Close()\n\n  body, err := ioutil.ReadAll(res.Body)\n  if err != nil {\n    fmt.Println(err)\n    return\n  }\n  fmt.Println(string(body))\n}"
+        lang: go
+        label: Go
+      - source: 'var client = new HttpClient();
+
+          var request = new HttpRequestMessage(HttpMethod.Get, "https://api.powernaut.io/v1/connect/sites?page=1&page_size=10");
+
+          request.Headers.Add("Accept", "application/json");
+
+          request.Headers.Add("Authorization", "Bearer <token>");
+
+          var response = await client.SendAsync(request);
+
+          response.EnsureSuccessStatusCode();
+
+          Console.WriteLine(await response.Content.ReadAsStringAsync());
+
+          '
+        lang: csharp
+        label: C#
+      - source: 'curl --location ''https://api.powernaut.io/v1/connect/sites?page=1&page_size=10'' \
+
+          --header ''Accept: application/json'' \
+
+          --header ''Authorization: Bearer <token>'''
+        lang: curl
+        label: cURL
+  /v1/connect/sites/{id}:
+    get:
+      description: Gets a site by its unique ID.
+      operationId: GetSite
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Identifier of the site.
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: The site
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectionPointDto'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+        '404':
+          description: Site does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA'
+      security:
+      - edge-cloud: []
+      - cloud-cloud: []
+      summary: Get a site
+      tags:
+      - sites
+    patch:
+      description: 'Update a site by its unique ID.
+
+
+        Only the properties you provide will be updated. Use `null` to unset a property.'
+      operationId: UpdateSite
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Identifier of the site you want to update.
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateConnectionPointDto'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectionPointDto'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+        '404':
+          description: Site does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA'
+      security:
+      - cloud-cloud: []
+      summary: Update a site
+      tags:
+      - sites
+    delete:
+      description: 'Delete a site
+
+
+        **Important**: This action is irreversible and will remove all associated resources, future bids, and baselines.'
+      operationId: RemoveSite
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Identifier of the site you want to delete.
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+        '404':
+          description: Site does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA'
+      security:
+      - cloud-cloud: []
+      summary: Delete a site
+      tags:
+      - sites
+  /v1/connect/sites/{id}/credentials:
+    post:
+      description: 'Creates a new named credential pair for this site and returns the plaintext secret once.
+
+
+        Provide a unique logical `name` when you need more than the default credential set. Omit `name` only to create the primary `"Default"` slot when it does not yet exist.'
+      operationId: SitesController_createCredentials_v1
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Site ID
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        description: Credential name parameters.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateConnectionPointCredentialDto'
+      responses:
+        '201':
+          description: New credentials created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectionPointCredentialDto'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+        '404':
+          description: Site does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA'
+        '409':
+          description: A credential set with this name already exists for this connection point
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConflictDto_QSBjcmVkZW50aWFsIHNldCB3aXRoIHRoaXMgbmFtZSBhbHJlYWR5IGV4aXN0cyBmb3IgdGhpcyBjb25uZWN0aW9uIHBvaW50'
+      security:
+      - cloud-cloud: []
+      summary: Generate connection credentials
+      tags:
+      - sites
+    get:
+      description: Returns every stored credential row for this site (by name and rotating state) without any secrets.
+      operationId: SitesController_listCredentials_v1
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Site ID
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Credential metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectionPointStoredCredentialListDto'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+        '404':
+          description: Site does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA'
+      security:
+      - cloud-cloud: []
+      summary: List credential metadata
+      tags:
+      - sites
+    delete:
+      description: Irrevocably deletes stored credentials for the named slot, including any rotating pair. Pass `name=Default` explicitly to revoke the default credential slot.
+      operationId: SitesController_revokeCredentials_v1
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Site ID
+        schema:
+          type: string
+          format: uuid
+      - name: name
+        required: true
+        in: query
+        description: Logical credential slot to remove.
+        schema:
+          minLength: 1
+          maxLength: 512
+          type: string
+      responses:
+        '204':
+          description: Credentials revoked successfully
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+        '404':
+          description: Site does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA'
+      security:
+      - cloud-cloud: []
+      summary: Revoke credentials
+      tags:
+      - sites
+  /v1/connect/sites/{id}/credentials/rotate:
+    post:
+      description: 'Creates new credentials and marks the old ones for rotation.
+
+
+        Both sets of credentials remain valid until the rotation is either completed or canceled. This allows for a seamless transition between the old and new credentials, ensuring that there is no downtime or disruption in service during the rotation process.
+
+
+        Optional `name` selects which logical credential set to rotate (defaults to `"Default"`).'
+      operationId: SitesController_startRotation_v1
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Site ID
+        schema:
+          type: string
+          format: uuid
+      - name: name
+        required: false
+        in: query
+        description: Credential slot to rotate. When omitted, the `"Default"` credential is rotated.
+        schema:
+          minLength: 1
+          maxLength: 512
+          type: string
+      responses:
+        '200':
+          description: New credentials created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectionPointCredentialDto'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+      security:
+      - cloud-cloud: []
+      summary: Rotate credentials
+      tags:
+      - sites
+  /v1/connect/sites/{id}/credentials/rotate/complete:
+    post:
+      description: 'Completes the credential rotation process by permanently removing the old credentials from the system. Once this operation is performed, the old credentials will no longer be valid and this action cannot be undone.
+
+
+        Optional `name` completes rotation for that slot (defaults to `"Default"`).'
+      operationId: SitesController_completeRotation_v1
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Site ID
+        schema:
+          type: string
+          format: uuid
+      - name: name
+        required: false
+        in: query
+        description: Credential slot whose rotation should be finalised. When omitted, `"Default"` is completed.
+        schema:
+          minLength: 1
+          maxLength: 512
+          type: string
+      responses:
+        '204':
+          description: Rotation completed successfully
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+      security:
+      - cloud-cloud: []
+      summary: Complete credential rotation
+      tags:
+      - sites
+  /v1/connect/sites/{id}/credentials/rotate/cancel:
+    post:
+      description: 'Cancels the credential rotation process. This action will remove the newly generated credentials and retain the old credentials, keeping them active and valid.
+
+
+        Optional `name` cancels rotation for that slot (defaults to `"Default"`).'
+      operationId: SitesController_cancelRotation_v1
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Site ID
+        schema:
+          type: string
+          format: uuid
+      - name: name
+        required: false
+        in: query
+        description: Credential slot whose rotation should be cancelled. When omitted, `"Default"` is cancelled.
+        schema:
+          minLength: 1
+          maxLength: 512
+          type: string
+      responses:
+        '204':
+          description: Rotation canceled successfully
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenExceptionDto'
+      security:
+      - cloud-cloud: []
+      summary: Cancel credential rotation
+      tags:
+      - sites
+  /v1/connect/historical-data/{import_id}/confirm:
+    post:
+      description: Confirms a historical data import, transitioning it to processing status and dispatching an async job to process the uploaded CSV file.
+      operationId: ConfirmHistoricalDataImport
+      parameters:
+      - name: import_id
+        required: true
+        in: path
+        description: Identifier of the historical data import to confirm.
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Import confirmed and processing started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfirmImportResponseDto'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestExceptionDto'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedExceptionDto'
+        '403':
+          description: Import does not belong to the authenticated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenDto_SW1wb3J0IGRvZXMgbm90IGJlbG9uZyB0byB0aGUgYXV0aGVudGljYXRlZCB1c2Vy'
+        '404':
+          description: Historical data import not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundDto_SGlzdG9yaWNhbCBkYXRhIGltcG9ydCBub3QgZm91bmQ'
+        '409':
+          description: Import is not in pending status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConflictDto_SW1wb3J0IGlzIG5vdCBpbiBwZW5kaW5nIHN0YXR1cw'
+      security:
+      - cloud-cloud: []
+      summary: Confirm a historical data import
+      tags:
+      - sites
+components:
+  schemas:
+    GeoLocationDto:
+      type: object
+      properties:
+        latitude:
+          type: string
+          description: Latitude of the location
+          example: '4.4764595'
+          format: decimal
+        longitude:
+          type: string
+          description: Longitude of the location
+          example: '50.5010789'
+          format: decimal
+      required:
+      - latitude
+      - longitude
+    ConnectionPointStoredCredentialDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Human-readable credential set name.
+        key:
+          type: string
+          description: Credential key identifier (MQTT username equivalent). Never includes the plaintext secret.
+        is_rotating:
+          type: boolean
+          description: Whether this credential row represents the retiring key pair whilst rotation is underway.
+      required:
+      - name
+      - key
+      - is_rotating
+    ConfirmImportResponseDto:
+      type: object
+      properties:
+        status:
+          type: string
+          description: The current status of the import
+          enum:
+          - pending
+          - processing
+          - completed
+          - partially_failed
+          - failed
+          example: processing
+      required:
+      - status
+    BadRequestExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example:
+          - Invalid datetime
+          - Invalid page size
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
+      required:
+      - message
+      - error
+      - status_code
+    AddressLocationDto:
+      type: object
+      properties:
+        address:
+          type: string
+          description: Full-text address, including country
+          example: Full-text address, including country
+      required:
+      - address
+    ConnectionPointListDto:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total amount of results that match the query
+          minimum: 0
+        items:
+          description: Paginated items
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectionPointDto'
+      required:
+      - total
+      - items
+    ConnectionPointDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the site.
+          format: uuid
+        status:
+          type: string
+          description: The status of the (downstream) site, whether it has resources or not, etc.
+          enum:
+          - no_resources
+          - onboarded
+          - paused
+          - deleted
+        upstream_status:
+          type: string
+          description: The upstream status of the site, whether or not a matching upstream site exists, it has an active contract or not, etc.
+          enum:
+          - no_upstream_registered
+          - no_contract
+          - contract_needs_agreement
+          - contract_pending
+          - contract_active
+          - contract_inactive
+          - paused
+          - pending_steering_readiness
+          - deleted
+          - pending
+          - connected
+          - disconnected
+        location:
+          description: Location of the site, can either be coordinates or a full-text address (incl. country).
+          oneOf:
+          - $ref: '#/components/schemas/AddressLocationDto'
+          - $ref: '#/components/schemas/GeoLocationDto'
+        grid_identifier:
+          type: string
+          description: 'The primary grid identifier for this site (e.g. EAN/MPAN/...).
+
+
+            Common prefixes will be stripped. Check the `supply_points` property for optional secondary grid identifiers.'
+          example: '00000000'
+        external_id:
+          type: string
+          description: Reference of the site in an external system (gateway, API, ...), used for mapping identifiers.
+          example: NCC-1701
+          nullable: true
+        supply_points:
+          description: List of supply points linked to this site.
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplyPointDto'
+            maxLength: 2
+            minLength: 1
+        infer_meter_data_from_resources:
+          type: boolean
+          description: 'Whether site meter readings can be calculated by summing the meter readings from all individual resources at the site. When enabled, the site''s net meter value is derived from the sum of all resource meter readings rather than using direct site-level meter data.
+
+
+            **Important:** This is only supported for sites that:
+
+            - Do not have a baseload
+
+            - Have all resources actively submitting meter data'
+        head_meter_resource_id:
+          type: object
+          description: The physical head meter resource for this site.
+          format: uuid
+          nullable: true
+        created_at:
+          type: string
+          description: Timestamp for creation of the site (ISO 8601)
+          format: date-time
+          example: '2024-01-05T11:30:15Z'
+        modified_at:
+          type: string
+          description: Timestamp for last modification of the site (ISO 8601)
+          format: date-time
+          example: '2024-01-05T11:30:15Z'
+        last_seen_at:
+          type: string
+          description: Timestamp of the last metric sent to the platform (ISO 8601)
+          format: date-time
+          example: '2025-01-07T15:08:22Z'
+          nullable: true
+      required:
+      - id
+      - status
+      - upstream_status
+      - location
+      - grid_identifier
+      - supply_points
+      - infer_meter_data_from_resources
+      - created_at
+      - modified_at
+      - last_seen_at
+    ConnectionPointCredentialDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Logical name of this credential slot (for example `"Default"` for the primary MQTT credential set).
+          minLength: 1
+          maxLength: 512
+        key:
+          type: string
+          description: The credential key used for authenticating this site.
+          format: uuid
+        secret:
+          type: string
+          description: The credential secret (only available once upon creation).
+          example: secret
+      required:
+      - name
+      - key
+      - secret
+    ConnectionPointWithCredentialsDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the site.
+          format: uuid
+        status:
+          type: string
+          description: The status of the (downstream) site, whether it has resources or not, etc.
+          enum:
+          - no_resources
+          - onboarded
+          - paused
+          - deleted
+        upstream_status:
+          type: string
+          description: The upstream status of the site, whether or not a matching upstream site exists, it has an active contract or not, etc.
+          enum:
+          - no_upstream_registered
+          - no_contract
+          - contract_needs_agreement
+          - contract_pending
+          - contract_active
+          - contract_inactive
+          - paused
+          - pending_steering_readiness
+          - deleted
+          - pending
+          - connected
+          - disconnected
+        location:
+          description: Location of the site, can either be coordinates or a full-text address (incl. country).
+          oneOf:
+          - $ref: '#/components/schemas/AddressLocationDto'
+          - $ref: '#/components/schemas/GeoLocationDto'
+        grid_identifier:
+          type: string
+          description: 'The primary grid identifier for this site (e.g. EAN/MPAN/...).
+
+
+            Common prefixes will be stripped. Check the `supply_points` property for optional secondary grid identifiers.'
+          example: '00000000'
+        external_id:
+          type: string
+          description: Reference of the site in an external system (gateway, API, ...), used for mapping identifiers.
+          example: NCC-1701
+          nullable: true
+        supply_points:
+          description: List of supply points linked to this site.
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplyPointDto'
+            maxLength: 2
+            minLength: 1
+        infer_meter_data_from_resources:
+          type: boolean
+          description: 'Whether site meter readings can be calculated by summing the meter readings from all individual resources at the site. When enabled, the site''s net meter value is derived from the sum of all resource meter readings rather than using direct site-level meter data.
+
+
+            **Important:** This is only supported for sites that:
+
+            - Do not have a baseload
+
+            - Have all resources actively submitting meter data'
+        head_meter_resource_id:
+          type: object
+          description: The physical head meter resource for this site.
+          format: uuid
+          nullable: true
+        created_at:
+          type: string
+          description: Timestamp for creation of the site (ISO 8601)
+          format: date-time
+          example: '2024-01-05T11:30:15Z'
+        modified_at:
+          type: string
+          description: Timestamp for last modification of the site (ISO 8601)
+          format: date-time
+          example: '2024-01-05T11:30:15Z'
+        last_seen_at:
+          type: string
+          description: Timestamp of the last metric sent to the platform (ISO 8601)
+          format: date-time
+          example: '2025-01-07T15:08:22Z'
+          nullable: true
+        credentials:
+          description: The credentials associated with this site
+          allOf:
+          - $ref: '#/components/schemas/ConnectionPointCredentialDto'
+      required:
+      - id
+      - status
+      - upstream_status
+      - location
+      - grid_identifier
+      - supply_points
+      - infer_meter_data_from_resources
+      - created_at
+      - modified_at
+      - last_seen_at
+      - credentials
+    ForbiddenExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Insufficient permissions
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
+    NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Site does not exist
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
+    UnauthorizedExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Unauthorized
+        error:
+          type: string
+          description: Unauthorized
+          example: Unauthorized
+        status_code:
+          type: number
+          description: '401'
+          example: 401
+      required:
+      - message
+      - error
+      - status_code
+    ForbiddenDto_SW1wb3J0IGRvZXMgbm90IGJlbG9uZyB0byB0aGUgYXV0aGVudGljYXRlZCB1c2Vy:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Import does not belong to the authenticated user
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
+    CreateSupplyPointDto:
+      type: object
+      properties:
+        grid_identifier:
+          type: string
+          description: 'The grid identifier for this supply point (e.g. EAN/MPAN/...).
+
+
+            Common prefixes will be stripped.'
+          example: '00000000'
+        direction:
+          type: string
+          description: The direction of the supply point
+          example: bidirectional
+          enum:
+          - offtake
+          - injection
+          - bidirectional
+          default: bidirectional
+      required:
+      - grid_identifier
+    CreateConnectionPointCredentialDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Logical name for this credential set within the site. Use "Default" to create the primary slot if it does not exist.
+          nullable: false
+          minLength: 1
+          maxLength: 512
+      required:
+      - name
+    NotFoundDto_SGlzdG9yaWNhbCBkYXRhIGltcG9ydCBub3QgZm91bmQ:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Historical data import not found
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
+    UpdateConnectionPointDto:
+      type: object
+      properties:
+        grid_identifier:
+          type: string
+          description: 'The grid identifier for this site (e.g. EAN/MPAN/...).
+
+
+            Common prefixes will be stripped. If provided, this will be stored as a bidirectional supply point.'
+          example: '00000000'
+        external_id:
+          type: string
+          description: Reference of the site in an external system (gateway, API, ...), used for mapping identifiers.
+          example: NCC-1701
+          minLength: 1
+          nullable: true
+        location:
+          description: Location of the site, can either be coordinates or a full-text address (incl. country).
+          oneOf:
+          - $ref: '#/components/schemas/AddressLocationDto'
+          - $ref: '#/components/schemas/GeoLocationDto'
+        supply_points:
+          description: "List of supply points linked to this site.\n\nThis is the preferred way of passing the grid identifier(s) of a site.\n\nThe following combinations are accepted: only bidirectional, only offtake and the combination offtake and injection. \n\nThe grid identifier of the bidirectional or offtake supply point will be considered the primary grid identifier and will be used to match this downstream site with upstream sites."
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateSupplyPointDto'
+        infer_meter_data_from_resources:
+          type: boolean
+          description: 'Whether site meter readings can be calculated by summing the meter readings from all individual resources at the site. When enabled, the site''s net meter value is derived from the sum of all resource meter readings rather than using direct site-level meter data.
+
+
+            **Important:** This is only supported for sites that:
+
+            - Do not have a baseload
+
+            - Have all resources actively submitting meter data'
+          default: false
+        head_meter_resource_id:
+          type: object
+          description: The physical head meter resource for this site.
+          format: uuid
+          nullable: true
+    ConflictDto_SW1wb3J0IGlzIG5vdCBpbiBwZW5kaW5nIHN0YXR1cw:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Import is not in pending status
+        error:
+          type: string
+          description: Conflict
+          example: Conflict
+        status_code:
+          type: number
+          description: '409'
+          example: 409
+      required:
+      - message
+      - error
+      - status_code
+    SupplyPointDto:
+      type: object
+      properties:
+        grid_identifier:
+          type: string
+          description: 'The grid identifier for this supply point (e.g. EAN/MPAN/...).
+
+
+            Common prefixes will be stripped.'
+          example: '00000000'
+        direction:
+          type: string
+          description: The direction of the supply point
+          example: bidirectional
+          enum:
+          - offtake
+          - injection
+          - bidirectional
+          default: bidirectional
+      required:
+      - grid_identifier
+      - direction
+    ConnectionPointStoredCredentialListDto:
+      type: object
+      properties:
+        items:
+          description: All stored credential rows for this site without secrets (includes both keys during rotation).
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectionPointStoredCredentialDto'
+      required:
+      - items
+    CreateConnectionPointDto:
+      type: object
+      properties:
+        grid_identifier:
+          type: string
+          description: 'The grid identifier for this site (e.g. EAN/MPAN/...).
+
+
+            Common prefixes will be stripped. If provided, this will be stored as a bidirectional supply point.'
+          example: '00000000'
+        external_id:
+          type: string
+          description: Reference of the site in an external system (gateway, API, ...), used for mapping identifiers.
+          example: NCC-1701
+          minLength: 1
+          nullable: true
+        location:
+          description: Location of the site, can either be coordinates or a full-text address (incl. country).
+          oneOf:
+          - $ref: '#/components/schemas/AddressLocationDto'
+          - $ref: '#/components/schemas/GeoLocationDto'
+        supply_points:
+          description: "List of supply points linked to this site.\n\nThis is the preferred way of passing the grid identifier(s) of a site.\n\nThe following combinations are accepted: only bidirectional, only offtake and the combination offtake and injection. \n\nThe grid identifier of the bidirectional or offtake supply point will be considered the primary grid identifier and will be used to match this downstream site with upstream sites."
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateSupplyPointDto'
+        infer_meter_data_from_resources:
+          type: boolean
+          description: 'Whether site meter readings can be calculated by summing the meter readings from all individual resources at the site. When enabled, the site''s net meter value is derived from the sum of all resource meter readings rather than using direct site-level meter data.
+
+
+            **Important:** This is only supported for sites that:
+
+            - Do not have a baseload
+
+            - Have all resources actively submitting meter data'
+          default: false
+      required:
+      - location
+      - supply_points
+    ConflictDto_QSBjcmVkZW50aWFsIHNldCB3aXRoIHRoaXMgbmFtZSBhbHJlYWR5IGV4aXN0cyBmb3IgdGhpcyBjb25uZWN0aW9uIHBvaW50:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: A credential set with this name already exists for this connection point
+        error:
+          type: string
+          description: Conflict
+          example: Conflict
+        status_code:
+          type: number
+          description: '409'
+          example: 409
+      required:
+      - message
+      - error
+      - status_code
+  securitySchemes:
+    cloud-cloud:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+      description: A bearer token obtained from the token endpoint.
+    token:
+      type: http
+      scheme: basic
+      description: Your client id and secret to obtain a bearer token for cloud-cloud authentication.
+    edge-cloud:
+      type: http
+      scheme: basic
+      description: Basic credentials used for edge-cloud authentication. They can be obtained when creating a site.
+x-webhooks:
+  bidAccepted:
+    post:
+      operationId: WebhookBidAccepted
+      description: 'During bidding, you can set a webhook to receive activation events on.
+
+
+        ### Fetching details
+
+
+        To make webhooks easy to implement, while also being secure, a webhook contains only a single reference to the bid that was accepted. You should use this reference to fetch the activation details by looking up the accepted bid.
+
+
+        See [this endpoint](#tag/managing_bids/operation/GetBid) for details on how to look up activation details.
+
+
+        ### Retries
+
+
+        You should reply with a `2XX` status code, indicating you have successfully activated the asset.
+
+        You can also reply with a `406` status code if you notice that the activation cannot be delivered upon for some reason (e.g. a suddenly disconnected car).
+
+
+        We will retry your webhook up to 3 times in case you:
+
+
+        1. Do not reply with a `2XX` or `406` status code or,
+
+        2. We do not get a successful reply within 5 seconds
+
+
+        Our portal shows a log of both successful and failed webhook calls.
+
+
+        '
+      summary: Receive an accepted bid
+      tags:
+      - accepting_bids
+      security: []
+      parameters:
+      - name: X-Powernaut-Webhook-Version
+        description: A version indicator for this webhook, used to track changes to the webhook implementation. At the moment, this is always `v1`.
+        example: v1
+        in: header
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BidAcceptedDto'
+      responses:
+        '202':
+          description: Successfully processed
+x-tagGroups:
+- name: Authentication
+  tags:
+  - authentication
+- name: Managing resources
+  tags:
+  - sites
+  - resources
+- name: Markets
+  tags:
+  - markets
+- name: Reporting flexibility
+  tags:
+  - baselining
+  - creating_bids
+  - metrics
+- name: Activating flexibility
+  tags:
+  - accepting_bids
+- name: Managing bids
+  tags:
+  - managing_bids
+- name: Forecasting
+  tags:
+  - getting_forecasts
+  - uploading_forecasts
+  - events
+- name: Sensor data
+  tags:
+  - sensor_data
+- name: Historical Data
+  tags:
+  - historical_data

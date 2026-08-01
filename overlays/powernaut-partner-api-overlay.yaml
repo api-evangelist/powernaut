@@ -1,0 +1,26 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Powernaut Partner API
+  version: 1.0.0
+extends: openapi/powernaut-partner-api-openapi-original.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-07-20'
+    x-apievangelist-provider: powernaut
+    x-apievangelist-category:
+    - Energy
+    - Virtual Power Plant
+    - Distributed Energy Resources
+    x-apievangelist-artifacts:
+      authentication: authentication/powernaut-authentication.yml
+      conventions: conventions/powernaut-conventions.yml
+      errors: errors/powernaut-problem-types.yml
+      data-model: data-model/powernaut-data-model.yml
+      lifecycle: lifecycle/powernaut-lifecycle.yml
+      webhooks: asyncapi/powernaut-webhooks.yml
+      sandbox: sandbox/powernaut-sandbox.yml
+- target: $.servers
+  update:
+    x-apievangelist-sandbox: https://api.sandbox.powernaut.io
+    x-apievangelist-production: https://api.powernaut.io

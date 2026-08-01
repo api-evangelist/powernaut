@@ -1,0 +1,23 @@
+generated: '2026-07-20'
+method: searched
+source: openapi/powernaut-partner-api-openapi-original.yml + https://docs.powernaut.io/partner-api
+spec_type: Webhooks
+delivery:
+  style: consumer-registered-url
+  notes: Partners register an "accepted" webhook URL when creating/updating a resource (ResourceWebhooksDto) or a bid (BidWebhooksDto) to receive activation notifications. If no webhook is provided, activation is delivered via MQTT instead.
+events:
+- name: bid.accepted
+  operation_ref: '#tag/accepting_bids/operation/WebhookBidAccepted'
+  trigger: A bid submitted for a resource is accepted for activation.
+  payload_schema: BidAcceptedDto
+  payload_fields:
+  - name: id
+    type: uuid
+    description: Identifier of the accepted bid; look up activation details via GET /v1/connect/bids/{id}.
+  registration:
+  - Set webhooks.accepted (URI) on a Resource via CreateResource / UpdateResource.
+  - Set webhooks.accepted (URI) on a Bid via BidResource / UpdateBid.
+alternatives:
+- transport: MQTT
+  notes: Real-time activation can be received over MQTT when no webhook URL is registered.
+notes: The provider documents a webhook catalog but does not publish an AsyncAPI document.

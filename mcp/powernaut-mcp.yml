@@ -1,0 +1,123 @@
+generated: '2026-07-20'
+method: derived
+status: candidate
+server:
+  name: powernaut
+  transport: http
+  note: No official hosted MCP server found; tools derived from OpenAPI operations.
+source: openapi/powernaut-partner-api-openapi-original.yml
+tools:
+- name: GetToken
+  description: Get a token
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#GetToken
+- name: CreateSite
+  description: Create a site
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#CreateSite
+- name: FindAllSites
+  description: Get all sites
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#FindAllSites
+- name: GetSite
+  description: Get a site
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#GetSite
+- name: UpdateSite
+  description: Update a site
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#UpdateSite
+- name: RemoveSite
+  description: Delete a site
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#RemoveSite
+- name: RetrieveBaselineSite
+  description: Site baseline
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#RetrieveBaselineSite
+- name: BaselineSite
+  description: Site
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#BaselineSite
+- name: SitesController_createCredentials_v1
+  description: Generate connection credentials
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#SitesController_createCredentials_v1
+- name: SitesController_listCredentials_v1
+  description: List credential metadata
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#SitesController_listCredentials_v1
+- name: SitesController_revokeCredentials_v1
+  description: Revoke credentials
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#SitesController_revokeCredentials_v1
+- name: SitesController_startRotation_v1
+  description: Rotate credentials
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#SitesController_startRotation_v1
+- name: SitesController_completeRotation_v1
+  description: Complete credential rotation
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#SitesController_completeRotation_v1
+- name: SitesController_cancelRotation_v1
+  description: Cancel credential rotation
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#SitesController_cancelRotation_v1
+- name: ActualPowerMetricsSite
+  description: Real-time data
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#ActualPowerMetricsSite
+- name: MarketsSite
+  description: Site markets
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#MarketsSite
+- name: ListSiteSensors
+  description: List sensors for a site
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#ListSiteSensors
+- name: GetForecastForSite
+  description: Retrieve forecasted signals for a specific site
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#GetForecastForSite
+- name: UploadSiteForecast
+  description: Submit site forecast
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#UploadSiteForecast
+- name: CreateResource
+  description: Create a resource
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#CreateResource
+- name: FindAllResources
+  description: Get all resources
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#FindAllResources
+- name: GetResource
+  description: Get a resource
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#GetResource
+- name: UpdateResource
+  description: Update a resource
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#UpdateResource
+- name: RemoveResource
+  description: Delete a resource
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#RemoveResource
+- name: BaselineResource
+  description: Resource
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#BaselineResource
+- name: BidResource
+  description: Bid a resource
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#BidResource
+- name: GetActivationsForResource
+  description: Get activations
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#GetActivationsForResource
+- name: GetForecastForResource
+  description: Retrieve forecasted signals for a specific resource
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#GetForecastForResource
+- name: UploadResourceForecast
+  description: Submit resource forecast
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#UploadResourceForecast
+- name: ReportEvent
+  description: Report event
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#ReportEvent
+- name: FindAllBids
+  description: Get all bids
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#FindAllBids
+- name: GetBid
+  description: Get a bid
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#GetBid
+- name: UpdateBid
+  description: Update a bid
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#UpdateBid
+- name: CancelBid
+  description: Cancel a bid
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#CancelBid
+- name: CreateHistoricalDataUploadUrl
+  description: Create a pre-signed upload URL
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#CreateHistoricalDataUploadUrl
+- name: ConfirmHistoricalDataImport
+  description: Confirm a historical data import
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#ConfirmHistoricalDataImport
+- name: GetSensor
+  description: Get sensor metadata
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#GetSensor
+- name: GetSensorReadings
+  description: Get sensor readings (15-minute averages)
+  source_operation: openapi/powernaut-partner-api-openapi-original.yml#GetSensorReadings

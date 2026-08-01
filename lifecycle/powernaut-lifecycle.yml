@@ -1,0 +1,24 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.powernaut.io/partner-api + https://status.powernaut.io/
+versioning:
+  scheme: uri-path
+  current: v1
+  docs: https://docs.powernaut.io/partner-api
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: No formal deprecation policy or RFC 8594 Sunset/Deprecation header support documented.
+release_notes:
+  url: https://docs.powernaut.io/
+  notes: Docs site tracks dated release notes (current window 2026-01); no machine-readable changelog found.
+sla:
+  url: null
+status_page:
+  url: https://status.powernaut.io/
+  provider: Better Stack
+  components:
+  - {name: API, uptime: '99.940%'}
+  - {name: API (Sandbox), uptime: '99.993%'}
+  - {name: Portal, uptime: '99.992%'}
+deprecated_operations: []

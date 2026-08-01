@@ -1,0 +1,42 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/powernaut-partner-api-openapi-original.yml + https://docs.powernaut.io/partner-api
+authentication:
+  style: bearer-jwt
+  token_endpoint: POST /v1/auth/token
+  obtain: HTTP Basic (base64 of url-encoded client_id:client_secret) to the token endpoint, returns a Bearer JWT with expires_in 3600s.
+  usage: 'Include "Authorization: Bearer <access_token>" on all other calls.'
+  edge_cloud: A separate HTTP Basic scheme (edge-cloud) is used for device/gateway credentials issued when creating a site.
+  cross_link: authentication/powernaut-authentication.yml
+idempotency:
+  supported: false
+  notes: No Idempotency-Key header or idempotency contract is documented in the OpenAPI or partner-api guide.
+pagination:
+  style: page-number
+  params:
+  - name: page
+    default: 1
+    description: Page number.
+  - name: page_size
+    default: 10
+    description: Page size.
+  response_fields:
+  - List responses wrap items in a *ListDto envelope (e.g. ConnectionPointListDto, BidListDto).
+versioning:
+  style: uri-path
+  current: v1
+  base_path: /v1
+error_envelope:
+  content_type: application/json
+  shape: '{ message, error, status_code }'
+  cross_link: errors/powernaut-problem-types.yml
+rate_limit_signaling:
+  documented: false
+  notes: No RateLimit / X-RateLimit / Retry-After headers are declared in the spec.
+request_tracing:
+  documented: false
+webhooks:
+  supported: true
+  notes: Resources and bids accept an optional "accepted" webhook URL to receive bid-acceptance notifications; alternative is MQTT activation.
+  cross_link: asyncapi/powernaut-webhooks.yml
+lifecycle_cross_link: lifecycle/powernaut-lifecycle.yml

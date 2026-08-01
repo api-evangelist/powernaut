@@ -1,7 +1,24 @@
 aid: powernaut
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/powernaut.png
 name: Powernaut
-description: Powernaut is a company surfaced as a portfolio company of seedcamp and added to the API Evangelist
-  network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: Powernaut is a Virtual Power Plant (VPP) and energy-flexibility platform for energy retailers and
+  independent power producers. Its Energy Operations Workspace connects and aggregates distributed energy resources
+  — solar, batteries, EVs and HVAC — then forecasts, optimizes and trades their flexibility across day-ahead, intraday,
+  imbalance, congestion and ancillary-service markets. The Powernaut Partner API (OpenAPI 3.0) exposes site and
+  resource connectivity, credential management, baselining, market bidding, forecasting, sensor readings and metrics.
+  Powernaut BV is based in Gent, Belgium and is backed by Seedcamp.
 url: https://raw.githubusercontent.com/api-evangelist/powernaut/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -11,10 +28,216 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-20'
 tags:
 - Company
-apis: []
+- Energy
+- Virtual Power Plant
+- Distributed Energy Resources
+- Energy Trading
+- Flexibility
+- Forecasting
+- Grid
+apis:
+- aid: powernaut:powernaut-authentication-api
+  name: Powernaut authentication API
+  description: Authenticating with the Powernaut platform.
+  humanURL: https://docs.powernaut.io/partner-api
+  baseURL: https://api.powernaut.io
+  tags:
+  - authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/powernaut-authentication-api-openapi.yml
+- aid: powernaut:powernaut-baselining-api
+  name: Powernaut baselining API
+  description: >-
+    With baselining, you indicate your normal consumption/production behaviour.
+
+
+    This baseline is essential to provide flexibility, which is then defined as a deviation from this
+    baseline. You can provide a baseline either for a site, or a resource.
+
+
+    See the [guide](/guides/connect/activating-flexibility/baselining) for more information.
+  humanURL: https://docs.powernaut.io/partner-api
+  baseURL: https://api.powernaut.io
+  tags:
+  - baselining
+  properties:
+  - type: OpenAPI
+    url: openapi/powernaut-baselining-api-openapi.yml
+- aid: powernaut:powernaut-creating-bids-api
+  name: Powernaut creating_bids API
+  description: A bid tells us how much flexibility is available in a certain time window.
+  humanURL: https://docs.powernaut.io/partner-api
+  baseURL: https://api.powernaut.io
+  tags:
+  - creating_bids
+  properties:
+  - type: OpenAPI
+    url: openapi/powernaut-creating-bids-api-openapi.yml
+- aid: powernaut:powernaut-events-api
+  name: Powernaut events API
+  description: >-
+    Events are EMS-initiated control actions that deviate from a resource's default behaviour (e.g. PV
+    curtailment due to negative tariffs).
+
+
+    Reporting these events helps us maintain clean training data for more accurate forecasting.
+
+
+    See the [guide](/guides/connect/forecasting/reporting-events) for more information.
+  humanURL: https://docs.powernaut.io/partner-api
+  baseURL: https://api.powernaut.io
+  tags:
+  - events
+  properties:
+  - type: OpenAPI
+    url: openapi/powernaut-events-api-openapi.yml
+- aid: powernaut:powernaut-getting-forecasts-api
+  name: Powernaut getting_forecasts API
+  description: >-
+    You can retrieve forecasts to help plan your flexibility offerings and understand expected power consumption
+    or production patterns.
+
+
+    See the [guide](/guides/connect/forecasting/getting-forecasts) for more information.
+  humanURL: https://docs.powernaut.io/partner-api
+  baseURL: https://api.powernaut.io
+  tags:
+  - getting_forecasts
+  properties:
+  - type: OpenAPI
+    url: openapi/powernaut-getting-forecasts-api-openapi.yml
+- aid: powernaut:powernaut-historical-data-api
+  name: Powernaut historical_data API
+  description: >-
+    Upload historical meter data for your sites.
+
+
+    Use these endpoints to import historical consumption and production data via CSV files.
+  humanURL: https://docs.powernaut.io/partner-api
+  baseURL: https://api.powernaut.io
+  tags:
+  - historical_data
+  properties:
+  - type: OpenAPI
+    url: openapi/powernaut-historical-data-api-openapi.yml
+- aid: powernaut:powernaut-managing-bids-api
+  name: Powernaut managing_bids API
+  description: >-
+    Manage your bids. You can update, cancel and receive notifications about bids.
+
+
+    When a bid is accepted, you either get notified or you poll for status updates.
+
+
+    Read more [here](/guides/connect/activating-flexibility/activating)
+  humanURL: https://docs.powernaut.io/partner-api
+  baseURL: https://api.powernaut.io
+  tags:
+  - managing_bids
+  properties:
+  - type: OpenAPI
+    url: openapi/powernaut-managing-bids-api-openapi.yml
+- aid: powernaut:powernaut-markets-api
+  name: Powernaut markets API
+  description: >-
+    Markets are the electricity markets in which you can participate.
+
+    Each market has a set of eligibility criteria, which you can query to see if you can participate in
+    a certain market.
+
+
+    Read our [guide](/guides/connect/markets) for more information.
+  humanURL: https://docs.powernaut.io/partner-api
+  baseURL: https://api.powernaut.io
+  tags:
+  - markets
+  properties:
+  - type: OpenAPI
+    url: openapi/powernaut-markets-api-openapi.yml
+- aid: powernaut:powernaut-metrics-api
+  name: Powernaut metrics API
+  description: Metrics reported by resources and sites
+  humanURL: https://docs.powernaut.io/partner-api
+  baseURL: https://api.powernaut.io
+  tags:
+  - metrics
+  properties:
+  - type: OpenAPI
+    url: openapi/powernaut-metrics-api-openapi.yml
+- aid: powernaut:powernaut-resources-api
+  name: Powernaut resources API
+  description: >-
+    Register, modify or delete flexible resources.
+
+
+    You can add flexible resources to each site, such as batteries, heat pumps, electric vehicles, ...
+    They are the physical resource that can offer flexibility.
+
+
+    Each resource has an enrolment status for the markets it can participate in, which you can query.
+  humanURL: https://docs.powernaut.io/partner-api
+  baseURL: https://api.powernaut.io
+  tags:
+  - resources
+  properties:
+  - type: OpenAPI
+    url: openapi/powernaut-resources-api-openapi.yml
+- aid: powernaut:powernaut-sensor-data-api
+  name: Powernaut sensor_data API
+  description: >-
+    Read raw time series data from sensors attached to your sites, such as irradiance sensors on PV installations.
+
+
+    Useful when you need measured conditions alongside metering data, for example to estimate PV output
+    during curtailment windows.
+
+
+    See the [guide](/guides/connect/sensor-data/reading-sensor-data) for more information.
+  humanURL: https://docs.powernaut.io/partner-api
+  baseURL: https://api.powernaut.io
+  tags:
+  - sensor_data
+  properties:
+  - type: OpenAPI
+    url: openapi/powernaut-sensor-data-api-openapi.yml
+- aid: powernaut:powernaut-sites-api
+  name: Powernaut sites API
+  description: >-
+    Register, modify or delete sites.
+
+
+    Sites are the start of everything, they are required to uniquely identify the end consumer's connection
+    to the grid. They define the meter point(s) for which flexibility is activated.
+
+
+    ⚠️ The `/v1/connect/connection-points` endpoints have moved to `/v1/connect/sites`. The original paths
+    have been deprecated.
+  humanURL: https://docs.powernaut.io/partner-api
+  baseURL: https://api.powernaut.io
+  tags:
+  - sites
+  properties:
+  - type: OpenAPI
+    url: openapi/powernaut-sites-api-openapi.yml
+- aid: powernaut:powernaut-uploading-forecasts-api
+  name: Powernaut uploading_forecasts API
+  description: >-
+    Sharing your forecasts helps us better understand your resources' expected behaviour, leading to improved
+    flexibility opportunities and optimised market participation.
+
+
+    See the [guide](/guides/connect/forecasting/uploading-forecasts) for more information.
+  humanURL: https://docs.powernaut.io/partner-api
+  baseURL: https://api.powernaut.io
+  tags:
+  - uploading_forecasts
+  properties:
+  - type: OpenAPI
+    url: openapi/powernaut-uploading-forecasts-api-openapi.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -23,3 +246,48 @@ maintainers:
 common:
 - type: Website
   url: http://powernaut.io
+- type: DeveloperPortal
+  url: https://docs.powernaut.io/partner-api
+- type: Documentation
+  url: https://docs.powernaut.io/
+- type: APIReference
+  url: https://docs.powernaut.io/partner-api
+- type: Support
+  url: https://powernaut.io/contact-us
+- type: Blog
+  url: https://powernaut.io/insights
+- type: Login
+  url: https://portal.powernaut.io
+- type: StatusPage
+  url: https://status.powernaut.io/
+- type: Authentication
+  url: authentication/powernaut-authentication.yml
+- type: AgenticAccess
+  url: agentic-access/powernaut-agentic-access.yml
+- type: DomainSecurity
+  url: security/powernaut-domain-security.yml
+- type: MCPServer
+  url: mcp/powernaut-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Conventions
+  url: conventions/powernaut-conventions.yml
+- type: ErrorCatalog
+  url: errors/powernaut-problem-types.yml
+- type: DataModel
+  url: data-model/powernaut-data-model.yml
+- type: Conformance
+  url: conformance/powernaut-conformance.yml
+- type: Lifecycle
+  url: lifecycle/powernaut-lifecycle.yml
+- type: Sandbox
+  url: sandbox/powernaut-sandbox.yml
+- type: Webhooks
+  url: asyncapi/powernaut-webhooks.yml
+- type: LLMsTxt
+  url: llms/powernaut-llms.txt
+x-enrichment:
+  date: '2026-07-20'
+  status: enriched
+  artifacts_added: 18
+  pass: local-v1

@@ -1,0 +1,29 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/powernaut-partner-api-openapi-original.yml
+standards:
+- id: oauth2
+  conforms: false
+  evidence: No oauth2 security scheme; auth is HTTP Basic to a token endpoint issuing a bearer JWT.
+- id: oidc
+  conforms: false
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Errors use application/json with a {message,error,status_code} envelope, not application/problem+json.
+- id: rfc6750-bearer-token
+  conforms: true
+  evidence: Bearer JWT presented via Authorization header (securityScheme cloud-cloud, http/bearer, bearerFormat JWT).
+- id: pagination
+  conforms: true
+  evidence: page / page_size query parameters on list operations.
+- id: idempotency
+  conforms: false
+  evidence: No Idempotency-Key header documented.
+- id: json-api
+  conforms: false
+- id: openapi-3.0
+  conforms: true
+  evidence: Provider publishes OpenAPI 3.0.0 at docs.powernaut.io/redocusaurus/plugin-redoc-0.yaml.
+- id: webhooks
+  conforms: true
+  evidence: Bid-acceptance webhooks registrable on resources and bids.

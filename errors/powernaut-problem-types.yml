@@ -1,0 +1,41 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/powernaut-partner-api-openapi-original.yml
+format: json
+envelope:
+  content_type: application/json
+  fields:
+  - name: message
+    description: One or more specific error messages (string or array of strings).
+  - name: error
+    description: Short reason phrase (e.g. "Bad Request").
+  - name: status_code
+    description: Numeric HTTP status code.
+  example:
+    message:
+    - Invalid datetime
+    - Invalid page size
+    error: Bad Request
+    status_code: 400
+problems:
+- status: 400
+  title: Bad Request
+  schema: BadRequestExceptionDto
+  description: Request validation failed (invalid datetime, invalid page size, malformed payload).
+- status: 401
+  title: Unauthorized
+  schema: UnauthorizedExceptionDto
+  description: Missing or invalid bearer token; obtain a token from POST /v1/auth/token.
+- status: 403
+  title: Forbidden
+  schema: ForbiddenExceptionDto
+  description: Authenticated but not permitted for this resource or action (e.g. invalid credentials, market action forbidden).
+- status: 404
+  title: Not Found
+  schema: NotFoundDto
+  description: Referenced site, resource, bid, sensor, or forecast does not exist.
+- status: 409
+  title: Conflict
+  schema: ConflictDto
+  description: State conflict (e.g. cannot update a baseline once activations exist in the window; a credential set with this name already exists for the connection point).
+notes: Errors use a plain application/json envelope, not RFC 9457 application/problem+json.

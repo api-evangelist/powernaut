@@ -1,0 +1,11 @@
+generated: '2026-07-20'
+method: generated
+skills:
+- file: powernaut-onboard-site-and-resources.md
+  name: Onboard a site and its flexible resources
+  api: openapi/powernaut-partner-api-openapi-original.yml
+  operations: [GetToken, CreateSite, CreateResource, FindAllSites, GetSite]
+- file: powernaut-bid-flexibility-and-activate.md
+  name: Bid resource flexibility and receive activation
+  api: openapi/powernaut-partner-api-openapi-original.yml
+  operations: [GetToken, BaselineResource, BidResource, FindAllBids, GetBid, GetActivationsForResource]

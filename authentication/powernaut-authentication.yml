@@ -1,0 +1,20 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/powernaut-partner-api-openapi-original.yml
+summary:
+  types:
+  - http
+schemes:
+- name: cloud-cloud
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: A bearer token obtained from the token endpoint.
+  sources:
+  - openapi/powernaut-partner-api-openapi-original.yml
+- name: token
+  type: http
+  scheme: basic
+  description: Your client id and secret to obtain a bearer token for cloud-cloud authentication.
+  sources:
+  - openapi/powernaut-partner-api-openapi-original.yml

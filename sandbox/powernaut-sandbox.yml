@@ -1,0 +1,16 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.powernaut.io/partner-api + https://status.powernaut.io/
+modes:
+- name: sandbox
+  base_url: https://api.sandbox.powernaut.io
+- name: production
+  base_url: https://api.powernaut.io
+separation:
+  style: separate-host
+  notes: Sandbox and production are distinct hosts, each requiring their own client_id/client_secret credentials. The sandbox API is monitored as its own status component (API (Sandbox)).
+credentials:
+  notes: Client id and secret are issued per environment; no published/self-serve test keys or magic test values were found in the public docs.
+test_values:
+  published: false
+  notes: The public docs do not publish shared test identifiers, sample sites, or fixture tooling. Never invent test values.

@@ -1,0 +1,38 @@
+{
+  "provider": "powernaut",
+  "sources": [
+    "powernaut-authentication-api-openapi.yml",
+    "powernaut-baselining-api-openapi.yml",
+    "powernaut-creating-bids-api-openapi.yml",
+    "powernaut-events-api-openapi.yml",
+    "powernaut-getting-forecasts-api-openapi.yml",
+    "powernaut-historical-data-api-openapi.yml",
+    "powernaut-managing-bids-api-openapi.yml",
+    "powernaut-markets-api-openapi.yml",
+    "powernaut-metrics-api-openapi.yml",
+    "powernaut-resources-api-openapi.yml",
+    "powernaut-sensor-data-api-openapi.yml",
+    "powernaut-sites-api-openapi.yml",
+    "powernaut-uploading-forecasts-api-openapi.yml"
+  ],
+  "outputs": [
+    "powernaut-authentication-api-openapi.yml",
+    "powernaut-baselining-api-openapi.yml",
+    "powernaut-creating-bids-api-openapi.yml",
+    "powernaut-events-api-openapi.yml",
+    "powernaut-getting-forecasts-api-openapi.yml",
+    "powernaut-historical-data-api-openapi.yml",
+    "powernaut-managing-bids-api-openapi.yml",
+    "powernaut-markets-api-openapi.yml",
+    "powernaut-metrics-api-openapi.yml",
+    "powernaut-resources-api-openapi.yml",
+    "powernaut-sensor-data-api-openapi.yml",
+    "powernaut-sites-api-openapi.yml",
+    "powernaut-uploading-forecasts-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

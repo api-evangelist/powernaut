@@ -1,0 +1,24 @@
+# Powernaut
+
+> Powernaut is a Virtual Power Plant (VPP) / flexibility platform for energy retailers and independent power producers. Its Energy Operations Workspace connects and aggregates distributed energy resources (solar, batteries, EVs, HVAC), forecasts and optimizes them, and participates in energy markets (day-ahead, intraday, imbalance, congestion, ancillary services). The Partner API exposes site/resource connectivity, baselining, bidding, forecasting, sensor readings, and metrics. Powernaut BV is based in Gent, Belgium and backed by Seedcamp.
+
+## APIs
+- [Partner API](https://docs.powernaut.io/partner-api): REST API to connect sites and resources, submit baselines and forecasts, bid resource flexibility into markets, and read sensor/metric data. Base URL https://api.powernaut.io (sandbox https://api.sandbox.powernaut.io).
+
+## Specs
+- [OpenAPI 3.0](https://docs.powernaut.io/redocusaurus/plugin-redoc-0.yaml): 38 operations across sites, resources, bids, baselining, forecasting, sensors, metrics, and historical data.
+
+## Authentication
+- HTTP Basic (client_id:client_secret, base64) to POST /v1/auth/token returns a Bearer JWT (expires_in 3600s). Present it as Authorization: Bearer <token> on all other calls. A separate edge-cloud Basic scheme is used for device/gateway credentials issued when creating a site.
+
+## Docs
+- [Documentation](https://docs.powernaut.io/)
+- [Guides](https://docs.powernaut.io/guides)
+- [Status](https://status.powernaut.io/)
+- [Website](https://powernaut.io)
+- [Insights / Blog](https://powernaut.io/insights)
+- [Careers](https://jobs.needle.so/powernaut)
+- [Portal / Login](https://portal.powernaut.io)
+
+## Webhooks
+- Register an "accepted" webhook URL on a resource or bid to receive bid-acceptance notifications; MQTT is the alternative transport.

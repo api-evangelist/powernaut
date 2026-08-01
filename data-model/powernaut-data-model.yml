@@ -1,0 +1,54 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/powernaut-partner-api-openapi-original.yml
+entities:
+- name: ConnectionPoint
+  aka: Site
+  schema: ConnectionPointDto
+  id: id (uuid)
+  key_fields: [status, upstream_status, location, grid_identifier, external_id, head_meter_resource_id]
+- name: SupplyPoint
+  schema: SupplyPointDto
+  key_fields: [grid_identifier, direction]
+- name: Resource
+  schema: ResourceDto
+  id: id (uuid)
+  key_fields: [name, type, capacity, site_id, parent_id, group_id, power, external_id, webhooks]
+- name: Bid
+  schema: BidDto
+  id: id (uuid)
+  key_fields: [timing, power_type, curve, expires_at, resource_id, baseline, status, activation, report, webhooks]
+- name: Sensor
+  schema: SensorDto
+  id: id
+  key_fields: [external_id, connection_point_id, measurements]
+- name: Forecast
+  schema: ForecastDto
+- name: Metrics
+  schema: MetricsDto
+relationships:
+- from: ConnectionPoint
+  type: has_many
+  to: SupplyPoint
+  via: supply_points
+- from: ConnectionPoint
+  type: has_one
+  to: Resource
+  via: head_meter_resource_id
+- from: Resource
+  type: belongs_to
+  to: ConnectionPoint
+  via: site_id
+- from: Resource
+  type: belongs_to
+  to: Resource
+  via: parent_id
+- from: Sensor
+  type: belongs_to
+  to: ConnectionPoint
+  via: connection_point_id
+- from: Bid
+  type: belongs_to
+  to: Resource
+  via: resource_id
+notes: Ids are UUIDs (no human-readable prefixes observed). Resources form a tree via parent_id and are grouped via group_id.

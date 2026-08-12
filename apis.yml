@@ -244,6 +244,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/powernaut-partner-api-overlay.yaml
 - type: Website
   url: http://powernaut.io
 - type: DeveloperPortal

@@ -1,0 +1,482 @@
+{
+  "item": [
+    {
+      "id": "e13c092d-8419-44c6-a9c6-846c7a2a722a",
+      "name": "creating_bids",
+      "description": {
+        "content": "A bid tells us how much flexibility is available in a certain time window.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4fd30d4a-afc6-48c2-82ca-4bee585bdd97",
+          "name": "Bid a resource",
+          "request": {
+            "name": "Bid a resource",
+            "description": {
+              "content": "Creates a bid for a resource's flexibility during a specific time window.\n\n**Implicit override behavior:**\nIf an open bid already exists for the same resource and time window, this endpoint will automatically update the existing bid instead of creating a new one.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "connect",
+                "resources",
+                ":id",
+                "bid"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identifier of the resource you want to add a bid for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{basicAuthUsername}}"
+                },
+                {
+                  "key": "password",
+                  "value": "{{basicAuthPassword}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"timing\": {\n    \"start\": \"<dateTime>\",\n    \"end\": \"<dateTime>\"\n  },\n  \"curve\": [\n    {\n      \"value\": \"<decimal>\",\n      \"price\": \"<decimal>\"\n    }\n  ],\n  \"power_type\": \"<string>\",\n  \"expires_at\": \"<dateTime>\",\n  \"webhooks\": {\n    \"accepted\": \"<uri>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0f25ebe0-dc76-44d7-a8b9-ae02339c6a2e",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id",
+                    "bid"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to add a bid for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timing\": {\n    \"start\": \"2024-07-01T14:00:00Z\",\n    \"end\": \"2024-07-01T14:15:00Z\"\n  },\n  \"curve\": [\n    {\n      \"value\": \"5.1\",\n      \"price\": \"5.1\"\n    }\n  ],\n  \"power_type\": \"active\",\n  \"expires_at\": \"2024-01-05T11:30:15Z\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"timing\": {\n    \"start\": \"2024-07-01T14:00:00Z\",\n    \"end\": \"2024-07-01T14:15:00Z\"\n  },\n  \"power_type\": \"active\",\n  \"curve\": [\n    {\n      \"value\": \"5.1\",\n      \"price\": \"5.1\"\n    }\n  ],\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  },\n  \"id\": \"6a746e8f-c4e7-38f2-7384-5f3a9c8373ed\",\n  \"resource_id\": \"71b9876f-e696-f1b1-01c2-4f63191c26a8\",\n  \"baseline\": \"5.000000\",\n  \"status\": \"open\",\n  \"created_at\": \"2024-01-05T11:30:15Z\",\n  \"modified_at\": \"2024-01-05T11:30:15Z\",\n  \"expires_at\": \"2024-01-05T11:30:15Z\",\n  \"activation\": {\n    \"value\": \"5.1\",\n    \"price\": \"5.1\",\n    \"created_at\": \"2024-07-01T14:00:00Z\",\n    \"type\": \"exact\",\n    \"canceled_at\": {}\n  },\n  \"report\": {\n    \"energy_requested\": \"15.500000\",\n    \"energy_delivered\": \"14.750000\",\n    \"extra_energy_delivered\": \"2.500000\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "06e886a3-175a-4499-9f12-0425d7f1c858",
+              "name": "Invalid expiry date",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id",
+                    "bid"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to add a bid for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timing\": {\n    \"start\": \"2024-07-01T14:00:00Z\",\n    \"end\": \"2024-07-01T14:15:00Z\"\n  },\n  \"curve\": [\n    {\n      \"value\": \"5.1\",\n      \"price\": \"5.1\"\n    }\n  ],\n  \"power_type\": \"active\",\n  \"expires_at\": \"2024-01-05T11:30:15Z\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Bad Request\",\n  \"status_code\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5ccb3c51-e997-441f-95a2-8a93dee9d4c4",
+              "name": "Not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id",
+                    "bid"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to add a bid for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timing\": {\n    \"start\": \"2024-07-01T14:00:00Z\",\n    \"end\": \"2024-07-01T14:15:00Z\"\n  },\n  \"curve\": [\n    {\n      \"value\": \"5.1\",\n      \"price\": \"5.1\"\n    }\n  ],\n  \"power_type\": \"active\",\n  \"expires_at\": \"2024-01-05T11:30:15Z\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Unauthorized\",\n  \"status_code\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bb292084-ccd7-4295-82cb-6806ecddd666",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id",
+                    "bid"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to add a bid for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timing\": {\n    \"start\": \"2024-07-01T14:00:00Z\",\n    \"end\": \"2024-07-01T14:15:00Z\"\n  },\n  \"curve\": [\n    {\n      \"value\": \"5.1\",\n      \"price\": \"5.1\"\n    }\n  ],\n  \"power_type\": \"active\",\n  \"expires_at\": \"2024-01-05T11:30:15Z\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Forbidden\",\n  \"status_code\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f053028e-50f3-4479-847f-4c802c6b60f0",
+              "name": "Resource does not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id",
+                    "bid"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to add a bid for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timing\": {\n    \"start\": \"2024-07-01T14:00:00Z\",\n    \"end\": \"2024-07-01T14:15:00Z\"\n  },\n  \"curve\": [\n    {\n      \"value\": \"5.1\",\n      \"price\": \"5.1\"\n    }\n  ],\n  \"power_type\": \"active\",\n  \"expires_at\": \"2024-01-05T11:30:15Z\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Not Found\",\n  \"status_code\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "44ed7079-c9b3-477e-99c5-81d745d10508",
+              "name": "Bid can no longer be updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id",
+                    "bid"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to add a bid for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timing\": {\n    \"start\": \"2024-07-01T14:00:00Z\",\n    \"end\": \"2024-07-01T14:15:00Z\"\n  },\n  \"curve\": [\n    {\n      \"value\": \"5.1\",\n      \"price\": \"5.1\"\n    }\n  ],\n  \"power_type\": \"active\",\n  \"expires_at\": \"2024-01-05T11:30:15Z\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Conflict\",\n  \"status_code\": 409\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.sandbox.powernaut.io",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "876046b0-27a0-4cbe-98bd-dceb2e10ffe1",
+    "name": "Powernaut authentication creating_bids API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "\n# Getting Started\n\nWelcome to the Powernaut API Reference!\n\nOur API offers a robust and secure way to connect your flexible resources to flexibility buyers such as energy utilities/suppliers and system operators.\n\nThis OpenAPI documentation is designed to provide a comprehensive and easy-to-understand guide for developers who are integrating their systems with Powernaut’s platform.\n\nBy leveraging our API, you can seamlessly offer flexibility in several electricity markets, opening up additional revenue streams\nfor your resources while contributing to a greener and more efficient electricity grid.\n\n\nContact Support:\n Name: Powernaut Support\n Email: support@powernaut.io",
+      "type": "text/plain"
+    }
+  }
+}

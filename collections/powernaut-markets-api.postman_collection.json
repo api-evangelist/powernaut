@@ -1,0 +1,362 @@
+{
+  "item": [
+    {
+      "id": "c31cd165-33dc-4b9f-8c07-4cc64c65a813",
+      "name": "markets",
+      "description": {
+        "content": "Markets are the electricity markets in which you can participate.\nEach market has a set of eligibility criteria, which you can query to see if you can participate in a certain market.\n\nRead our [guide](/guides/connect/markets) for more information.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ba27d5fd-380b-442e-80fc-523304541639",
+          "name": "Site markets",
+          "request": {
+            "name": "Site markets",
+            "description": {
+              "content": "Retrieves the markets a site can have access to.\n\nWhether a market is available or not depends on the combination of a few factors:\n\n- Whether or not the owner of the site is contractually connected to the market via its supplier\n- Whether or not the site is located in the market's service area (geographically)\n\n- Whether or not the site and its resources meet the market's eligibility criteria (technical requirements)\n\nThe result contains all contractually available markets, with a `status` property indicating whether or not the site can access the market.\n\nThe different values of the market status of a site are:\n\n- `active` - The site is active on this market.\n\n- `ineligible` - The site is not eligible for this market (for example due to technical, or geographical reasons).\n\n- `action_required` - Further action is required from the site to activate this market.\n\nWhen the status is `action_required`, further action is required to activate the market. Look at the `action` property for more information.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "connect",
+                "sites",
+                ":id",
+                "markets"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identifier of the site you want to get markets for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "821b2022-c225-4b1e-b181-fd8f23156b4c",
+              "name": "Markets",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "sites",
+                    ":id",
+                    "markets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the site you want to get markets for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"name\": \"string\",\n    \"status\": \"active\"\n  },\n  {\n    \"name\": \"string\",\n    \"status\": \"active\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "610fed07-8d96-4342-a426-775c88a064e7",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "sites",
+                    ":id",
+                    "markets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the site you want to get markets for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Bad Request\",\n  \"status_code\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f26ae730-6374-48d5-912b-46a9b15d5897",
+              "name": "Not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "sites",
+                    ":id",
+                    "markets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the site you want to get markets for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Unauthorized\",\n  \"status_code\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5d2cb571-8f27-4dc0-9579-5058b74f9d33",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "sites",
+                    ":id",
+                    "markets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the site you want to get markets for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Forbidden\",\n  \"status_code\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2360370f-bf05-4a4e-9994-4e936972495c",
+              "name": "Site does not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "sites",
+                    ":id",
+                    "markets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the site you want to get markets for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Not Found\",\n  \"status_code\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.sandbox.powernaut.io",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "3c1cec76-3878-47ad-ae77-51e7d24ca09c",
+    "name": "Powernaut authentication markets API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "\n# Getting Started\n\nWelcome to the Powernaut API Reference!\n\nOur API offers a robust and secure way to connect your flexible resources to flexibility buyers such as energy utilities/suppliers and system operators.\n\nThis OpenAPI documentation is designed to provide a comprehensive and easy-to-understand guide for developers who are integrating their systems with Powernaut’s platform.\n\nBy leveraging our API, you can seamlessly offer flexibility in several electricity markets, opening up additional revenue streams\nfor your resources while contributing to a greener and more efficient electricity grid.\n\n\nContact Support:\n Name: Powernaut Support\n Email: support@powernaut.io",
+      "type": "text/plain"
+    }
+  }
+}

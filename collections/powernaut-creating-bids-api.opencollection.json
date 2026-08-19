@@ -1,0 +1,46 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Powernaut authentication creating_bids API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "creating_bids",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Bid a resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/resources/:id/bid",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the resource you want to add a bid for."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "basic",
+              "username": "{{username}}",
+              "password": "{{password}}"
+            }
+          },
+          "docs": "Creates a bid for a resource's flexibility during a specific time window.\n\n**Implicit override behavior:**\nIf an open bid already exists for the same resource and time window, this endpoint will automatically update the existing bid instead of creating a new one."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

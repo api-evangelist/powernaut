@@ -1,0 +1,40 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Powernaut authentication API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sandbox.powernaut.io/v1/auth/token",
+            "headers": [
+              {
+                "name": "authorization",
+                "value": ""
+              }
+            ],
+            "auth": {
+              "type": "basic",
+              "username": "{{username}}",
+              "password": "{{password}}"
+            }
+          },
+          "docs": "Gets an authentication access token, to be used to authenticate calls to all other endpoints.\n\nInclude this token in the headers of all other endpoint calls:\n\n```\nAuthorization: Bearer <token>\n```"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

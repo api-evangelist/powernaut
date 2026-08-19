@@ -1,0 +1,41 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Powernaut authentication markets API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "markets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Site markets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/sites/:id/markets",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the site you want to get markets for."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves the markets a site can have access to.\n\nWhether a market is available or not depends on the combination of a few factors:\n\n- Whether or not the owner of the site is contractually connected to the market via its supplier\n- Whether or not the site is located in the market's service area (geographically)\n\n- Whether or not the site and its resources meet the market's eligibility criteria (technical requirements)\n\nThe result contains all contractually available markets, with a `status` prop"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

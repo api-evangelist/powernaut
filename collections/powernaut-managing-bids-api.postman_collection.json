@@ -1,0 +1,1481 @@
+{
+  "item": [
+    {
+      "id": "e0cfa588-e8f0-432d-9248-77aa775ea167",
+      "name": "managing_bids",
+      "description": {
+        "content": "Manage your bids. You can update, cancel and receive notifications about bids.\n\nWhen a bid is accepted, you either get notified or you poll for status updates.\n\nRead more [here](/guides/connect/activating-flexibility/activating)",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2b864bbe-2cd7-4b7e-adad-e333412ce154",
+          "name": "Get all bids",
+          "request": {
+            "name": "Get all bids",
+            "description": {
+              "content": "Gets all accepted or open bids available to your current authorised scope.\n\nAccepted bids need to be acted upon and the requested flexibility should be provided.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "connect",
+                "bids"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "Page size"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Status of the bids (accepted or open). If not provided, all open & accepted bids will be returned."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{basicAuthUsername}}"
+                },
+                {
+                  "key": "password",
+                  "value": "{{basicAuthPassword}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "92355552-6ec3-49a1-82fc-e8a7673254e4",
+              "name": "All bids with the given status",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"total\": 5899,\n  \"items\": [\n    {\n      \"timing\": {\n        \"start\": \"2024-07-01T14:00:00Z\",\n        \"end\": \"2024-07-01T14:15:00Z\"\n      },\n      \"power_type\": \"active\",\n      \"curve\": [\n        {\n          \"value\": \"5.1\",\n          \"price\": \"5.1\"\n        }\n      ],\n      \"webhooks\": {\n        \"accepted\": \"https://domain.tld/path\"\n      },\n      \"id\": \"40110670-8c66-7ead-65ba-b5dd4d394c71\",\n      \"resource_id\": \"f312d197-e5dc-62ec-48c2-cee248dcf17b\",\n      \"baseline\": \"5.000000\",\n      \"status\": \"open\",\n      \"created_at\": \"2024-01-05T11:30:15Z\",\n      \"modified_at\": \"2024-01-05T11:30:15Z\",\n      \"expires_at\": \"2024-01-05T11:30:15Z\",\n      \"activation\": {\n        \"value\": \"5.1\",\n        \"price\": \"5.1\",\n        \"created_at\": \"2024-07-01T14:00:00Z\",\n        \"type\": \"exact\",\n        \"canceled_at\": {}\n      },\n      \"report\": {\n        \"energy_requested\": \"15.500000\",\n        \"energy_delivered\": \"14.750000\",\n        \"extra_energy_delivered\": \"2.500000\"\n      }\n    },\n    {\n      \"timing\": {\n        \"start\": \"2024-07-01T14:00:00Z\",\n        \"end\": \"2024-07-01T14:15:00Z\"\n      },\n      \"power_type\": \"active\",\n      \"curve\": [\n        {\n          \"value\": \"5.1\",\n          \"price\": \"5.1\"\n        }\n      ],\n      \"webhooks\": {\n        \"accepted\": \"https://domain.tld/path\"\n      },\n      \"id\": \"e1604290-0b90-6ddf-b711-dd0b2a426805\",\n      \"resource_id\": \"53a6f4c8-d1a5-2d1b-333c-287b15cf1456\",\n      \"baseline\": \"5.000000\",\n      \"status\": \"open\",\n      \"created_at\": \"2024-01-05T11:30:15Z\",\n      \"modified_at\": \"2024-01-05T11:30:15Z\",\n      \"expires_at\": \"2024-01-05T11:30:15Z\",\n      \"activation\": {\n        \"value\": \"5.1\",\n        \"price\": \"5.1\",\n        \"created_at\": \"2024-07-01T14:00:00Z\",\n        \"type\": \"exact\",\n        \"canceled_at\": {}\n      },\n      \"report\": {\n        \"energy_requested\": \"15.500000\",\n        \"energy_delivered\": \"14.750000\",\n        \"extra_energy_delivered\": \"2.500000\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e7e4e63e-d13c-4117-ab86-f5e85f42498f",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Bad Request\",\n  \"status_code\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5daab91d-26de-4248-8ca3-34a491718f31",
+              "name": "Not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Unauthorized\",\n  \"status_code\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "55af7fff-96a1-49d1-9388-7fc73581b69d",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Forbidden\",\n  \"status_code\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c348a9d8-4c8c-4d93-800e-d4a9891e66cd",
+          "name": "Get a bid",
+          "request": {
+            "name": "Get a bid",
+            "description": {
+              "content": "Gets a bid by its unique ID.\n\nCan be used to look up a bid, and its activation after you've received a notification that it was accepted, see the `activation` property in the response of this endpoint.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "connect",
+                "bids",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identifier of the bid."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{basicAuthUsername}}"
+                },
+                {
+                  "key": "password",
+                  "value": "{{basicAuthPassword}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c6ad8078-91de-4266-b9bc-02eada9e6e57",
+              "name": "The bid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the bid."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"timing\": {\n    \"start\": \"2024-07-01T14:00:00Z\",\n    \"end\": \"2024-07-01T14:15:00Z\"\n  },\n  \"power_type\": \"active\",\n  \"curve\": [\n    {\n      \"value\": \"5.1\",\n      \"price\": \"5.1\"\n    }\n  ],\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  },\n  \"id\": \"d2817b81-c1d1-c49a-eac3-452061dcdbb5\",\n  \"resource_id\": \"ca4fb7eb-fd53-7f89-a965-c51a88925bd8\",\n  \"baseline\": \"5.000000\",\n  \"status\": \"open\",\n  \"created_at\": \"2024-01-05T11:30:15Z\",\n  \"modified_at\": \"2024-01-05T11:30:15Z\",\n  \"expires_at\": \"2024-01-05T11:30:15Z\",\n  \"activation\": {\n    \"value\": \"5.1\",\n    \"price\": \"5.1\",\n    \"created_at\": \"2024-07-01T14:00:00Z\",\n    \"type\": \"exact\",\n    \"canceled_at\": {}\n  },\n  \"report\": {\n    \"energy_requested\": \"15.500000\",\n    \"energy_delivered\": \"14.750000\",\n    \"extra_energy_delivered\": \"2.500000\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e0b0a04-d0cd-4ea9-b403-7376954b8403",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the bid."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Bad Request\",\n  \"status_code\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7e50deb8-8996-4c6a-80f9-6c2e5ca080e2",
+              "name": "Not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the bid."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Unauthorized\",\n  \"status_code\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a823b49a-f8d5-407c-8c28-94e1728a90fb",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the bid."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Forbidden\",\n  \"status_code\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1749b15d-7389-4e0b-965c-682c602dea44",
+              "name": "Bid does not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the bid."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Not Found\",\n  \"status_code\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c2d2d374-3669-4c3c-89fe-8eb81dd77041",
+          "name": "Update a bid",
+          "request": {
+            "name": "Update a bid",
+            "description": {
+              "content": "Update a bid by its unique ID.\n\nAccepted bids cannot be updated.\n\nOnly the properties you provide will be updated. Use `null` to unset a property.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "connect",
+                "bids",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identifier of the bid you want to update."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{basicAuthUsername}}"
+                },
+                {
+                  "key": "password",
+                  "value": "{{basicAuthPassword}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"power_type\": \"<string>\",\n  \"curve\": [\n    {\n      \"value\": \"<decimal>\",\n      \"price\": \"<decimal>\"\n    }\n  ],\n  \"expires_at\": \"<dateTime>\",\n  \"webhooks\": {\n    \"accepted\": \"<uri>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2d4d0093-35d6-47ae-a855-71f89180cec6",
+              "name": "Accepted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the bid you want to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"power_type\": \"active\",\n  \"curve\": [\n    {\n      \"value\": \"5.1\",\n      \"price\": \"5.1\"\n    }\n  ],\n  \"expires_at\": \"2024-01-05T11:30:15Z\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"timing\": {\n    \"start\": \"2024-07-01T14:00:00Z\",\n    \"end\": \"2024-07-01T14:15:00Z\"\n  },\n  \"power_type\": \"active\",\n  \"curve\": [\n    {\n      \"value\": \"5.1\",\n      \"price\": \"5.1\"\n    }\n  ],\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  },\n  \"id\": \"c967c20f-db50-e5c0-21f5-bfd237524886\",\n  \"resource_id\": \"f6764653-7a17-9c08-e098-1699b8c5896a\",\n  \"baseline\": \"5.000000\",\n  \"status\": \"open\",\n  \"created_at\": \"2024-01-05T11:30:15Z\",\n  \"modified_at\": \"2024-01-05T11:30:15Z\",\n  \"expires_at\": \"2024-01-05T11:30:15Z\",\n  \"activation\": {\n    \"value\": \"5.1\",\n    \"price\": \"5.1\",\n    \"created_at\": \"2024-07-01T14:00:00Z\",\n    \"type\": \"exact\",\n    \"canceled_at\": {}\n  },\n  \"report\": {\n    \"energy_requested\": \"15.500000\",\n    \"energy_delivered\": \"14.750000\",\n    \"extra_energy_delivered\": \"2.500000\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "30a2b1f1-d1d8-4316-999e-5138286639b6",
+              "name": "Invalid expiry date",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the bid you want to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"power_type\": \"active\",\n  \"curve\": [\n    {\n      \"value\": \"5.1\",\n      \"price\": \"5.1\"\n    }\n  ],\n  \"expires_at\": \"2024-01-05T11:30:15Z\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Bad Request\",\n  \"status_code\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3cb18eec-aa50-474a-a93d-220b98aabd03",
+              "name": "Not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the bid you want to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"power_type\": \"active\",\n  \"curve\": [\n    {\n      \"value\": \"5.1\",\n      \"price\": \"5.1\"\n    }\n  ],\n  \"expires_at\": \"2024-01-05T11:30:15Z\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Unauthorized\",\n  \"status_code\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "79484d3a-6897-4b72-92cc-4a798d98f08e",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the bid you want to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"power_type\": \"active\",\n  \"curve\": [\n    {\n      \"value\": \"5.1\",\n      \"price\": \"5.1\"\n    }\n  ],\n  \"expires_at\": \"2024-01-05T11:30:15Z\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Forbidden\",\n  \"status_code\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1e18e8a5-93a0-4d7a-887b-45d36c2f3ad5",
+              "name": "Bid not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the bid you want to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"power_type\": \"active\",\n  \"curve\": [\n    {\n      \"value\": \"5.1\",\n      \"price\": \"5.1\"\n    }\n  ],\n  \"expires_at\": \"2024-01-05T11:30:15Z\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Not Found\",\n  \"status_code\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "01da3951-cd7b-469a-a417-5721c4cdbc65",
+              "name": "Bid can no longer be updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the bid you want to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"power_type\": \"active\",\n  \"curve\": [\n    {\n      \"value\": \"5.1\",\n      \"price\": \"5.1\"\n    }\n  ],\n  \"expires_at\": \"2024-01-05T11:30:15Z\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Conflict\",\n  \"status_code\": 409\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0319261f-b5fe-474a-8b81-f8745e359f31",
+          "name": "Cancel a bid",
+          "request": {
+            "name": "Cancel a bid",
+            "description": {
+              "content": "Cancels a bid by its unique ID.\n\nAccepted bids cannot be canceled.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "connect",
+                "bids",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identifier of the bid you want to cancel."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{basicAuthUsername}}"
+                },
+                {
+                  "key": "password",
+                  "value": "{{basicAuthPassword}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "696190b5-3370-494b-9da9-549b3a087c3b",
+              "name": "Canceled",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the bid you want to cancel."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "892169b4-0c4f-4538-9224-bf3314c21c72",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the bid you want to cancel."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Bad Request\",\n  \"status_code\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c1f06107-6d66-4b32-9c1d-efd9a5412ead",
+              "name": "Not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the bid you want to cancel."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Unauthorized\",\n  \"status_code\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9fe2a1c5-5c78-4362-bcf3-b78776f6201d",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the bid you want to cancel."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Forbidden\",\n  \"status_code\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0a50f401-7a80-401a-a3ee-8b9f4666498c",
+              "name": "Bid not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the bid you want to cancel."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Not Found\",\n  \"status_code\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "edbfdb26-6f20-4a9c-9361-125991420cfd",
+              "name": "Bid can no longer be updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "bids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the bid you want to cancel."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Conflict\",\n  \"status_code\": 409\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.sandbox.powernaut.io",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "2281c5cf-5a85-4033-84da-386c3f78cf0f",
+    "name": "Powernaut authentication managing_bids API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "\n# Getting Started\n\nWelcome to the Powernaut API Reference!\n\nOur API offers a robust and secure way to connect your flexible resources to flexibility buyers such as energy utilities/suppliers and system operators.\n\nThis OpenAPI documentation is designed to provide a comprehensive and easy-to-understand guide for developers who are integrating their systems with Powernaut’s platform.\n\nBy leveraging our API, you can seamlessly offer flexibility in several electricity markets, opening up additional revenue streams\nfor your resources while contributing to a greener and more efficient electricity grid.\n\n\nContact Support:\n Name: Powernaut Support\n Email: support@powernaut.io",
+      "type": "text/plain"
+    }
+  }
+}

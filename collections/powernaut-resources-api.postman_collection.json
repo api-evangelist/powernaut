@@ -1,0 +1,2061 @@
+{
+  "item": [
+    {
+      "id": "64088b7c-f765-40a8-a525-d6c18190c418",
+      "name": "resources",
+      "description": {
+        "content": "Register, modify or delete flexible resources.\n\nYou can add flexible resources to each site, such as batteries, heat pumps, electric vehicles, ... They are the physical resource that can offer flexibility.\n\nEach resource has an enrolment status for the markets it can participate in, which you can query.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0d0e49d3-7fe6-411d-b297-4d2831e14474",
+          "name": "Create a resource",
+          "request": {
+            "name": "Create a resource",
+            "description": {
+              "content": "Create a new resource.\n\nA maximum of 10 resources can be created per site.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "connect",
+                "resources"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{basicAuthUsername}}"
+                },
+                {
+                  "key": "password",
+                  "value": "{{basicAuthPassword}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"<string>\",\n  \"power\": {\n    \"active\": {\n      \"minimum\": \"<decimal>\",\n      \"maximum\": \"<decimal>\"\n    },\n    \"reactive\": {\n      \"minimum\": \"<decimal>\",\n      \"maximum\": \"<decimal>\"\n    }\n  },\n  \"site_id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"external_id\": \"<string>\",\n  \"capacity\": {\n    \"minimum\": \"<decimal>\",\n    \"maximum\": \"<decimal>\"\n  },\n  \"group_id\": \"<uuid>\",\n  \"parent_id\": \"<uuid>\",\n  \"webhooks\": {\n    \"accepted\": \"<uri>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "19b84c01-ed22-40c2-92e0-20ddf96ac391",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"static_battery\",\n  \"power\": {\n    \"active\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    },\n    \"reactive\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    }\n  },\n  \"site_id\": \"<uuid>\",\n  \"name\": \"Home Battery\",\n  \"external_id\": \"NCC-1701\",\n  \"capacity\": {\n    \"minimum\": \"-5.1\",\n    \"maximum\": \"5.1\"\n  },\n  \"group_id\": \"<uuid>\",\n  \"parent_id\": \"<uuid>\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"static_battery\",\n  \"site_id\": \"35e2db3f-784e-0e6d-5540-291114c5263e\",\n  \"id\": \"a873e5ed-b69a-5e7a-a2e9-bc9c12a57a03\",\n  \"power\": {\n    \"active\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    },\n    \"reactive\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    }\n  },\n  \"created_at\": \"2024-01-05T11:30:15Z\",\n  \"modified_at\": \"2024-01-05T11:30:15Z\",\n  \"last_seen_at\": \"2025-01-07T15:08:22Z\",\n  \"name\": \"Home Battery\",\n  \"capacity\": {\n    \"minimum\": \"-5.1\",\n    \"maximum\": \"5.1\"\n  },\n  \"parent_id\": \"e9baede3-3603-b871-d74b-b009ebbf9fe4\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  },\n  \"external_id\": \"NCC-1701\",\n  \"group_id\": \"1628afda-657c-7a11-ed87-eca3ec1dcaa7\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "72cd23c2-3750-42e1-b6d1-282bbc860c5f",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"static_battery\",\n  \"power\": {\n    \"active\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    },\n    \"reactive\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    }\n  },\n  \"site_id\": \"<uuid>\",\n  \"name\": \"Home Battery\",\n  \"external_id\": \"NCC-1701\",\n  \"capacity\": {\n    \"minimum\": \"-5.1\",\n    \"maximum\": \"5.1\"\n  },\n  \"group_id\": \"<uuid>\",\n  \"parent_id\": \"<uuid>\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Bad Request\",\n  \"status_code\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b3d10297-e477-4feb-8fe5-536631f569d2",
+              "name": "Not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"static_battery\",\n  \"power\": {\n    \"active\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    },\n    \"reactive\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    }\n  },\n  \"site_id\": \"<uuid>\",\n  \"name\": \"Home Battery\",\n  \"external_id\": \"NCC-1701\",\n  \"capacity\": {\n    \"minimum\": \"-5.1\",\n    \"maximum\": \"5.1\"\n  },\n  \"group_id\": \"<uuid>\",\n  \"parent_id\": \"<uuid>\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Unauthorized\",\n  \"status_code\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f77a2c28-080c-4def-b031-515cdcfe2023",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"static_battery\",\n  \"power\": {\n    \"active\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    },\n    \"reactive\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    }\n  },\n  \"site_id\": \"<uuid>\",\n  \"name\": \"Home Battery\",\n  \"external_id\": \"NCC-1701\",\n  \"capacity\": {\n    \"minimum\": \"-5.1\",\n    \"maximum\": \"5.1\"\n  },\n  \"group_id\": \"<uuid>\",\n  \"parent_id\": \"<uuid>\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Forbidden\",\n  \"status_code\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5d70d48b-671b-44d0-b827-cbd29169b4aa",
+          "name": "Get all resources",
+          "request": {
+            "name": "Get all resources",
+            "description": {
+              "content": "Gets all resources available to your current authorised scope, or for a site specifically.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "connect",
+                "resources"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "site_id",
+                  "value": "<uuid>",
+                  "description": "Identifier of the site to fetch resources for."
+                },
+                {
+                  "disabled": false,
+                  "key": "connection_point_id",
+                  "value": "<uuid>",
+                  "description": "Identifier of the site to fetch resources for.\n\n**Note**: This is deprecated, use `site_id` instead."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{basicAuthUsername}}"
+                },
+                {
+                  "key": "password",
+                  "value": "{{basicAuthPassword}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "46bfb064-2455-4efd-a6f3-b6fc4413575e",
+              "name": "All resources",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "site_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "connection_point_id",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"total\": 1279,\n  \"items\": [\n    {\n      \"type\": \"static_battery\",\n      \"site_id\": \"093466be-0d0d-0705-2f6f-2223fb1cd29a\",\n      \"id\": \"90ec71aa-7e7e-3719-9ac8-38af873a20d0\",\n      \"power\": {\n        \"active\": {\n          \"minimum\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"maximum\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"reactive\": {\n          \"minimum\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"maximum\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"created_at\": \"2024-01-05T11:30:15Z\",\n      \"modified_at\": \"2024-01-05T11:30:15Z\",\n      \"last_seen_at\": \"2025-01-07T15:08:22Z\",\n      \"name\": \"Home Battery\",\n      \"capacity\": {\n        \"minimum\": \"-5.1\",\n        \"maximum\": \"5.1\"\n      },\n      \"parent_id\": \"c135a075-9777-106c-1ee8-ebb02a122b06\",\n      \"webhooks\": {\n        \"accepted\": \"https://domain.tld/path\"\n      },\n      \"external_id\": \"NCC-1701\",\n      \"group_id\": \"0d6618bb-af84-23bb-b5f5-a3b439b8a890\"\n    },\n    {\n      \"type\": \"static_battery\",\n      \"site_id\": \"38c598e9-a1f0-3e6a-e568-0b604f7a6ad9\",\n      \"id\": \"7a51e8d0-363c-8224-97b3-731bba831bec\",\n      \"power\": {\n        \"active\": {\n          \"minimum\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"maximum\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"reactive\": {\n          \"minimum\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"maximum\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"created_at\": \"2024-01-05T11:30:15Z\",\n      \"modified_at\": \"2024-01-05T11:30:15Z\",\n      \"last_seen_at\": \"2025-01-07T15:08:22Z\",\n      \"name\": \"Home Battery\",\n      \"capacity\": {\n        \"minimum\": \"-5.1\",\n        \"maximum\": \"5.1\"\n      },\n      \"parent_id\": \"f0988383-3ec9-a43f-c399-8c866e981ee8\",\n      \"webhooks\": {\n        \"accepted\": \"https://domain.tld/path\"\n      },\n      \"external_id\": \"NCC-1701\",\n      \"group_id\": \"02ab7f51-7263-7e12-158b-af3a9264cc60\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d3c18b54-5faa-4b95-83c2-2491659e2c7e",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "site_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "connection_point_id",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Bad Request\",\n  \"status_code\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d072c583-00f1-4cee-ad21-444ca9f40358",
+              "name": "Not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "site_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "connection_point_id",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Unauthorized\",\n  \"status_code\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "00a47312-13ba-4170-9102-1883deeba766",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "site_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "connection_point_id",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Forbidden\",\n  \"status_code\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b3aeeab0-b7a5-4cae-aa8d-c6cfccd978f2",
+          "name": "Get a resource",
+          "request": {
+            "name": "Get a resource",
+            "description": {
+              "content": "Gets a resource by its unique ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "connect",
+                "resources",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identifier of the resource."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{basicAuthUsername}}"
+                },
+                {
+                  "key": "password",
+                  "value": "{{basicAuthPassword}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "51ab5b63-a3bc-43d9-ac81-0d93f11cbca6",
+              "name": "The resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"static_battery\",\n  \"site_id\": \"35e2db3f-784e-0e6d-5540-291114c5263e\",\n  \"id\": \"a873e5ed-b69a-5e7a-a2e9-bc9c12a57a03\",\n  \"power\": {\n    \"active\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    },\n    \"reactive\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    }\n  },\n  \"created_at\": \"2024-01-05T11:30:15Z\",\n  \"modified_at\": \"2024-01-05T11:30:15Z\",\n  \"last_seen_at\": \"2025-01-07T15:08:22Z\",\n  \"name\": \"Home Battery\",\n  \"capacity\": {\n    \"minimum\": \"-5.1\",\n    \"maximum\": \"5.1\"\n  },\n  \"parent_id\": \"e9baede3-3603-b871-d74b-b009ebbf9fe4\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  },\n  \"external_id\": \"NCC-1701\",\n  \"group_id\": \"1628afda-657c-7a11-ed87-eca3ec1dcaa7\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6e9f1c9d-6c2e-4a58-8df9-89fecb13ae43",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Bad Request\",\n  \"status_code\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4869312b-0ece-4dc2-9823-592605a42362",
+              "name": "Not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Unauthorized\",\n  \"status_code\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4af28758-16e4-4bb5-b8d3-e431d464e472",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Forbidden\",\n  \"status_code\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4e43a19a-cbf5-4553-b690-8e3cef855ff8",
+              "name": "Resource does not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Not Found\",\n  \"status_code\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aabd7fd0-acfa-4aca-90fb-b9bc70179a5c",
+          "name": "Update a resource",
+          "request": {
+            "name": "Update a resource",
+            "description": {
+              "content": "Update a resource by its unique ID.\n\nOnly the properties you provide will be updated. Use `null` to unset a property.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "connect",
+                "resources",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identifier of the resource you want to update."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{basicAuthUsername}}"
+                },
+                {
+                  "key": "password",
+                  "value": "{{basicAuthPassword}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"external_id\": \"<string>\",\n  \"type\": \"<string>\",\n  \"power\": {\n    \"active\": {\n      \"minimum\": \"<decimal>\",\n      \"maximum\": \"<decimal>\"\n    },\n    \"reactive\": {\n      \"minimum\": \"<decimal>\",\n      \"maximum\": \"<decimal>\"\n    }\n  },\n  \"capacity\": {\n    \"minimum\": \"<decimal>\",\n    \"maximum\": \"<decimal>\"\n  },\n  \"parent_id\": \"<uuid>\",\n  \"webhooks\": {\n    \"accepted\": \"<uri>\"\n  },\n  \"group_id\": \"<uuid>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "154cd6c5-b94b-4db7-ad44-4ced1ca3a5c3",
+              "name": "Accepted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Home Battery\",\n  \"external_id\": \"NCC-1701\",\n  \"type\": \"static_battery\",\n  \"power\": {\n    \"active\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    },\n    \"reactive\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    }\n  },\n  \"capacity\": {\n    \"minimum\": \"-5.1\",\n    \"maximum\": \"5.1\"\n  },\n  \"parent_id\": \"<uuid>\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  },\n  \"group_id\": \"<uuid>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"static_battery\",\n  \"site_id\": \"35e2db3f-784e-0e6d-5540-291114c5263e\",\n  \"id\": \"a873e5ed-b69a-5e7a-a2e9-bc9c12a57a03\",\n  \"power\": {\n    \"active\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    },\n    \"reactive\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    }\n  },\n  \"created_at\": \"2024-01-05T11:30:15Z\",\n  \"modified_at\": \"2024-01-05T11:30:15Z\",\n  \"last_seen_at\": \"2025-01-07T15:08:22Z\",\n  \"name\": \"Home Battery\",\n  \"capacity\": {\n    \"minimum\": \"-5.1\",\n    \"maximum\": \"5.1\"\n  },\n  \"parent_id\": \"e9baede3-3603-b871-d74b-b009ebbf9fe4\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  },\n  \"external_id\": \"NCC-1701\",\n  \"group_id\": \"1628afda-657c-7a11-ed87-eca3ec1dcaa7\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "de4d225e-159a-41ae-b415-e3482a4757d2",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Home Battery\",\n  \"external_id\": \"NCC-1701\",\n  \"type\": \"static_battery\",\n  \"power\": {\n    \"active\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    },\n    \"reactive\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    }\n  },\n  \"capacity\": {\n    \"minimum\": \"-5.1\",\n    \"maximum\": \"5.1\"\n  },\n  \"parent_id\": \"<uuid>\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  },\n  \"group_id\": \"<uuid>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Bad Request\",\n  \"status_code\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ccd5adf3-f882-450d-8bd8-79738e6ad327",
+              "name": "Not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Home Battery\",\n  \"external_id\": \"NCC-1701\",\n  \"type\": \"static_battery\",\n  \"power\": {\n    \"active\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    },\n    \"reactive\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    }\n  },\n  \"capacity\": {\n    \"minimum\": \"-5.1\",\n    \"maximum\": \"5.1\"\n  },\n  \"parent_id\": \"<uuid>\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  },\n  \"group_id\": \"<uuid>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Unauthorized\",\n  \"status_code\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ab17a0f1-e197-492d-8b33-7dcf1b1e6107",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Home Battery\",\n  \"external_id\": \"NCC-1701\",\n  \"type\": \"static_battery\",\n  \"power\": {\n    \"active\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    },\n    \"reactive\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    }\n  },\n  \"capacity\": {\n    \"minimum\": \"-5.1\",\n    \"maximum\": \"5.1\"\n  },\n  \"parent_id\": \"<uuid>\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  },\n  \"group_id\": \"<uuid>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Forbidden\",\n  \"status_code\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bd947c20-2db2-4827-8859-89f75621cd60",
+              "name": "Resource does not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Home Battery\",\n  \"external_id\": \"NCC-1701\",\n  \"type\": \"static_battery\",\n  \"power\": {\n    \"active\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    },\n    \"reactive\": {\n      \"minimum\": \"-5.1\",\n      \"maximum\": \"5.1\"\n    }\n  },\n  \"capacity\": {\n    \"minimum\": \"-5.1\",\n    \"maximum\": \"5.1\"\n  },\n  \"parent_id\": \"<uuid>\",\n  \"webhooks\": {\n    \"accepted\": \"https://domain.tld/path\"\n  },\n  \"group_id\": \"<uuid>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Not Found\",\n  \"status_code\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9e13c555-419c-498d-b018-5eae8c12d5b8",
+          "name": "Delete a resource",
+          "request": {
+            "name": "Delete a resource",
+            "description": {
+              "content": "Delete a resource\n\n**Important**: This action is irreversible and will remove all associated future bids and baselines.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "connect",
+                "resources",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identifier of the resource you want to delete."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{basicAuthUsername}}"
+                },
+                {
+                  "key": "password",
+                  "value": "{{basicAuthPassword}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "372cc5e1-e5a2-44c1-81bd-459d582de381",
+              "name": "Deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4264c1f0-ec53-40eb-8132-fcf6bf7c6e57",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Bad Request\",\n  \"status_code\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fdc4e7fa-6bc4-45b6-b88e-5f94e5783532",
+              "name": "Not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Unauthorized\",\n  \"status_code\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ae569cbd-b569-4bc4-a5f0-f28f838c30bd",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Forbidden\",\n  \"status_code\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "303383a1-ee00-4e26-af97-992fbe186dcc",
+              "name": "Resource does not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Not Found\",\n  \"status_code\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "36ee65a1-373f-4cb5-898d-e6b9b4ab5b62",
+          "name": "Get activations",
+          "request": {
+            "name": "Get activations",
+            "description": {
+              "content": "Gets the activations for a resource.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "connect",
+                "resources",
+                ":id",
+                "activations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<number>",
+                  "description": "Page number"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "<number>",
+                  "description": "Page size"
+                },
+                {
+                  "disabled": false,
+                  "key": "start",
+                  "value": "<string>",
+                  "description": "An optional date from which to start filtering activations (ISO 8601)"
+                },
+                {
+                  "disabled": false,
+                  "key": "end",
+                  "value": "<string>",
+                  "description": "An optional date until which to filter activations (ISO 8601)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Identifier of the resource you want to get activations for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{basicAuthUsername}}"
+                },
+                {
+                  "key": "password",
+                  "value": "{{basicAuthPassword}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0da6f9e9-c30c-4ff9-adb7-780a209eedda",
+              "name": "A paginated list of activations",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id",
+                    "activations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to get activations for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"total\": 6082,\n  \"items\": [\n    {\n      \"start\": \"2024-03-15T10:30:00Z\",\n      \"end\": \"2024-03-15T10:30:00Z\",\n      \"value\": \"5.1\",\n      \"energy\": {\n        \"delivered\": \"5.1\",\n        \"requested\": \"5.1\",\n        \"extra_delivered\": \"1.2\"\n      },\n      \"direction\": \"upward\",\n      \"resource_id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n      \"resource_type\": \"static_battery\",\n      \"site_id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n      \"bid_id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\"\n    },\n    {\n      \"start\": \"2024-03-15T10:30:00Z\",\n      \"end\": \"2024-03-15T10:30:00Z\",\n      \"value\": \"5.1\",\n      \"energy\": {\n        \"delivered\": \"5.1\",\n        \"requested\": \"5.1\",\n        \"extra_delivered\": \"1.2\"\n      },\n      \"direction\": \"upward\",\n      \"resource_id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n      \"resource_type\": \"static_battery\",\n      \"site_id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n      \"bid_id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "26e9fa12-5c3b-40ff-a578-04e06a7c0154",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id",
+                    "activations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to get activations for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Bad Request\",\n  \"status_code\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "937c5582-33b5-4fb9-a9e4-37d3a757cecf",
+              "name": "Not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id",
+                    "activations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to get activations for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Unauthorized\",\n  \"status_code\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bd308a6f-7464-4251-9ee7-ea26fc4cfe2a",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id",
+                    "activations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to get activations for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Forbidden\",\n  \"status_code\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fae71fa7-ff99-4593-805f-61ab61b18a7a",
+              "name": "Resource does not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connect",
+                    "resources",
+                    ":id",
+                    "activations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Identifier of the resource you want to get activations for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"error\": \"Not Found\",\n  \"status_code\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.sandbox.powernaut.io",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "51d89434-dc83-4e8a-8fe1-8081e46de193",
+    "name": "Powernaut authentication resources API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "\n# Getting Started\n\nWelcome to the Powernaut API Reference!\n\nOur API offers a robust and secure way to connect your flexible resources to flexibility buyers such as energy utilities/suppliers and system operators.\n\nThis OpenAPI documentation is designed to provide a comprehensive and easy-to-understand guide for developers who are integrating their systems with Powernaut’s platform.\n\nBy leveraging our API, you can seamlessly offer flexibility in several electricity markets, opening up additional revenue streams\nfor your resources while contributing to a greener and more efficient electricity grid.\n\n\nContact Support:\n Name: Powernaut Support\n Email: support@powernaut.io",
+      "type": "text/plain"
+    }
+  }
+}

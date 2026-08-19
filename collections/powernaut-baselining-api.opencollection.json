@@ -1,0 +1,116 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Powernaut authentication baselining API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "baselining",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Site baseline",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/sites/:id/baseline",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the site you want to retrieve the baseline data for."
+              },
+              {
+                "name": "amount",
+                "value": "",
+                "type": "query",
+                "description": "Number of timesteps to be included in the time window."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start of window (ISO 8601). Must be a perfect minute without seconds or milliseconds precision.\n\n**Note**: To avoid timezone issues, we perform an additional check for the presence of timezone information. You should always include either UTC with `Z`, or an offset like `+01:00`."
+              },
+              {
+                "name": "granularity",
+                "value": "",
+                "type": "query",
+                "description": "The granularity to fetch the state for, i.e. the time length of each element.\n\nIt cannot be smaller than 1 minute, and cannot contain sub-minute precision.\n\nThe expected format is <a href=\"https://en.wikipedia.org/wiki/ISO_8601#Durations\" target=\"_blank\">ISO8601</a>."
+              }
+            ],
+            "auth": {
+              "type": "basic",
+              "username": "{{username}}",
+              "password": "{{password}}"
+            }
+          },
+          "docs": "Retrieve baseline data for the site (`active` power only)."
+        },
+        {
+          "info": {
+            "name": "Site",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/sites/:id/baseline",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the site you want to add a baseline for."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "basic",
+              "username": "{{username}}",
+              "password": "{{password}}"
+            }
+          },
+          "docs": "Add a baseline for a site.\n\nThis operation will override any existing baseline values that might overlap."
+        },
+        {
+          "info": {
+            "name": "Resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/resources/:id/baseline",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the resource you want to add a baseline for."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "basic",
+              "username": "{{username}}",
+              "password": "{{password}}"
+            }
+          },
+          "docs": "Add a baseline for a resource.\n\nThis operation will override any existing baseline values that might overlap."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,330 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Powernaut authentication sites API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "sites",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all sites",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/sites",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size"
+              }
+            ],
+            "auth": {
+              "type": "basic",
+              "username": "{{username}}",
+              "password": "{{password}}"
+            }
+          },
+          "docs": "Gets all sites available to your current authorised scope. Results are ordered based on creation date (most recent first)."
+        },
+        {
+          "info": {
+            "name": "Create a site",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/sites",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new site.\n\nThe credentials returned can be used for edge-cloud authentication, if needed."
+        },
+        {
+          "info": {
+            "name": "Get a site",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/sites/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the site."
+              }
+            ],
+            "auth": {
+              "type": "basic",
+              "username": "{{username}}",
+              "password": "{{password}}"
+            }
+          },
+          "docs": "Gets a site by its unique ID."
+        },
+        {
+          "info": {
+            "name": "Update a site",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/sites/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the site you want to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update a site by its unique ID.\n\nOnly the properties you provide will be updated. Use `null` to unset a property."
+        },
+        {
+          "info": {
+            "name": "Delete a site",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/sites/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the site you want to delete."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a site\n\n**Important**: This action is irreversible and will remove all associated resources, future bids, and baselines."
+        },
+        {
+          "info": {
+            "name": "List credential metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/sites/:id/credentials",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Site ID"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns every stored credential row for this site (by name and rotating state) without any secrets."
+        },
+        {
+          "info": {
+            "name": "Generate connection credentials",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/sites/:id/credentials",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Site ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new named credential pair for this site and returns the plaintext secret once.\n\nProvide a unique logical `name` when you need more than the default credential set. Omit `name` only to create the primary `\"Default\"` slot when it does not yet exist."
+        },
+        {
+          "info": {
+            "name": "Revoke credentials",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/sites/:id/credentials",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Site ID"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Logical credential slot to remove."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Irrevocably deletes stored credentials for the named slot, including any rotating pair. Pass `name=Default` explicitly to revoke the default credential slot."
+        },
+        {
+          "info": {
+            "name": "Rotate credentials",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/sites/:id/credentials/rotate",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Site ID"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Credential slot to rotate. When omitted, the `\"Default\"` credential is rotated."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates new credentials and marks the old ones for rotation.\n\nBoth sets of credentials remain valid until the rotation is either completed or canceled. This allows for a seamless transition between the old and new credentials, ensuring that there is no downtime or disruption in service during the rotation process.\n\nOptional `name` selects which logical credential set to rotate (defaults to `\"Default\"`)."
+        },
+        {
+          "info": {
+            "name": "Complete credential rotation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/sites/:id/credentials/rotate/complete",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Site ID"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Credential slot whose rotation should be finalised. When omitted, `\"Default\"` is completed."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Completes the credential rotation process by permanently removing the old credentials from the system. Once this operation is performed, the old credentials will no longer be valid and this action cannot be undone.\n\nOptional `name` completes rotation for that slot (defaults to `\"Default\"`)."
+        },
+        {
+          "info": {
+            "name": "Cancel credential rotation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/sites/:id/credentials/rotate/cancel",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Site ID"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Credential slot whose rotation should be cancelled. When omitted, `\"Default\"` is cancelled."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Cancels the credential rotation process. This action will remove the newly generated credentials and retain the old credentials, keeping them active and valid.\n\nOptional `name` cancels rotation for that slot (defaults to `\"Default\"`)."
+        },
+        {
+          "info": {
+            "name": "Confirm a historical data import",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/historical-data/:import_id/confirm",
+            "params": [
+              {
+                "name": "import_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the historical data import to confirm."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Confirms a historical data import, transitioning it to processing status and dispatching an async job to process the uploaded CSV file."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

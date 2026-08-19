@@ -1,0 +1,117 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Powernaut authentication sensor_data API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "sensor_data",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List sensors for a site",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/sites/:id/sensors",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the site (UUID)."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all sensors linked to the site. Each entry includes the sensor's `external_id` (your gateway device key) and the `id` you need for `GET /v1/connect/sensors/{id}/readings`."
+        },
+        {
+          "info": {
+            "name": "Get sensor metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/sensors/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the sensor (UUID)."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves the identifiers and measurement channels for a single sensor. Call this once per sensor and cache the result; it rarely changes."
+        },
+        {
+          "info": {
+            "name": "Get sensor readings (15-minute averages)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/sensors/:id/readings",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the sensor (UUID)."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start of the window (ISO 8601 with timezone, e.g. `2026-01-15T00:00:00Z`). Inclusive."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End of the window (ISO 8601 with timezone). Exclusive."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "1-based page number. Defaults to 1."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Readings per page. Defaults to 1000, maximum 10000."
+              },
+              {
+                "name": "measurement",
+                "value": "",
+                "type": "query",
+                "description": "Measurement channel to return, matching one of the sensor's `measurements[].key` values (e.g. `irradiance`, `cell_temperature`, `external_temperature`, `wind_speed`). Optional; defaults to `irradiance` when omitted."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns 15-minute average readings for a single sensor over a `[start, end)` window. Sensors emitting at higher cadence (e.g. 1- or 5-minute) are normalised by averaging all raw samples within each quarter-hour bucket. Buckets with no readings are omitted. Timestamps are the start of the bucket and are returned in UTC."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

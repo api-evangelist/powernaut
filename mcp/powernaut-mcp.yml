@@ -121,3 +121,9 @@ tools:
 - name: GetSensorReadings
   description: Get sensor readings (15-minute averages)
   source_operation: openapi/powernaut-partner-api-openapi-original.yml#GetSensorReadings
+deployment:
+  mode: none
+  verified: derived
+  tools: 38
+  checked: '2026-08-12'
+  source: catalog MCP census

@@ -1,0 +1,59 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Powernaut authentication metrics API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "metrics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Real-time data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/sites/:id/metrics",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the site you want to get real-time data for."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start of window (ISO 8601). Must be a perfect minute without seconds or milliseconds precision.\n\n**Note**: To avoid timezone issues, we perform an additional check for the presence of timezone information. You should always include either UTC with `Z`, or an offset like `+01:00`."
+              },
+              {
+                "name": "amount",
+                "value": "",
+                "type": "query",
+                "description": "Number of timesteps to be included in the time window."
+              },
+              {
+                "name": "granularity",
+                "value": "",
+                "type": "query",
+                "description": "The granularity to fetch the state for, i.e. the time length of each element.\n\nIt cannot be smaller than 1 minute, and cannot contain sub-minute precision.\n\nThe expected format is <a href=\"https://en.wikipedia.org/wiki/ISO_8601#Durations\" target=\"_blank\">ISO8601</a>."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves the actual real-time data for this site "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

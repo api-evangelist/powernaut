@@ -1,0 +1,73 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Powernaut authentication uploading_forecasts API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "uploading_forecasts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Submit site forecast",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/sites/:id/forecast",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the site to upload forecast for."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Upload external power forecasts for a site.\n\nThis endpoint is tolerant of past timestamps - they will be ignored rather than causing validation errors. The response includes both successfully inserted forecasts and any ignored forecasts.\n\n**Validation:**\n- All timestamps must be perfect quarter-hours (15-minute intervals)\n- Forecasts in the past will be ignored (not inserted)\n- Future forecasts can't be submitted more than 48 hours in advance\n- Site ID must exist and be accessible to the authent"
+        },
+        {
+          "info": {
+            "name": "Submit resource forecast",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/resources/:id/forecast",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the resource to upload forecast for."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "basic",
+              "username": "{{username}}",
+              "password": "{{password}}"
+            }
+          },
+          "docs": "Upload external power forecasts for a specific resource.\n\nThis endpoint is tolerant of past timestamps - they will be ignored rather than causing validation errors. The response includes both successfully inserted forecasts and any ignored forecasts.\n\n**Validation:**\n- All timestamps must be perfect quarter-hours (15-minute intervals)\n- Forecasts in the past will be ignored (not inserted)\n- Future forecasts can't be submitted more than 48 hours in advance\n- Resource ID must exist and be accessib"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,130 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Powernaut authentication managing_bids API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "managing_bids",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all bids",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/bids",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Page size"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Status of the bids (accepted or open). If not provided, all open & accepted bids will be returned."
+              }
+            ],
+            "auth": {
+              "type": "basic",
+              "username": "{{username}}",
+              "password": "{{password}}"
+            }
+          },
+          "docs": "Gets all accepted or open bids available to your current authorised scope.\n\nAccepted bids need to be acted upon and the requested flexibility should be provided."
+        },
+        {
+          "info": {
+            "name": "Get a bid",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/bids/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the bid."
+              }
+            ],
+            "auth": {
+              "type": "basic",
+              "username": "{{username}}",
+              "password": "{{password}}"
+            }
+          },
+          "docs": "Gets a bid by its unique ID.\n\nCan be used to look up a bid, and its activation after you've received a notification that it was accepted, see the `activation` property in the response of this endpoint."
+        },
+        {
+          "info": {
+            "name": "Update a bid",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/bids/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the bid you want to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "basic",
+              "username": "{{username}}",
+              "password": "{{password}}"
+            }
+          },
+          "docs": "Update a bid by its unique ID.\n\nAccepted bids cannot be updated.\n\nOnly the properties you provide will be updated. Use `null` to unset a property."
+        },
+        {
+          "info": {
+            "name": "Cancel a bid",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/bids/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the bid you want to cancel."
+              }
+            ],
+            "auth": {
+              "type": "basic",
+              "username": "{{username}}",
+              "password": "{{password}}"
+            }
+          },
+          "docs": "Cancels a bid by its unique ID.\n\nAccepted bids cannot be canceled."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

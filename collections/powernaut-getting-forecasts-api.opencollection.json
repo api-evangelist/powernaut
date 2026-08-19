@@ -1,0 +1,111 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Powernaut authentication getting_forecasts API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "getting_forecasts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve forecasted signals for a specific site",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/sites/:id/forecast",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the site (UUID format)."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start of window (ISO 8601). Must be a perfect quarter hour without seconds or milliseconds precision.\n\n**Note**: To avoid timezone issues, we perform an additional check for the presence of timezone information. You should always include either UTC with `Z`, or an offset like `+01:00`."
+              },
+              {
+                "name": "amount",
+                "value": "",
+                "type": "query",
+                "description": "The number of forecast data points to retrieve."
+              },
+              {
+                "name": "granularity",
+                "value": "",
+                "type": "query",
+                "description": "The granularity to fetch the forecast for, i.e. the time length of each element.\n\nOnly 15-minute granularity is supported.\n\nThe expected format is <a href=\"https://en.wikipedia.org/wiki/ISO_8601#Durations\" target=\"_blank\">ISO8601</a>."
+              },
+              {
+                "name": "signal",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve forecasted signals for a specific site"
+        },
+        {
+          "info": {
+            "name": "Retrieve forecasted signals for a specific resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sandbox.powernaut.io/v1/connect/resources/:id/forecast",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the resource (UUID format)."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start of window (ISO 8601). Must be a perfect quarter hour without seconds or milliseconds precision.\n\n**Note**: To avoid timezone issues, we perform an additional check for the presence of timezone information. You should always include either UTC with `Z`, or an offset like `+01:00`."
+              },
+              {
+                "name": "amount",
+                "value": "",
+                "type": "query",
+                "description": "The number of forecast data points to retrieve."
+              },
+              {
+                "name": "granularity",
+                "value": "",
+                "type": "query",
+                "description": "The granularity to fetch the forecast for, i.e. the time length of each element.\n\nOnly 15-minute granularity is supported.\n\nThe expected format is <a href=\"https://en.wikipedia.org/wiki/ISO_8601#Durations\" target=\"_blank\">ISO8601</a>."
+              },
+              {
+                "name": "signal",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "basic",
+              "username": "{{username}}",
+              "password": "{{password}}"
+            }
+          },
+          "docs": "Retrieve forecasted signals for a specific resource"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

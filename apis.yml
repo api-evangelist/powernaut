@@ -45,6 +45,8 @@ apis:
   humanURL: https://docs.powernaut.io/partner-api
   baseURL: https://api.powernaut.io
   tags:
+  - Authentication
+  tags_raw:
   - authentication
   properties:
   - type: OpenAPI
@@ -72,7 +74,8 @@ apis:
   description: A bid tells us how much flexibility is available in a certain time window.
   humanURL: https://docs.powernaut.io/partner-api
   baseURL: https://api.powernaut.io
-  tags:
+  tags: []
+  tags_raw:
   - creating_bids
   properties:
   - type: OpenAPI
@@ -91,6 +94,8 @@ apis:
   humanURL: https://docs.powernaut.io/partner-api
   baseURL: https://api.powernaut.io
   tags:
+  - Event
+  tags_raw:
   - events
   properties:
   - type: OpenAPI
@@ -105,7 +110,8 @@ apis:
     See the [guide](/guides/connect/forecasting/getting-forecasts) for more information.
   humanURL: https://docs.powernaut.io/partner-api
   baseURL: https://api.powernaut.io
-  tags:
+  tags: []
+  tags_raw:
   - getting_forecasts
   properties:
   - type: OpenAPI
@@ -120,6 +126,8 @@ apis:
   humanURL: https://docs.powernaut.io/partner-api
   baseURL: https://api.powernaut.io
   tags:
+  - Historical Data
+  tags_raw:
   - historical_data
   properties:
   - type: OpenAPI
@@ -136,7 +144,8 @@ apis:
     Read more [here](/guides/connect/activating-flexibility/activating)
   humanURL: https://docs.powernaut.io/partner-api
   baseURL: https://api.powernaut.io
-  tags:
+  tags: []
+  tags_raw:
   - managing_bids
   properties:
   - type: OpenAPI
@@ -154,6 +163,8 @@ apis:
   humanURL: https://docs.powernaut.io/partner-api
   baseURL: https://api.powernaut.io
   tags:
+  - Markets
+  tags_raw:
   - markets
   properties:
   - type: OpenAPI
@@ -164,6 +175,8 @@ apis:
   humanURL: https://docs.powernaut.io/partner-api
   baseURL: https://api.powernaut.io
   tags:
+  - Metrics
+  tags_raw:
   - metrics
   properties:
   - type: OpenAPI
@@ -182,6 +195,8 @@ apis:
   humanURL: https://docs.powernaut.io/partner-api
   baseURL: https://api.powernaut.io
   tags:
+  - Resources
+  tags_raw:
   - resources
   properties:
   - type: OpenAPI
@@ -200,6 +215,8 @@ apis:
   humanURL: https://docs.powernaut.io/partner-api
   baseURL: https://api.powernaut.io
   tags:
+  - Sensor Data
+  tags_raw:
   - sensor_data
   properties:
   - type: OpenAPI
@@ -219,6 +236,8 @@ apis:
   humanURL: https://docs.powernaut.io/partner-api
   baseURL: https://api.powernaut.io
   tags:
+  - Sites
+  tags_raw:
   - sites
   properties:
   - type: OpenAPI
@@ -233,7 +252,8 @@ apis:
     See the [guide](/guides/connect/forecasting/uploading-forecasts) for more information.
   humanURL: https://docs.powernaut.io/partner-api
   baseURL: https://api.powernaut.io
-  tags:
+  tags: []
+  tags_raw:
   - uploading_forecasts
   properties:
   - type: OpenAPI

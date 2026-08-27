@@ -258,6 +258,16 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/powernaut-uploading-forecasts-api-openapi.yml
+- aid: powernaut:powernaut-accepting-bids-api
+  name: Powernaut Accepting Bids API
+  description: The accepting_bids API from Powernaut — 0 operation(s) for accepting_bids.
+  humanURL: https://docs.powernaut.io/partner-api
+  baseURL: https://api.powernaut.io
+  tags:
+  - accepting_bids
+  properties:
+  - type: OpenAPI
+    url: openapi/powernaut-accepting-bids-api-openapi.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

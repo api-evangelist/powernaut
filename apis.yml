@@ -137,8 +137,7 @@ apis:
     Use these endpoints to import historical consumption and production data via CSV files.
   humanURL: https://docs.powernaut.io/partner-api
   baseURL: https://api.powernaut.io
-  tags:
-  - Historical Data
+  tags: []
   tags_raw:
   - historical_data
   properties:
@@ -226,8 +225,7 @@ apis:
     See the [guide](/guides/connect/sensor-data/reading-sensor-data) for more information.
   humanURL: https://docs.powernaut.io/partner-api
   baseURL: https://api.powernaut.io
-  tags:
-  - Sensor Data
+  tags: []
   tags_raw:
   - sensor_data
   properties:
@@ -275,7 +273,8 @@ apis:
   description: The accepting_bids API from Powernaut — 0 operation(s) for accepting_bids.
   humanURL: https://docs.powernaut.io/partner-api
   baseURL: https://api.powernaut.io
-  tags:
+  tags: []
+  tags_raw:
   - accepting_bids
   properties:
   - type: OpenAPI

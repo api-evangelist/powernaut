@@ -1,25 +1,10 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Powernaut authentication resources API
-  description: '
-
-    # Getting Started
+  title: Powernaut Resources API
+  description: '# Getting Started
 
 
-    Welcome to the Powernaut API Reference!
-
-
-    Our API offers a robust and secure way to connect your flexible resources to flexibility buyers such as energy utilities/suppliers and system operators.
-
-
-    This OpenAPI documentation is designed to provide a comprehensive and easy-to-understand guide for developers who are integrating their systems with Powernaut’s platform.
-
-
-    By leveraging our API, you can seamlessly offer flexibility in several electricity markets, opening up additional revenue streams
-
-    for your resources while contributing to a greener and more efficient electricity grid.
-
-    '
+    Welcome to the Powernaut API Reference!'
   version: 1.0.0
   contact:
     name: Powernaut Support
@@ -34,7 +19,7 @@ servers:
 - url: https://api.powernaut.io
   description: Production
 tags:
-- name: resources
+- name: Resources
   description: 'Register, modify or delete flexible resources.
 
 
@@ -88,7 +73,7 @@ paths:
       - cloud-cloud: []
       summary: Create a resource
       tags:
-      - resources
+      - Resources
       x-codeSamples:
       - source: "import requests\nimport json\n\nurl = \"https://api.powernaut.io/v1/connect/resources\"\n\npayload = json.dumps({\n  \"type\": \"<string>\",\n  \"power\": {\n    \"active\": {\n      \"minimum\": \"<decimal>\",\n      \"maximum\": \"<decimal>\"\n    },\n    \"reactive\": {\n      \"minimum\": \"<decimal>\",\n      \"maximum\": \"<decimal>\"\n    }\n  },\n  \"site_id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"external_id\": \"<string>\",\n  \"capacity\": {\n    \"minimum\": \"<decimal>\",\n    \"maximum\": \"<decimal>\"\n  },\n  \"group_id\": \"<uuid>\",\n  \"parent_id\": \"<uuid>\",\n  \"webhooks\": {\n    \"accepted\": \"<uri>\"\n  }\n})\nheaders = {\n  'Content-Type': 'application/json',\n  'Accept': 'application/json',\n  'Authorization': 'Bearer <token>'\n}\n\nresponse = requests.request(\"POST\", url, headers=headers, data=payload)\n\nprint(response.text)\n"
         lang: python
@@ -178,7 +163,7 @@ paths:
       - cloud-cloud: []
       summary: Get all resources
       tags:
-      - resources
+      - Resources
       x-codeSamples:
       - source: "import requests\n\nurl = \"https://api.powernaut.io/v1/connect/resources\"\n\npayload = {}\nheaders = {\n  'Accept': 'application/json',\n  'Authorization': 'Bearer <token>'\n}\n\nresponse = requests.request(\"GET\", url, headers=headers, data=payload)\n\nprint(response.text)\n"
         lang: python
@@ -264,7 +249,7 @@ paths:
       - cloud-cloud: []
       summary: Get a resource
       tags:
-      - resources
+      - Resources
     patch:
       description: 'Update a resource by its unique ID.
 
@@ -321,7 +306,7 @@ paths:
       - cloud-cloud: []
       summary: Update a resource
       tags:
-      - resources
+      - Resources
     delete:
       description: 'Delete a resource
 
@@ -368,7 +353,7 @@ paths:
       - cloud-cloud: []
       summary: Delete a resource
       tags:
-      - resources
+      - Resources
   /v1/connect/resources/{id}/activations:
     get:
       description: Gets the activations for a resource.
@@ -441,127 +426,9 @@ paths:
       - cloud-cloud: []
       summary: Get activations
       tags:
-      - resources
+      - Resources
 components:
   schemas:
-    BadRequestExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example:
-          - Invalid datetime
-          - Invalid page size
-        error:
-          type: string
-          description: Bad Request
-          example: Bad Request
-        status_code:
-          type: number
-          description: '400'
-          example: 400
-      required:
-      - message
-      - error
-      - status_code
-    UnauthorizedExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Unauthorized
-        error:
-          type: string
-          description: Unauthorized
-          example: Unauthorized
-        status_code:
-          type: number
-          description: '401'
-          example: 401
-      required:
-      - message
-      - error
-      - status_code
-    UpdateResourceDto:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Human-readable name for this resource. Useful for reporting, but not required.
-          example: Home Battery
-          minLength: 1
-        external_id:
-          type: string
-          description: Reference of the resource in external system (gateway, API, ...), used for mapping identifiers.
-          example: NCC-1701
-          minLength: 1
-          nullable: true
-        type:
-          type: string
-          description: Type of energy resource (battery, heat pump, solar, etc.).
-          enum:
-          - static_battery
-          - heat_pump
-          - electric_vehicle
-          - electric_vehicle_charging_point
-          - photovoltaic
-          - wind
-          - group
-          - other
-          - meter
-          example: static_battery
-        power:
-          description: Power constraints for this resource.
-          allOf:
-          - $ref: '#/components/schemas/ResourcePowerDto'
-        capacity:
-          description: 'Capacity constraints for this resource (in kWh).
-
-
-            This property is currently only required for battery resources.'
-          allOf:
-          - $ref: '#/components/schemas/ResourcePowerConstraints'
-        parent_id:
-          type: string
-          description: 'Identifier of the physical parent resource in the site topology.
-
-
-            Set this field to `null` to remove the parent relationship.
-
-
-            Constraints:
-
-            - Parent must exist and belong to the same site
-
-            - Only meter-type resources can be parents
-
-            - Group resources cannot have a parent
-
-            - Hierarchy is limited to 10 levels deep'
-          format: uuid
-          nullable: true
-        webhooks:
-          description: Webhooks related to this resource, for example to be notified about the acceptance of a bid for this resource.
-          allOf:
-          - $ref: '#/components/schemas/ResourceWebhooksDto'
-        group_id:
-          type: string
-          description: 'Identifier of the resource group that this resource should belong to.
-
-
-            Set this field to `null` to remove a resource from its existing group.'
-          format: uuid
-          nullable: true
     CreateResourceDto:
       type: object
       properties:
@@ -571,11 +438,12 @@ components:
           example: Home Battery
           minLength: 1
         external_id:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Reference of the resource in external system (gateway, API, ...), used for mapping identifiers.
           example: NCC-1701
           minLength: 1
-          nullable: true
         type:
           type: string
           description: Type of energy resource (battery, heat pump, solar, etc.).
@@ -613,7 +481,9 @@ components:
             Only provide this when you want to immediately associate the resource with an existing group on the same site.'
           format: uuid
         parent_id:
-          type: string
+          type:
+          - string
+          - 'null'
           description: 'Identifier of the physical parent resource in the site topology.
 
 
@@ -627,7 +497,6 @@ components:
 
             - Hierarchy is limited to 10 levels deep'
           format: uuid
-          nullable: true
         webhooks:
           description: Webhooks related to this resource, for example to be notified about the acceptance of a bid for this resource.
           allOf:
@@ -636,165 +505,79 @@ components:
       - type
       - power
       - site_id
-    ResourcePowerConstraints:
+    UpdateResourceDto:
       type: object
       properties:
-        minimum:
+        name:
           type: string
-          description: Minimum level
-          example: '-5.1'
-          format: decimal
-          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
-        maximum:
+          description: Human-readable name for this resource. Useful for reporting, but not required.
+          example: Home Battery
+          minLength: 1
+        external_id:
+          type:
+          - string
+          - 'null'
+          description: Reference of the resource in external system (gateway, API, ...), used for mapping identifiers.
+          example: NCC-1701
+          minLength: 1
+        type:
           type: string
-          description: Maximum level
-          example: '5.1'
-          format: decimal
-          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
-      required:
-      - minimum
-      - maximum
-    ResourcePowerDto:
-      type: object
-      properties:
-        active:
-          description: 'Active power constraints (minimum, maximum) this resource can import/export (in kW).
+          description: Type of energy resource (battery, heat pump, solar, etc.).
+          enum:
+          - static_battery
+          - heat_pump
+          - electric_vehicle
+          - electric_vehicle_charging_point
+          - photovoltaic
+          - wind
+          - group
+          - other
+          - meter
+          example: static_battery
+        power:
+          description: Power constraints for this resource.
+          allOf:
+          - $ref: '#/components/schemas/ResourcePowerDto'
+        capacity:
+          description: 'Capacity constraints for this resource (in kWh).
 
 
-            Positive values indicate consumption, negative values indicate production.
-
-
-            A battery would typically have a value set for both an active import and export.'
+            This property is currently only required for battery resources.'
           allOf:
           - $ref: '#/components/schemas/ResourcePowerConstraints'
-        reactive:
-          description: 'Reactive power constraints (minimum, maximum) this resource can import/export (in kVAR).
+        parent_id:
+          type:
+          - string
+          - 'null'
+          description: 'Identifier of the physical parent resource in the site topology.
 
 
-            Positive values indicate lag, negative values indicate lead.'
+            Set this field to `null` to remove the parent relationship.
+
+
+            Constraints:
+
+            - Parent must exist and belong to the same site
+
+            - Only meter-type resources can be parents
+
+            - Group resources cannot have a parent
+
+            - Hierarchy is limited to 10 levels deep'
+          format: uuid
+        webhooks:
+          description: Webhooks related to this resource, for example to be notified about the acceptance of a bid for this resource.
           allOf:
-          - $ref: '#/components/schemas/ResourcePowerConstraints'
-      required:
-      - active
-    ProviderActivationSummaryListDto:
-      type: object
-      properties:
-        total:
-          type: integer
-          description: Total amount of results that match the query
-          minimum: 0
-        items:
-          description: Activations for the current page
-          type: array
-          items:
-            $ref: '#/components/schemas/ProviderActivationSummaryDto'
-      required:
-      - total
-      - items
-    ConnectionPointResourcesListDto:
-      type: object
-      properties:
-        total:
-          type: integer
-          description: Total amount of results that match the query
-          minimum: 0
-        items:
-          description: Paginated items
-          type: array
-          items:
-            $ref: '#/components/schemas/ResourceDto'
-      required:
-      - total
-      - items
-    ResourceWebhooksDto:
-      type: object
-      properties:
-        accepted:
-          type: string
-          description: 'Webhook at which you''d like to receive a notification of acceptance for bids made for this resource. For more information on the webhook content, see [the specifications](#tag/accepting_bids/operation/WebhookBidAccepted).
+          - $ref: '#/components/schemas/ResourceWebhooksDto'
+        group_id:
+          type:
+          - string
+          - 'null'
+          description: 'Identifier of the resource group that this resource should belong to.
 
 
-            This is optional, and if not provided, activation via MQTT will be used instead. For more information on other notification options, see [this guide](/guides/connect/activating-flexibility/activating).'
-          example: https://domain.tld/path
-          format: uri
-    ForbiddenExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Insufficient permissions
-        error:
-          type: string
-          description: Forbidden
-          example: Forbidden
-        status_code:
-          type: number
-          description: '403'
-          example: 403
-      required:
-      - message
-      - error
-      - status_code
-    EnergyDto:
-      type: object
-      properties:
-        delivered:
-          type: string
-          description: 'The actual energy delivered by the resource, in `kWh` or `kVARh`, verified by real-time metering.
-
-            It can be negative if, for example, a resources increases its consumption when a decrease was requested.
-
-
-            This is only available after the activation has been verified, which happens a few minutes after the activation''s time window.'
-          format: decimal
-          example: '5.1'
-          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
-          nullable: true
-        requested:
-          type: string
-          description: The energy requested by the activation, in `kWh` or `kVARh`, based on an initial estimate of available flexibility.
-          format: decimal
-          example: '5.1'
-          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
-        extra_delivered:
-          type: string
-          description: Extra energy delivered beyond the requested amount for procurements without a delivery limit (in `kWh` or `kVARh`). `null` before verification or for procurements with a fixed delivery limit (where overdelivery is not tracked).
-          format: decimal
-          example: '1.2'
-          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
-          nullable: true
-      required:
-      - delivered
-      - requested
-      - extra_delivered
-    NotFoundDto_UmVzb3VyY2UgZG9lcyBub3QgZXhpc3Q:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Resource does not exist
-        error:
-          type: string
-          description: Not Found
-          example: Not Found
-        status_code:
-          type: number
-          description: '404'
-          example: 404
-      required:
-      - message
-      - error
-      - status_code
+            Set this field to `null` to remove a resource from its existing group.'
+          format: uuid
     ProviderActivationSummaryDto:
       type: object
       properties:
@@ -894,13 +677,14 @@ components:
           description: Identifier for the site that this resource is part of.
           format: uuid
         parent_id:
-          type: string
+          type:
+          - string
+          - 'null'
           description: 'Identifier of the physical parent resource in the site topology.
 
 
             Used to model hierarchical resource relationships (up to 10 levels deep).'
           format: uuid
-          nullable: true
         webhooks:
           description: Webhooks related to this resource, for example to be notified about the acceptance of a bid for this resource.
           allOf:
@@ -910,15 +694,17 @@ components:
           description: Unique identifier for the resource
           format: uuid
         external_id:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Reference of the resource in external system (gateway, API, ...), used for mapping identifiers.
           example: NCC-1701
-          nullable: true
         group_id:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Identifier of the group this resource belongs to.
           format: uuid
-          nullable: true
         power:
           description: Power constraints for this resource.
           allOf:
@@ -934,11 +720,12 @@ components:
           format: date-time
           example: '2024-01-05T11:30:15Z'
         last_seen_at:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Timestamp for last metric received from the resource (ISO 8601)
           format: date-time
           example: '2025-01-07T15:08:22Z'
-          nullable: true
       required:
       - type
       - site_id
@@ -947,6 +734,215 @@ components:
       - created_at
       - modified_at
       - last_seen_at
+    ConnectionPointResourcesListDto:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total amount of results that match the query
+          minimum: 0
+        items:
+          description: Paginated items
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceDto'
+      required:
+      - total
+      - items
+    ResourceWebhooksDto:
+      type: object
+      properties:
+        accepted:
+          type: string
+          description: 'Webhook at which you''d like to receive a notification of acceptance for bids made for this resource. For more information on the webhook content, see [the specifications](#tag/accepting_bids/operation/WebhookBidAccepted).
+
+
+            This is optional, and if not provided, activation via MQTT will be used instead. For more information on other notification options, see [this guide](/guides/connect/activating-flexibility/activating).'
+          example: https://domain.tld/path
+          format: uri
+    ResourcePowerConstraints:
+      type: object
+      properties:
+        minimum:
+          type: string
+          description: Minimum level
+          example: '-5.1'
+          format: decimal
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+        maximum:
+          type: string
+          description: Maximum level
+          example: '5.1'
+          format: decimal
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+      required:
+      - minimum
+      - maximum
+    NotFoundDto_UmVzb3VyY2UgZG9lcyBub3QgZXhpc3Q:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Resource does not exist
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
+    ForbiddenExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Insufficient permissions
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
+    ResourcePowerDto:
+      type: object
+      properties:
+        active:
+          description: 'Active power constraints (minimum, maximum) this resource can import/export (in kW).
+
+
+            Positive values indicate consumption, negative values indicate production.
+
+
+            A battery would typically have a value set for both an active import and export.'
+          allOf:
+          - $ref: '#/components/schemas/ResourcePowerConstraints'
+        reactive:
+          description: 'Reactive power constraints (minimum, maximum) this resource can import/export (in kVAR).
+
+
+            Positive values indicate lag, negative values indicate lead.'
+          allOf:
+          - $ref: '#/components/schemas/ResourcePowerConstraints'
+      required:
+      - active
+    EnergyDto:
+      type: object
+      properties:
+        delivered:
+          type:
+          - string
+          - 'null'
+          description: 'The actual energy delivered by the resource, in `kWh` or `kVARh`, verified by real-time metering.
+
+            It can be negative if, for example, a resources increases its consumption when a decrease was requested.
+
+
+            This is only available after the activation has been verified, which happens a few minutes after the activation''s time window.'
+          format: decimal
+          example: '5.1'
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+        requested:
+          type: string
+          description: The energy requested by the activation, in `kWh` or `kVARh`, based on an initial estimate of available flexibility.
+          format: decimal
+          example: '5.1'
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+        extra_delivered:
+          type:
+          - string
+          - 'null'
+          description: Extra energy delivered beyond the requested amount for procurements without a delivery limit (in `kWh` or `kVARh`). `null` before verification or for procurements with a fixed delivery limit (where overdelivery is not tracked).
+          format: decimal
+          example: '1.2'
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+      required:
+      - delivered
+      - requested
+      - extra_delivered
+    UnauthorizedExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Unauthorized
+        error:
+          type: string
+          description: Unauthorized
+          example: Unauthorized
+        status_code:
+          type: number
+          description: '401'
+          example: 401
+      required:
+      - message
+      - error
+      - status_code
+    ProviderActivationSummaryListDto:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total amount of results that match the query
+          minimum: 0
+        items:
+          description: Activations for the current page
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderActivationSummaryDto'
+      required:
+      - total
+      - items
+    BadRequestExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example:
+          - Invalid datetime
+          - Invalid page size
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
+      required:
+      - message
+      - error
+      - status_code
   securitySchemes:
     cloud-cloud:
       scheme: bearer
@@ -961,62 +957,6 @@ components:
       type: http
       scheme: basic
       description: Basic credentials used for edge-cloud authentication. They can be obtained when creating a site.
-x-webhooks:
-  bidAccepted:
-    post:
-      operationId: WebhookBidAccepted
-      description: 'During bidding, you can set a webhook to receive activation events on.
-
-
-        ### Fetching details
-
-
-        To make webhooks easy to implement, while also being secure, a webhook contains only a single reference to the bid that was accepted. You should use this reference to fetch the activation details by looking up the accepted bid.
-
-
-        See [this endpoint](#tag/managing_bids/operation/GetBid) for details on how to look up activation details.
-
-
-        ### Retries
-
-
-        You should reply with a `2XX` status code, indicating you have successfully activated the asset.
-
-        You can also reply with a `406` status code if you notice that the activation cannot be delivered upon for some reason (e.g. a suddenly disconnected car).
-
-
-        We will retry your webhook up to 3 times in case you:
-
-
-        1. Do not reply with a `2XX` or `406` status code or,
-
-        2. We do not get a successful reply within 5 seconds
-
-
-        Our portal shows a log of both successful and failed webhook calls.
-
-
-        '
-      summary: Receive an accepted bid
-      tags:
-      - accepting_bids
-      security: []
-      parameters:
-      - name: X-Powernaut-Webhook-Version
-        description: A version indicator for this webhook, used to track changes to the webhook implementation. At the moment, this is always `v1`.
-        example: v1
-        in: header
-        schema:
-          type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BidAcceptedDto'
-      responses:
-        '202':
-          description: Successfully processed
 x-tagGroups:
 - name: Authentication
   tags:

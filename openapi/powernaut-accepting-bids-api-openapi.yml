@@ -9,7 +9,7 @@ info:
   license:
     name: Creative Commons Attribution-ShareAlike 4.0 International
     url: https://creativecommons.org/licenses/by-sa/4.0/
-  description: 'Operations tagged accepting_bids across 13 of this provider''s published API definitions: powernaut-authentication-api-openapi.yml, powernaut-baselining-api-openapi.yml, powernaut-creating-bids-api-openapi.yml, powernaut-events-api-openapi.yml, powernaut-getting-forecasts-api-openapi.yml, powernaut-historical-data-api-openapi.yml, powernaut-managing-bids-api-openapi.yml, powernaut-markets-api-openapi.yml, powernaut-metrics-api-openapi.yml, powernaut-resources-api-openapi.yml, powernaut-sensor-data-api-openapi.yml, powernaut-sites-api-openapi.yml, powernaut-uploading-forecasts-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged accepting_bids across 2 of this provider''s published API definitions: powernaut-partner-api-openapi-original.yml, powernaut-accepting-bids-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.sandbox.powernaut.io
   description: Sandbox
@@ -17,6 +17,8 @@ servers:
   description: Production
 tags:
 - name: accepting_bids
+  description: Bids get accepted when there's a need for them. You need to activate when they get accepted, i.e. act on the requested flexibility.
+  x-displayName: Activating
 paths: {}
 webhooks:
   bidAccepted:
@@ -31,7 +33,7 @@ webhooks:
         To make webhooks easy to implement, while also being secure, a webhook contains only a single reference to the bid that was accepted. You should use this reference to fetch the activation details by looking up the accepted bid.
 
 
-        See [this endpoint](#tag/managing_bids/operation/GetBid) for details on how to look up activation details.
+        See this endpoint for details on how to look up activation details.
 
 
         ### Retries
@@ -50,10 +52,7 @@ webhooks:
         2. We do not get a successful reply within 5 seconds
 
 
-        Our portal shows a log of both successful and failed webhook calls.
-
-
-        '
+        Our portal shows a log of both successful and failed webhook calls.'
       summary: Receive an accepted bid
       tags:
       - accepting_bids
@@ -80,6 +79,16 @@ webhooks:
     - url: https://api.powernaut.io
       description: Production
 components:
+  schemas:
+    BidAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifier for the bid that has been accepted. You can use this to look up the details of the activation.
+          format: uuid
+      required:
+      - id
   securitySchemes:
     cloud-cloud:
       scheme: bearer
@@ -95,19 +104,8 @@ components:
       scheme: basic
       description: Basic credentials used for edge-cloud authentication. They can be obtained when creating a site.
 x-refined-from:
-- powernaut-authentication-api-openapi.yml
-- powernaut-baselining-api-openapi.yml
-- powernaut-creating-bids-api-openapi.yml
-- powernaut-events-api-openapi.yml
-- powernaut-getting-forecasts-api-openapi.yml
-- powernaut-historical-data-api-openapi.yml
-- powernaut-managing-bids-api-openapi.yml
-- powernaut-markets-api-openapi.yml
-- powernaut-metrics-api-openapi.yml
-- powernaut-resources-api-openapi.yml
-- powernaut-sensor-data-api-openapi.yml
-- powernaut-sites-api-openapi.yml
-- powernaut-uploading-forecasts-api-openapi.yml
+- powernaut-partner-api-openapi-original.yml
+- powernaut-accepting-bids-api-openapi.yml
 x-tagGroups:
 - name: Authentication
   tags:

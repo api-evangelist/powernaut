@@ -1,25 +1,10 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Powernaut authentication sensor_data API
-  description: '
-
-    # Getting Started
+  title: Powernaut Sensor Data API
+  description: '# Getting Started
 
 
-    Welcome to the Powernaut API Reference!
-
-
-    Our API offers a robust and secure way to connect your flexible resources to flexibility buyers such as energy utilities/suppliers and system operators.
-
-
-    This OpenAPI documentation is designed to provide a comprehensive and easy-to-understand guide for developers who are integrating their systems with Powernaut’s platform.
-
-
-    By leveraging our API, you can seamlessly offer flexibility in several electricity markets, opening up additional revenue streams
-
-    for your resources while contributing to a greener and more efficient electricity grid.
-
-    '
+    Welcome to the Powernaut API Reference!'
   version: 1.0.0
   contact:
     name: Powernaut Support
@@ -34,14 +19,14 @@ servers:
 - url: https://api.powernaut.io
   description: Production
 tags:
-- name: sensor_data
+- name: Sensor Data
   description: 'Read raw time series data from sensors attached to your sites, such as irradiance sensors on PV installations.
 
 
     Useful when you need measured conditions alongside metering data, for example to estimate PV output during curtailment windows.
 
 
-    See the [guide](/guides/connect/sensor-data/reading-sensor-data) for more information.'
+    See the guide for more information.'
   x-displayName: Sensor data
 paths:
   /v1/connect/sites/{id}/sensors:
@@ -93,7 +78,7 @@ paths:
       - cloud-cloud: []
       summary: List sensors for a site
       tags:
-      - sensor_data
+      - Sensor Data
   /v1/connect/sensors/{id}:
     get:
       description: Retrieves the identifiers and measurement channels for a single sensor. Call this once per sensor and cache the result; it rarely changes.
@@ -135,7 +120,7 @@ paths:
       - cloud-cloud: []
       summary: Get sensor metadata
       tags:
-      - sensor_data
+      - Sensor Data
   /v1/connect/sensors/{id}/readings:
     get:
       description: Returns 15-minute average readings for a single sensor over a `[start, end)` window. Sensors emitting at higher cadence (e.g. 1- or 5-minute) are normalised by averaging all raw samples within each quarter-hour bucket. Buckets with no readings are omitted. Timestamps are the start of the bucket and are returned in UTC.
@@ -221,9 +206,92 @@ paths:
       - cloud-cloud: []
       summary: Get sensor readings (15-minute averages)
       tags:
-      - sensor_data
+      - Sensor Data
 components:
   schemas:
+    SensorMeasurementDto:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Machine-readable name of the measurement channel, used as the field name in raw data (e.g. `irradiance`).
+          example: irradiance
+        unit:
+          type: string
+          description: Physical unit of the measurement, expressed as a short symbol (e.g. `W/m2`).
+          example: W/m2
+      required:
+      - key
+      - unit
+    NotFoundDto_U2l0ZSBub3QgZm91bmQ:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Site not found
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
+    ForbiddenDto_Rm9yYmlkZGVu:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Forbidden
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
+    BadRequestDto_SW52YWxpZCB0aW1lIHdpbmRvdyBvciBwYWdpbmF0aW9uIHBhcmFtZXRlcnMu:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Invalid time window or pagination parameters.
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
+      required:
+      - message
+      - error
+      - status_code
     SensorReadingDto:
       type: object
       properties:
@@ -239,7 +307,7 @@ components:
       required:
       - timestamp
       - value
-    NotFoundDto_U2Vuc29yIG5vdCBmb3VuZA:
+    ForbiddenExceptionDto:
       type: object
       properties:
         message:
@@ -249,15 +317,15 @@ components:
           - type: array
             items:
               type: string
-          example: Sensor not found
+          example: Insufficient permissions
         error:
           type: string
-          description: Not Found
-          example: Not Found
+          description: Forbidden
+          example: Forbidden
         status_code:
           type: number
-          description: '404'
-          example: 404
+          description: '403'
+          example: 403
       required:
       - message
       - error
@@ -286,6 +354,90 @@ components:
       - external_id
       - connection_point_id
       - measurements
+    UnauthorizedDto_VW5hdXRob3JpemVk:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Unauthorized
+        error:
+          type: string
+          description: Unauthorized
+          example: Unauthorized
+        status_code:
+          type: number
+          description: '401'
+          example: 401
+      required:
+      - message
+      - error
+      - status_code
+    UnauthorizedExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Unauthorized
+        error:
+          type: string
+          description: Unauthorized
+          example: Unauthorized
+        status_code:
+          type: number
+          description: '401'
+          example: 401
+      required:
+      - message
+      - error
+      - status_code
+    NotFoundDto_U2Vuc29yIG5vdCBmb3VuZA:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Sensor not found
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
+    SensorReadingsListDto:
+      type: object
+      properties:
+        data:
+          description: Readings for the requested sensor and time window, ordered by `timestamp` ascending. Intervals without a reading are omitted.
+          type: array
+          items:
+            $ref: '#/components/schemas/SensorReadingDto'
+        total:
+          type: integer
+          description: Total number of readings matching the filter across all pages.
+          example: 70080
+      required:
+      - data
+      - total
     BadRequestExceptionDto:
       type: object
       properties:
@@ -311,173 +463,6 @@ components:
       - message
       - error
       - status_code
-    NotFoundDto_U2l0ZSBub3QgZm91bmQ:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Site not found
-        error:
-          type: string
-          description: Not Found
-          example: Not Found
-        status_code:
-          type: number
-          description: '404'
-          example: 404
-      required:
-      - message
-      - error
-      - status_code
-    SensorMeasurementDto:
-      type: object
-      properties:
-        key:
-          type: string
-          description: Machine-readable name of the measurement channel, used as the field name in raw data (e.g. `irradiance`).
-          example: irradiance
-        unit:
-          type: string
-          description: Physical unit of the measurement, expressed as a short symbol (e.g. `W/m2`).
-          example: W/m2
-      required:
-      - key
-      - unit
-    UnauthorizedExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Unauthorized
-        error:
-          type: string
-          description: Unauthorized
-          example: Unauthorized
-        status_code:
-          type: number
-          description: '401'
-          example: 401
-      required:
-      - message
-      - error
-      - status_code
-    UnauthorizedDto_VW5hdXRob3JpemVk:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Unauthorized
-        error:
-          type: string
-          description: Unauthorized
-          example: Unauthorized
-        status_code:
-          type: number
-          description: '401'
-          example: 401
-      required:
-      - message
-      - error
-      - status_code
-    BadRequestDto_SW52YWxpZCB0aW1lIHdpbmRvdyBvciBwYWdpbmF0aW9uIHBhcmFtZXRlcnMu:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Invalid time window or pagination parameters.
-        error:
-          type: string
-          description: Bad Request
-          example: Bad Request
-        status_code:
-          type: number
-          description: '400'
-          example: 400
-      required:
-      - message
-      - error
-      - status_code
-    ForbiddenExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Insufficient permissions
-        error:
-          type: string
-          description: Forbidden
-          example: Forbidden
-        status_code:
-          type: number
-          description: '403'
-          example: 403
-      required:
-      - message
-      - error
-      - status_code
-    ForbiddenDto_Rm9yYmlkZGVu:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Forbidden
-        error:
-          type: string
-          description: Forbidden
-          example: Forbidden
-        status_code:
-          type: number
-          description: '403'
-          example: 403
-      required:
-      - message
-      - error
-      - status_code
-    SensorReadingsListDto:
-      type: object
-      properties:
-        data:
-          description: Readings for the requested sensor and time window, ordered by `timestamp` ascending. Intervals without a reading are omitted.
-          type: array
-          items:
-            $ref: '#/components/schemas/SensorReadingDto'
-        total:
-          type: integer
-          description: Total number of readings matching the filter across all pages.
-          example: 70080
-      required:
-      - data
-      - total
   securitySchemes:
     cloud-cloud:
       scheme: bearer
@@ -492,62 +477,6 @@ components:
       type: http
       scheme: basic
       description: Basic credentials used for edge-cloud authentication. They can be obtained when creating a site.
-x-webhooks:
-  bidAccepted:
-    post:
-      operationId: WebhookBidAccepted
-      description: 'During bidding, you can set a webhook to receive activation events on.
-
-
-        ### Fetching details
-
-
-        To make webhooks easy to implement, while also being secure, a webhook contains only a single reference to the bid that was accepted. You should use this reference to fetch the activation details by looking up the accepted bid.
-
-
-        See [this endpoint](#tag/managing_bids/operation/GetBid) for details on how to look up activation details.
-
-
-        ### Retries
-
-
-        You should reply with a `2XX` status code, indicating you have successfully activated the asset.
-
-        You can also reply with a `406` status code if you notice that the activation cannot be delivered upon for some reason (e.g. a suddenly disconnected car).
-
-
-        We will retry your webhook up to 3 times in case you:
-
-
-        1. Do not reply with a `2XX` or `406` status code or,
-
-        2. We do not get a successful reply within 5 seconds
-
-
-        Our portal shows a log of both successful and failed webhook calls.
-
-
-        '
-      summary: Receive an accepted bid
-      tags:
-      - accepting_bids
-      security: []
-      parameters:
-      - name: X-Powernaut-Webhook-Version
-        description: A version indicator for this webhook, used to track changes to the webhook implementation. At the moment, this is always `v1`.
-        example: v1
-        in: header
-        schema:
-          type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BidAcceptedDto'
-      responses:
-        '202':
-          description: Successfully processed
 x-tagGroups:
 - name: Authentication
   tags:

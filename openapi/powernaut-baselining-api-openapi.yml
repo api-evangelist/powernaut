@@ -1,25 +1,10 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Powernaut authentication baselining API
-  description: '
-
-    # Getting Started
+  title: Powernaut Baselining API
+  description: '# Getting Started
 
 
-    Welcome to the Powernaut API Reference!
-
-
-    Our API offers a robust and secure way to connect your flexible resources to flexibility buyers such as energy utilities/suppliers and system operators.
-
-
-    This OpenAPI documentation is designed to provide a comprehensive and easy-to-understand guide for developers who are integrating their systems with Powernaut’s platform.
-
-
-    By leveraging our API, you can seamlessly offer flexibility in several electricity markets, opening up additional revenue streams
-
-    for your resources while contributing to a greener and more efficient electricity grid.
-
-    '
+    Welcome to the Powernaut API Reference!'
   version: 1.0.0
   contact:
     name: Powernaut Support
@@ -41,7 +26,7 @@ tags:
     This baseline is essential to provide flexibility, which is then defined as a deviation from this baseline. You can provide a baseline either for a site, or a resource.
 
 
-    See the [guide](/guides/connect/activating-flexibility/baselining) for more information.'
+    See the guide for more information.'
   x-displayName: Baselining
 paths:
   /v1/connect/sites/{id}/baseline:
@@ -243,6 +228,21 @@ paths:
       - baselining
 components:
   schemas:
+    BaselineDto:
+      type: object
+      properties:
+        items:
+          description: 'The baseline values, starting from timestamp `start`.
+
+
+            This is the `active` power that will be imported/exported. A positive number indicates grid import and negative indicates grid export.'
+          minItems: 1
+          maxItems: 192
+          type: array
+          items:
+            type: string
+      required:
+      - items
     CreateBaselineDto:
       type: object
       properties:
@@ -285,7 +285,7 @@ components:
       required:
       - start
       - values
-    BadRequestExceptionDto:
+    ConflictDto_Q2Fubm90IHVwZGF0ZSBiYXNlbGluZTogdGhlcmUgaGF2ZSBiZWVuIGFjdGl2YXRpb25zIGluIHRoaXMgdGltZSB3aW5kb3c:
       type: object
       properties:
         message:
@@ -295,17 +295,38 @@ components:
           - type: array
             items:
               type: string
-          example:
-          - Invalid datetime
-          - Invalid page size
+          example: 'Cannot update baseline: there have been activations in this time window'
         error:
           type: string
-          description: Bad Request
-          example: Bad Request
+          description: Conflict
+          example: Conflict
         status_code:
           type: number
-          description: '400'
-          example: 400
+          description: '409'
+          example: 409
+      required:
+      - message
+      - error
+      - status_code
+    NotFoundDto_UmVzb3VyY2UgZG9lcyBub3QgZXhpc3Q:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Resource does not exist
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
       required:
       - message
       - error
@@ -333,29 +354,6 @@ components:
       - message
       - error
       - status_code
-    UnauthorizedExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Unauthorized
-        error:
-          type: string
-          description: Unauthorized
-          example: Unauthorized
-        status_code:
-          type: number
-          description: '401'
-          example: 401
-      required:
-      - message
-      - error
-      - status_code
     ForbiddenExceptionDto:
       type: object
       properties:
@@ -379,7 +377,7 @@ components:
       - message
       - error
       - status_code
-    ConflictDto_Q2Fubm90IHVwZGF0ZSBiYXNlbGluZTogdGhlcmUgaGF2ZSBiZWVuIGFjdGl2YXRpb25zIGluIHRoaXMgdGltZSB3aW5kb3c:
+    UnauthorizedExceptionDto:
       type: object
       properties:
         message:
@@ -389,35 +387,20 @@ components:
           - type: array
             items:
               type: string
-          example: 'Cannot update baseline: there have been activations in this time window'
+          example: Unauthorized
         error:
           type: string
-          description: Conflict
-          example: Conflict
+          description: Unauthorized
+          example: Unauthorized
         status_code:
           type: number
-          description: '409'
-          example: 409
+          description: '401'
+          example: 401
       required:
       - message
       - error
       - status_code
-    BaselineDto:
-      type: object
-      properties:
-        items:
-          description: 'The baseline values, starting from timestamp `start`.
-
-
-            This is the `active` power that will be imported/exported. A positive number indicates grid import and negative indicates grid export.'
-          minItems: 1
-          maxItems: 192
-          type: array
-          items:
-            type: string
-      required:
-      - items
-    NotFoundDto_UmVzb3VyY2UgZG9lcyBub3QgZXhpc3Q:
+    BadRequestExceptionDto:
       type: object
       properties:
         message:
@@ -427,15 +410,17 @@ components:
           - type: array
             items:
               type: string
-          example: Resource does not exist
+          example:
+          - Invalid datetime
+          - Invalid page size
         error:
           type: string
-          description: Not Found
-          example: Not Found
+          description: Bad Request
+          example: Bad Request
         status_code:
           type: number
-          description: '404'
-          example: 404
+          description: '400'
+          example: 400
       required:
       - message
       - error
@@ -454,62 +439,6 @@ components:
       type: http
       scheme: basic
       description: Basic credentials used for edge-cloud authentication. They can be obtained when creating a site.
-x-webhooks:
-  bidAccepted:
-    post:
-      operationId: WebhookBidAccepted
-      description: 'During bidding, you can set a webhook to receive activation events on.
-
-
-        ### Fetching details
-
-
-        To make webhooks easy to implement, while also being secure, a webhook contains only a single reference to the bid that was accepted. You should use this reference to fetch the activation details by looking up the accepted bid.
-
-
-        See [this endpoint](#tag/managing_bids/operation/GetBid) for details on how to look up activation details.
-
-
-        ### Retries
-
-
-        You should reply with a `2XX` status code, indicating you have successfully activated the asset.
-
-        You can also reply with a `406` status code if you notice that the activation cannot be delivered upon for some reason (e.g. a suddenly disconnected car).
-
-
-        We will retry your webhook up to 3 times in case you:
-
-
-        1. Do not reply with a `2XX` or `406` status code or,
-
-        2. We do not get a successful reply within 5 seconds
-
-
-        Our portal shows a log of both successful and failed webhook calls.
-
-
-        '
-      summary: Receive an accepted bid
-      tags:
-      - accepting_bids
-      security: []
-      parameters:
-      - name: X-Powernaut-Webhook-Version
-        description: A version indicator for this webhook, used to track changes to the webhook implementation. At the moment, this is always `v1`.
-        example: v1
-        in: header
-        schema:
-          type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BidAcceptedDto'
-      responses:
-        '202':
-          description: Successfully processed
 x-tagGroups:
 - name: Authentication
   tags:

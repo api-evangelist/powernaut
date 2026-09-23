@@ -1,21 +1,11 @@
 {
   "provider": "powernaut",
   "sources": [
-    "powernaut-authentication-api-openapi.yml",
-    "powernaut-baselining-api-openapi.yml",
-    "powernaut-creating-bids-api-openapi.yml",
-    "powernaut-events-api-openapi.yml",
-    "powernaut-getting-forecasts-api-openapi.yml",
-    "powernaut-historical-data-api-openapi.yml",
-    "powernaut-managing-bids-api-openapi.yml",
-    "powernaut-markets-api-openapi.yml",
-    "powernaut-metrics-api-openapi.yml",
-    "powernaut-resources-api-openapi.yml",
-    "powernaut-sensor-data-api-openapi.yml",
-    "powernaut-sites-api-openapi.yml",
-    "powernaut-uploading-forecasts-api-openapi.yml"
+    "_original/powernaut-partner-api-openapi-original.yml",
+    "powernaut-accepting-bids-api-openapi.yml"
   ],
   "outputs": [
+    "powernaut-accepting-bids-api-openapi.yml",
     "powernaut-authentication-api-openapi.yml",
     "powernaut-baselining-api-openapi.yml",
     "powernaut-creating-bids-api-openapi.yml",
@@ -32,7 +22,28 @@
   ],
   "archived": [],
   "errors": [],
-  "warnings": [],
-  "notes": [],
-  "skipped": []
+  "warnings": [
+    "powernaut-accepting-bids-api-openapi.yml: previously refined output kept for 1 operation(s) no archived document covers (e.g. webhook:bidAccepted post); its other 0 operation(s) came from the archive and were dropped from it. The archive is incomplete for this provider \u2014 re-harvest to restore _original/ as the full source of truth."
+  ],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "powernaut-partner-api-openapi-original.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0; promoted x-webhooks (1) to the standard `webhooks` key",
+    "tag 'accepting_bids' spans 2 source specs (powernaut-partner-api-openapi-original.yml, powernaut-accepting-bids-api-openapi.yml): per-path servers applied",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "powernaut-authentication-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "powernaut-baselining-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "powernaut-creating-bids-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "powernaut-events-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "powernaut-getting-forecasts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "powernaut-historical-data-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "powernaut-managing-bids-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "powernaut-markets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "powernaut-metrics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "powernaut-resources-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "powernaut-sensor-data-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "powernaut-sites-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "powernaut-uploading-forecasts-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

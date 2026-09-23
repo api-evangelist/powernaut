@@ -1,25 +1,10 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Powernaut authentication uploading_forecasts API
-  description: '
-
-    # Getting Started
+  title: Powernaut Uploading Forecasts API
+  description: '# Getting Started
 
 
-    Welcome to the Powernaut API Reference!
-
-
-    Our API offers a robust and secure way to connect your flexible resources to flexibility buyers such as energy utilities/suppliers and system operators.
-
-
-    This OpenAPI documentation is designed to provide a comprehensive and easy-to-understand guide for developers who are integrating their systems with Powernaut’s platform.
-
-
-    By leveraging our API, you can seamlessly offer flexibility in several electricity markets, opening up additional revenue streams
-
-    for your resources while contributing to a greener and more efficient electricity grid.
-
-    '
+    Welcome to the Powernaut API Reference!'
   version: 1.0.0
   contact:
     name: Powernaut Support
@@ -38,7 +23,7 @@ tags:
   description: 'Sharing your forecasts helps us better understand your resources'' expected behaviour, leading to improved flexibility opportunities and optimised market participation.
 
 
-    See the [guide](/guides/connect/forecasting/uploading-forecasts) for more information.'
+    See the guide for more information.'
   x-displayName: Uploading forecasts
 paths:
   /v1/connect/sites/{id}/forecast:
@@ -190,90 +175,6 @@ paths:
       - uploading_forecasts
 components:
   schemas:
-    NotFoundDto_U2l0ZSBub3QgZm91bmQ:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Site not found
-        error:
-          type: string
-          description: Not Found
-          example: Not Found
-        status_code:
-          type: number
-          description: '404'
-          example: 404
-      required:
-      - message
-      - error
-      - status_code
-    UploadResourceForecastDto:
-      type: object
-      properties:
-        model_id:
-          type: string
-          description: 'Identifier for the specific forecast model used.
-
-            This helps track which model version or configuration was used for any given forecast.'
-          example: external-resource-model-v1
-          minLength: 1
-          maxLength: 100
-        items:
-          description: Array of forecast data points (maximum 192 points for 48 hours at 15-minute intervals). All timestamps must be perfect quarter-hours. Past timestamps will be ignored.
-          minItems: 1
-          maxItems: 192
-          type: array
-          items:
-            $ref: '#/components/schemas/ForecastDataPointUploadDto'
-      required:
-      - model_id
-      - items
-    UploadForecastResponseDto:
-      type: object
-      properties:
-        inserted:
-          description: Successfully inserted forecast data points
-          type: array
-          items:
-            $ref: '#/components/schemas/ForecastDataPointUploadDto'
-        ignored:
-          description: Forecast data points that were ignored (e.g., those in the past)
-          example: []
-          type: array
-          items:
-            $ref: '#/components/schemas/ForecastDataPointUploadDto'
-      required:
-      - inserted
-      - ignored
-    UnauthorizedDto_Tm90IGF1dGhvcml6ZWQ:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Not authorized
-        error:
-          type: string
-          description: Unauthorized
-          example: Unauthorized
-        status_code:
-          type: number
-          description: '401'
-          example: 401
-      required:
-      - message
-      - error
-      - status_code
     BadRequestDto_SW52YWxpZCBmb3JlY2FzdCBkYXRhIG9yIHBvd2VyIHZhbHVlcyBleGNlZWQgcmVzb3VyY2UgY29uc3RyYWludHM:
       type: object
       properties:
@@ -297,7 +198,7 @@ components:
       - message
       - error
       - status_code
-    BadRequestDto_SW52YWxpZCBmb3JlY2FzdCBkYXRh:
+    NotFoundDto_U2l0ZSBub3QgZm91bmQ:
       type: object
       properties:
         message:
@@ -307,15 +208,15 @@ components:
           - type: array
             items:
               type: string
-          example: Invalid forecast data
+          example: Site not found
         error:
           type: string
-          description: Bad Request
-          example: Bad Request
+          description: Not Found
+          example: Not Found
         status_code:
           type: number
-          description: '400'
-          example: 400
+          description: '404'
+          example: 404
       required:
       - message
       - error
@@ -343,6 +244,113 @@ components:
       - message
       - error
       - status_code
+    UploadConnectionPointForecastDto:
+      type: object
+      properties:
+        model_id:
+          type: string
+          description: 'Identifier for the specific forecast model used.
+
+            This helps track which model version or configuration was used for any given forecast.'
+          example: external-model-v1
+          minLength: 1
+          maxLength: 100
+        items:
+          description: Array of forecast data points (maximum 192 points for 48 hours at 15-minute intervals). All timestamps must be perfect quarter-hours. Past timestamps will be ignored.
+          minItems: 1
+          maxItems: 192
+          type: array
+          items:
+            $ref: '#/components/schemas/ForecastDataPointUploadDto'
+      required:
+      - model_id
+      - items
+    NotFoundDto_UmVzb3VyY2Ugbm90IGZvdW5k:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Resource not found
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
+    UnauthorizedDto_Tm90IGF1dGhvcml6ZWQ:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Not authorized
+        error:
+          type: string
+          description: Unauthorized
+          example: Unauthorized
+        status_code:
+          type: number
+          description: '401'
+          example: 401
+      required:
+      - message
+      - error
+      - status_code
+    BadRequestDto_SW52YWxpZCBmb3JlY2FzdCBkYXRh:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Invalid forecast data
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
+      required:
+      - message
+      - error
+      - status_code
+    UploadForecastResponseDto:
+      type: object
+      properties:
+        inserted:
+          description: Successfully inserted forecast data points
+          type: array
+          items:
+            $ref: '#/components/schemas/ForecastDataPointUploadDto'
+        ignored:
+          description: Forecast data points that were ignored (e.g., those in the past)
+          example: []
+          type: array
+          items:
+            $ref: '#/components/schemas/ForecastDataPointUploadDto'
+      required:
+      - inserted
+      - ignored
     ForecastDataPointUploadDto:
       type: object
       properties:
@@ -370,30 +378,7 @@ components:
       - start
       - end
       - value
-    NotFoundDto_UmVzb3VyY2Ugbm90IGZvdW5k:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Resource not found
-        error:
-          type: string
-          description: Not Found
-          example: Not Found
-        status_code:
-          type: number
-          description: '404'
-          example: 404
-      required:
-      - message
-      - error
-      - status_code
-    UploadConnectionPointForecastDto:
+    UploadResourceForecastDto:
       type: object
       properties:
         model_id:
@@ -401,7 +386,7 @@ components:
           description: 'Identifier for the specific forecast model used.
 
             This helps track which model version or configuration was used for any given forecast.'
-          example: external-model-v1
+          example: external-resource-model-v1
           minLength: 1
           maxLength: 100
         items:
@@ -428,62 +413,6 @@ components:
       type: http
       scheme: basic
       description: Basic credentials used for edge-cloud authentication. They can be obtained when creating a site.
-x-webhooks:
-  bidAccepted:
-    post:
-      operationId: WebhookBidAccepted
-      description: 'During bidding, you can set a webhook to receive activation events on.
-
-
-        ### Fetching details
-
-
-        To make webhooks easy to implement, while also being secure, a webhook contains only a single reference to the bid that was accepted. You should use this reference to fetch the activation details by looking up the accepted bid.
-
-
-        See [this endpoint](#tag/managing_bids/operation/GetBid) for details on how to look up activation details.
-
-
-        ### Retries
-
-
-        You should reply with a `2XX` status code, indicating you have successfully activated the asset.
-
-        You can also reply with a `406` status code if you notice that the activation cannot be delivered upon for some reason (e.g. a suddenly disconnected car).
-
-
-        We will retry your webhook up to 3 times in case you:
-
-
-        1. Do not reply with a `2XX` or `406` status code or,
-
-        2. We do not get a successful reply within 5 seconds
-
-
-        Our portal shows a log of both successful and failed webhook calls.
-
-
-        '
-      summary: Receive an accepted bid
-      tags:
-      - accepting_bids
-      security: []
-      parameters:
-      - name: X-Powernaut-Webhook-Version
-        description: A version indicator for this webhook, used to track changes to the webhook implementation. At the moment, this is always `v1`.
-        example: v1
-        in: header
-        schema:
-          type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BidAcceptedDto'
-      responses:
-        '202':
-          description: Successfully processed
 x-tagGroups:
 - name: Authentication
   tags:

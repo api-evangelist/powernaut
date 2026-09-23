@@ -1,25 +1,10 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Powernaut authentication events API
-  description: '
-
-    # Getting Started
+  title: Powernaut Events API
+  description: '# Getting Started
 
 
-    Welcome to the Powernaut API Reference!
-
-
-    Our API offers a robust and secure way to connect your flexible resources to flexibility buyers such as energy utilities/suppliers and system operators.
-
-
-    This OpenAPI documentation is designed to provide a comprehensive and easy-to-understand guide for developers who are integrating their systems with Powernaut’s platform.
-
-
-    By leveraging our API, you can seamlessly offer flexibility in several electricity markets, opening up additional revenue streams
-
-    for your resources while contributing to a greener and more efficient electricity grid.
-
-    '
+    Welcome to the Powernaut API Reference!'
   version: 1.0.0
   contact:
     name: Powernaut Support
@@ -34,14 +19,14 @@ servers:
 - url: https://api.powernaut.io
   description: Production
 tags:
-- name: events
+- name: Events
   description: 'Events are EMS-initiated control actions that deviate from a resource''s default behaviour (e.g. PV curtailment due to negative tariffs).
 
 
     Reporting these events helps us maintain clean training data for more accurate forecasting.
 
 
-    See the [guide](/guides/connect/forecasting/reporting-events) for more information.'
+    See the guide for more information.'
   x-displayName: Events
 paths:
   /v1/connect/resources/{id}/events:
@@ -92,10 +77,47 @@ paths:
       - cloud-cloud: []
       summary: Report event
       tags:
-      - events
+      - Events
 components:
   schemas:
-    BadRequestExceptionDto:
+    CreateResourceEventDto:
+      type: object
+      properties:
+        event_type:
+          type: string
+          description: 'Type of events
+
+            - `PV_CURTAILMENT_SCHEDULED`: report periods of PV curtailment
+
+            - `MFRR_ACTIVATION`: report mFRR pool curtailment dispatched to a gateway'
+          enum:
+          - PV_CURTAILMENT_SCHEDULED
+          - MFRR_ACTIVATION
+          example: PV_CURTAILMENT_SCHEDULED
+        payload:
+          description: Event-specific payload data, usually a time window.
+          allOf:
+          - $ref: '#/components/schemas/PVCurtailmentScheduledPayloadDto'
+      required:
+      - event_type
+      - payload
+    PVCurtailmentScheduledPayloadDto:
+      type: object
+      properties:
+        start:
+          type: string
+          description: Start time of the action. Should be a perfect quarter-hour.
+          example: '2025-09-19T12:30:00Z'
+          format: date-time
+        end:
+          type: string
+          description: End time of the action. Should be a perfect quarter-hour.
+          example: '2025-09-19T14:00:00Z'
+          format: date-time
+      required:
+      - start
+      - end
+    ForbiddenExceptionDto:
       type: object
       properties:
         message:
@@ -105,17 +127,15 @@ components:
           - type: array
             items:
               type: string
-          example:
-          - Invalid datetime
-          - Invalid page size
+          example: Insufficient permissions
         error:
           type: string
-          description: Bad Request
-          example: Bad Request
+          description: Forbidden
+          example: Forbidden
         status_code:
           type: number
-          description: '400'
-          example: 400
+          description: '403'
+          example: 403
       required:
       - message
       - error
@@ -143,28 +163,7 @@ components:
       - message
       - error
       - status_code
-    CreateResourceEventDto:
-      type: object
-      properties:
-        event_type:
-          type: string
-          description: 'Type of events
-
-            - `PV_CURTAILMENT_SCHEDULED`: report periods of PV curtailment
-
-            - `MFRR_ACTIVATION`: report mFRR pool curtailment dispatched to a gateway'
-          enum:
-          - PV_CURTAILMENT_SCHEDULED
-          - MFRR_ACTIVATION
-          example: PV_CURTAILMENT_SCHEDULED
-        payload:
-          description: Event-specific payload data, usually a time window.
-          allOf:
-          - $ref: '#/components/schemas/PVCurtailmentScheduledPayloadDto'
-      required:
-      - event_type
-      - payload
-    ForbiddenExceptionDto:
+    BadRequestExceptionDto:
       type: object
       properties:
         message:
@@ -174,35 +173,21 @@ components:
           - type: array
             items:
               type: string
-          example: Insufficient permissions
+          example:
+          - Invalid datetime
+          - Invalid page size
         error:
           type: string
-          description: Forbidden
-          example: Forbidden
+          description: Bad Request
+          example: Bad Request
         status_code:
           type: number
-          description: '403'
-          example: 403
+          description: '400'
+          example: 400
       required:
       - message
       - error
       - status_code
-    PVCurtailmentScheduledPayloadDto:
-      type: object
-      properties:
-        start:
-          type: string
-          description: Start time of the action. Should be a perfect quarter-hour.
-          example: '2025-09-19T12:30:00Z'
-          format: date-time
-        end:
-          type: string
-          description: End time of the action. Should be a perfect quarter-hour.
-          example: '2025-09-19T14:00:00Z'
-          format: date-time
-      required:
-      - start
-      - end
   securitySchemes:
     cloud-cloud:
       scheme: bearer
@@ -217,62 +202,6 @@ components:
       type: http
       scheme: basic
       description: Basic credentials used for edge-cloud authentication. They can be obtained when creating a site.
-x-webhooks:
-  bidAccepted:
-    post:
-      operationId: WebhookBidAccepted
-      description: 'During bidding, you can set a webhook to receive activation events on.
-
-
-        ### Fetching details
-
-
-        To make webhooks easy to implement, while also being secure, a webhook contains only a single reference to the bid that was accepted. You should use this reference to fetch the activation details by looking up the accepted bid.
-
-
-        See [this endpoint](#tag/managing_bids/operation/GetBid) for details on how to look up activation details.
-
-
-        ### Retries
-
-
-        You should reply with a `2XX` status code, indicating you have successfully activated the asset.
-
-        You can also reply with a `406` status code if you notice that the activation cannot be delivered upon for some reason (e.g. a suddenly disconnected car).
-
-
-        We will retry your webhook up to 3 times in case you:
-
-
-        1. Do not reply with a `2XX` or `406` status code or,
-
-        2. We do not get a successful reply within 5 seconds
-
-
-        Our portal shows a log of both successful and failed webhook calls.
-
-
-        '
-      summary: Receive an accepted bid
-      tags:
-      - accepting_bids
-      security: []
-      parameters:
-      - name: X-Powernaut-Webhook-Version
-        description: A version indicator for this webhook, used to track changes to the webhook implementation. At the moment, this is always `v1`.
-        example: v1
-        in: header
-        schema:
-          type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BidAcceptedDto'
-      responses:
-        '202':
-          description: Successfully processed
 x-tagGroups:
 - name: Authentication
   tags:

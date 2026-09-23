@@ -1,25 +1,10 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Powernaut authentication creating_bids API
-  description: '
-
-    # Getting Started
+  title: Powernaut Creating Bids API
+  description: '# Getting Started
 
 
-    Welcome to the Powernaut API Reference!
-
-
-    Our API offers a robust and secure way to connect your flexible resources to flexibility buyers such as energy utilities/suppliers and system operators.
-
-
-    This OpenAPI documentation is designed to provide a comprehensive and easy-to-understand guide for developers who are integrating their systems with Powernaut’s platform.
-
-
-    By leveraging our API, you can seamlessly offer flexibility in several electricity markets, opening up additional revenue streams
-
-    for your resources while contributing to a greener and more efficient electricity grid.
-
-    '
+    Welcome to the Powernaut API Reference!'
   version: 1.0.0
   contact:
     name: Powernaut Support
@@ -106,6 +91,261 @@ paths:
       - creating_bids
 components:
   schemas:
+    BidWebhooksDto:
+      type: object
+      properties:
+        accepted:
+          type: string
+          description: 'Webhook at which you''d like to receive a notification of acceptance for bids made for this resource. For more information on the webhook content, see [the specifications](#tag/accepting_bids/operation/WebhookBidAccepted).
+
+
+            This is optional, and if not provided, activation via MQTT will be used instead. For more information on other notification options, see [this guide](/guides/connect/activating-flexibility/activating).'
+          example: https://domain.tld/path
+          format: uri
+    ActivationDto:
+      type: object
+      properties:
+        value:
+          type:
+          - string
+          - 'null'
+          description: 'Requested power value by the activation, in `kW` or `kVAR` (depending on the bid''s type). Can be any of the values on the given bid curve.
+
+
+            The resource should set its setpoint to this value during the time of the bid.
+
+
+            **Note**: This value can also be `null`, which simply means we no longer request you to follow any particular setpoint. You should return to your baseline, or default steering mode.'
+          example: '5.1'
+          format: decimal
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+        price:
+          type: string
+          description: The price value of the point on the bid curve corresponding with the requested power. This is purely informative.
+          example: '5.1'
+          format: decimal
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,5}?)$
+        created_at:
+          type: string
+          description: Time when the most recent activation was created, i.e. when the bid was accepted (ISO 8601)
+          format: date-time
+          example: '2024-07-01T14:00:00Z'
+        canceled_at:
+          type: object
+          description: Time when the most recent activation was canceled (ISO 8601)
+          format: date-time
+          example: '2024-07-01T14:00:00Z'
+        type:
+          type: string
+          description: The flex delivery mode for this activation. `exact` — hold the requested setpoint. `maximise_upwards` / `maximise_downwards` — deliver as much flex as possible in the given direction.
+          enum:
+          - exact
+          - maximise_upwards
+          - maximise_downwards
+          example: exact
+      required:
+      - value
+      - price
+      - created_at
+      - type
+    TimeWindowDto:
+      type: object
+      properties:
+        start:
+          type: string
+          description: 'Start of window (ISO 8601). Must be a perfect quarter-hour.
+
+
+            **Note**: To avoid timezone issues, we perform an additional check for the presence of timezone information. You should always include either UTC with `Z`, or an offset like `+01:00`.'
+          format: date-time
+          example: '2024-07-01T14:00:00Z'
+        end:
+          type: string
+          description: 'End of window (ISO 8601). Must be a perfect quarter-hour, and exactly one quarter hour after `start`.
+
+
+            **Note**: To avoid timezone issues, we perform an additional check for the presence of timezone information. You should always include either UTC with `Z`, or an offset like `+01:00`.'
+          format: date-time
+          example: '2024-07-01T14:15:00Z'
+      required:
+      - start
+      - end
+    NotFoundDto_UmVzb3VyY2UgZG9lcyBub3QgZXhpc3Q:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Resource does not exist
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
+    ForbiddenExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Insufficient permissions
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
+    ConflictDto_QmlkIGNhbiBubyBsb25nZXIgYmUgdXBkYXRlZA:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Bid can no longer be updated
+        error:
+          type: string
+          description: Conflict
+          example: Conflict
+        status_code:
+          type: number
+          description: '409'
+          example: 409
+      required:
+      - message
+      - error
+      - status_code
+    PricePointDto:
+      type: object
+      properties:
+        value:
+          type: string
+          description: 'The value of the bid, i.e. the active/reactive power you''re willing to import/export for the price point (in `kW` or `kVAR`, depending on the bid''s power type). Use a positive number for grid import (more consumption/less production) and negative for export to the grid (more production/less consumption).
+
+
+            This cannot exceed the maximum power constraints for the resource.'
+          example: '5.1'
+          format: decimal
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+        price:
+          type: string
+          description: "The unit price constraint for which this price point is valid (e.g. €/kWh or €/kVARh).\n For example, you might not want to activate your flexible power if the value of flexibility at that point is less than 0.30 EUR/kWh.\n\nThis can be left empty, in which case the bid is always valid (no matter the price for flexibility at that point).\n\n**Note:** The currency is automatically inferred based on the site."
+          example: '5.1'
+          format: decimal
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,5}?)$
+      required:
+      - value
+    BadRequestDto_SW52YWxpZCBleHBpcnkgZGF0ZQ:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Invalid expiry date
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
+      required:
+      - message
+      - error
+      - status_code
+    UnauthorizedExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Unauthorized
+        error:
+          type: string
+          description: Unauthorized
+          example: Unauthorized
+        status_code:
+          type: number
+          description: '401'
+          example: 401
+      required:
+      - message
+      - error
+      - status_code
+    BidReportDto:
+      type: object
+      properties:
+        energy_requested:
+          type: string
+          description: 'Total energy requested for this bid, in `kWh` or `kVARh`, based on an initial estimate of available flexibility.
+
+
+            **Sign convention**: A negative value indicates downward flexibility, whereas a positive value indicates upward flexibility.'
+          example: '15.500000'
+        energy_delivered:
+          type: string
+          description: 'Total energy delivered for this bid, in `kWh` or `kVARh`, verified by real-time metering.
+
+
+            **Sign convention**:
+
+            - A negative value indicates downward flexibility, whereas a positive value indicates upward flexibility.
+
+            - If the sign is different from `energy_requested`, it indicates that the bid was delivered in the wrong direction.'
+          example: '14.750000'
+        extra_energy_delivered:
+          type:
+          - string
+          - 'null'
+          description: 'Portion of `energy_delivered` that exceeds the requested amount (in `kWh` or `kVARh`).
+
+
+            `"0.000000"` when no extra delivery occurred. Only non-zero for `maximise_upwards` and `maximise_downwards` activation types; `exact` activations always return `null` because over-delivery is not tracked for those.
+
+
+            **Sign convention**: Follows the sign of `energy_delivered` — negative for `maximise_downwards`, positive for `maximise_upwards`.
+
+            - `maximise_upwards` with 3 kWh of over-delivery → `"3.000000"` (>= 0)
+
+            - `maximise_downwards` with 3 kWh of over-delivery → `"-3.000000"` (<= 0)'
+          example: '2.500000'
+      required:
+      - energy_requested
+      - energy_delivered
+      - extra_energy_delivered
     BidDto:
       type: object
       properties:
@@ -206,259 +446,6 @@ components:
       - status
       - created_at
       - modified_at
-    ActivationDto:
-      type: object
-      properties:
-        value:
-          type: string
-          description: 'Requested power value by the activation, in `kW` or `kVAR` (depending on the bid''s type). Can be any of the values on the given bid curve.
-
-
-            The resource should set its setpoint to this value during the time of the bid.
-
-
-            **Note**: This value can also be `null`, which simply means we no longer request you to follow any particular setpoint. You should return to your baseline, or default steering mode.'
-          example: '5.1'
-          format: decimal
-          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
-          nullable: true
-        price:
-          type: string
-          description: The price value of the point on the bid curve corresponding with the requested power. This is purely informative.
-          example: '5.1'
-          format: decimal
-          pattern: ^-?[0-9]{1,15}(.[0-9]{1,5}?)$
-        created_at:
-          type: string
-          description: Time when the most recent activation was created, i.e. when the bid was accepted (ISO 8601)
-          format: date-time
-          example: '2024-07-01T14:00:00Z'
-        canceled_at:
-          type: object
-          description: Time when the most recent activation was canceled (ISO 8601)
-          format: date-time
-          example: '2024-07-01T14:00:00Z'
-        type:
-          type: string
-          description: The flex delivery mode for this activation. `exact` — hold the requested setpoint. `maximise_upwards` / `maximise_downwards` — deliver as much flex as possible in the given direction.
-          enum:
-          - exact
-          - maximise_upwards
-          - maximise_downwards
-          example: exact
-      required:
-      - value
-      - price
-      - created_at
-      - type
-    UnauthorizedExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Unauthorized
-        error:
-          type: string
-          description: Unauthorized
-          example: Unauthorized
-        status_code:
-          type: number
-          description: '401'
-          example: 401
-      required:
-      - message
-      - error
-      - status_code
-    TimeWindowDto:
-      type: object
-      properties:
-        start:
-          type: string
-          description: 'Start of window (ISO 8601). Must be a perfect quarter-hour.
-
-
-            **Note**: To avoid timezone issues, we perform an additional check for the presence of timezone information. You should always include either UTC with `Z`, or an offset like `+01:00`.'
-          format: date-time
-          example: '2024-07-01T14:00:00Z'
-        end:
-          type: string
-          description: 'End of window (ISO 8601). Must be a perfect quarter-hour, and exactly one quarter hour after `start`.
-
-
-            **Note**: To avoid timezone issues, we perform an additional check for the presence of timezone information. You should always include either UTC with `Z`, or an offset like `+01:00`.'
-          format: date-time
-          example: '2024-07-01T14:15:00Z'
-      required:
-      - start
-      - end
-    BidReportDto:
-      type: object
-      properties:
-        energy_requested:
-          type: string
-          description: 'Total energy requested for this bid, in `kWh` or `kVARh`, based on an initial estimate of available flexibility.
-
-
-            **Sign convention**: A negative value indicates downward flexibility, whereas a positive value indicates upward flexibility.'
-          example: '15.500000'
-        energy_delivered:
-          type: string
-          description: 'Total energy delivered for this bid, in `kWh` or `kVARh`, verified by real-time metering.
-
-
-            **Sign convention**:
-
-            - A negative value indicates downward flexibility, whereas a positive value indicates upward flexibility.
-
-            - If the sign is different from `energy_requested`, it indicates that the bid was delivered in the wrong direction.'
-          example: '14.750000'
-        extra_energy_delivered:
-          type: string
-          description: 'Portion of `energy_delivered` that exceeds the requested amount (in `kWh` or `kVARh`).
-
-
-            `"0.000000"` when no extra delivery occurred. Only non-zero for `maximise_upwards` and `maximise_downwards` activation types; `exact` activations always return `null` because over-delivery is not tracked for those.
-
-
-            **Sign convention**: Follows the sign of `energy_delivered` — negative for `maximise_downwards`, positive for `maximise_upwards`.
-
-            - `maximise_upwards` with 3 kWh of over-delivery → `"3.000000"` (>= 0)
-
-            - `maximise_downwards` with 3 kWh of over-delivery → `"-3.000000"` (<= 0)'
-          example: '2.500000'
-          nullable: true
-      required:
-      - energy_requested
-      - energy_delivered
-      - extra_energy_delivered
-    ConflictDto_QmlkIGNhbiBubyBsb25nZXIgYmUgdXBkYXRlZA:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Bid can no longer be updated
-        error:
-          type: string
-          description: Conflict
-          example: Conflict
-        status_code:
-          type: number
-          description: '409'
-          example: 409
-      required:
-      - message
-      - error
-      - status_code
-    PricePointDto:
-      type: object
-      properties:
-        value:
-          type: string
-          description: 'The value of the bid, i.e. the active/reactive power you''re willing to import/export for the price point (in `kW` or `kVAR`, depending on the bid''s power type). Use a positive number for grid import (more consumption/less production) and negative for export to the grid (more production/less consumption).
-
-
-            This cannot exceed the maximum power constraints for the resource.'
-          example: '5.1'
-          format: decimal
-          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
-        price:
-          type: string
-          description: "The unit price constraint for which this price point is valid (e.g. €/kWh or €/kVARh).\n For example, you might not want to activate your flexible power if the value of flexibility at that point is less than 0.30 EUR/kWh.\n\nThis can be left empty, in which case the bid is always valid (no matter the price for flexibility at that point).\n\n**Note:** The currency is automatically inferred based on the site."
-          example: '5.1'
-          format: decimal
-          pattern: ^-?[0-9]{1,15}(.[0-9]{1,5}?)$
-      required:
-      - value
-    BidWebhooksDto:
-      type: object
-      properties:
-        accepted:
-          type: string
-          description: 'Webhook at which you''d like to receive a notification of acceptance for bids made for this resource. For more information on the webhook content, see [the specifications](#tag/accepting_bids/operation/WebhookBidAccepted).
-
-
-            This is optional, and if not provided, activation via MQTT will be used instead. For more information on other notification options, see [this guide](/guides/connect/activating-flexibility/activating).'
-          example: https://domain.tld/path
-          format: uri
-    ForbiddenExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Insufficient permissions
-        error:
-          type: string
-          description: Forbidden
-          example: Forbidden
-        status_code:
-          type: number
-          description: '403'
-          example: 403
-      required:
-      - message
-      - error
-      - status_code
-    BadRequestDto_SW52YWxpZCBleHBpcnkgZGF0ZQ:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Invalid expiry date
-        error:
-          type: string
-          description: Bad Request
-          example: Bad Request
-        status_code:
-          type: number
-          description: '400'
-          example: 400
-      required:
-      - message
-      - error
-      - status_code
-    NotFoundDto_UmVzb3VyY2UgZG9lcyBub3QgZXhpc3Q:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Resource does not exist
-        error:
-          type: string
-          description: Not Found
-          example: Not Found
-        status_code:
-          type: number
-          description: '404'
-          example: 404
-      required:
-      - message
-      - error
-      - status_code
     CreateBidDto:
       type: object
       properties:
@@ -515,62 +502,6 @@ components:
       type: http
       scheme: basic
       description: Basic credentials used for edge-cloud authentication. They can be obtained when creating a site.
-x-webhooks:
-  bidAccepted:
-    post:
-      operationId: WebhookBidAccepted
-      description: 'During bidding, you can set a webhook to receive activation events on.
-
-
-        ### Fetching details
-
-
-        To make webhooks easy to implement, while also being secure, a webhook contains only a single reference to the bid that was accepted. You should use this reference to fetch the activation details by looking up the accepted bid.
-
-
-        See [this endpoint](#tag/managing_bids/operation/GetBid) for details on how to look up activation details.
-
-
-        ### Retries
-
-
-        You should reply with a `2XX` status code, indicating you have successfully activated the asset.
-
-        You can also reply with a `406` status code if you notice that the activation cannot be delivered upon for some reason (e.g. a suddenly disconnected car).
-
-
-        We will retry your webhook up to 3 times in case you:
-
-
-        1. Do not reply with a `2XX` or `406` status code or,
-
-        2. We do not get a successful reply within 5 seconds
-
-
-        Our portal shows a log of both successful and failed webhook calls.
-
-
-        '
-      summary: Receive an accepted bid
-      tags:
-      - accepting_bids
-      security: []
-      parameters:
-      - name: X-Powernaut-Webhook-Version
-        description: A version indicator for this webhook, used to track changes to the webhook implementation. At the moment, this is always `v1`.
-        example: v1
-        in: header
-        schema:
-          type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BidAcceptedDto'
-      responses:
-        '202':
-          description: Successfully processed
 x-tagGroups:
 - name: Authentication
   tags:

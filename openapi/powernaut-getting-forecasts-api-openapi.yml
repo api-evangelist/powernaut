@@ -196,7 +196,7 @@ paths:
       - getting_forecasts
 components:
   schemas:
-    NotFoundDto_Rm9yZWNhc3Qgbm90IGZvdW5kIGZvciB0aGlzIHNpdGUu:
+    UnauthorizedExceptionDto:
       type: object
       properties:
         message:
@@ -206,40 +206,15 @@ components:
           - type: array
             items:
               type: string
-          example: Forecast not found for this site.
+          example: Unauthorized
         error:
           type: string
-          description: Not Found
-          example: Not Found
+          description: Unauthorized
+          example: Unauthorized
         status_code:
           type: number
-          description: '404'
-          example: 404
-      required:
-      - message
-      - error
-      - status_code
-    BadRequestExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example:
-          - Invalid datetime
-          - Invalid page size
-        error:
-          type: string
-          description: Bad Request
-          example: Bad Request
-        status_code:
-          type: number
-          description: '400'
-          example: 400
+          description: '401'
+          example: 401
       required:
       - message
       - error
@@ -296,52 +271,6 @@ components:
       - unit
       - last_updated
       - model_id
-    ForbiddenExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Insufficient permissions
-        error:
-          type: string
-          description: Forbidden
-          example: Forbidden
-        status_code:
-          type: number
-          description: '403'
-          example: 403
-      required:
-      - message
-      - error
-      - status_code
-    UnauthorizedExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Unauthorized
-        error:
-          type: string
-          description: Unauthorized
-          example: Unauthorized
-        status_code:
-          type: number
-          description: '401'
-          example: 401
-      required:
-      - message
-      - error
-      - status_code
     NotFoundDto_Rm9yZWNhc3Qgbm90IGZvdW5kIGZvciB0aGlzIHJlc291cmNlLg:
       type: object
       properties:
@@ -376,6 +305,77 @@ components:
             $ref: '#/components/schemas/ForecastElementDto'
       required:
       - data
+    ForbiddenExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Insufficient permissions
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
+    BadRequestExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example:
+          - Invalid datetime
+          - Invalid page size
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
+      required:
+      - message
+      - error
+      - status_code
+    NotFoundDto_Rm9yZWNhc3Qgbm90IGZvdW5kIGZvciB0aGlzIHNpdGUu:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Forecast not found for this site.
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
   securitySchemes:
     cloud-cloud:
       scheme: bearer

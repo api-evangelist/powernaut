@@ -102,34 +102,7 @@ paths:
       - Metrics
 components:
   schemas:
-    MetricsDto:
-      type: object
-      properties:
-        items:
-          type: array
-          description: 'The real-time data, in kilowatts (kW).
-
-
-            The length of the list corresponds to the amount of intervals requested. The granularity of the data is the same as the one requested.
-
-
-            A `null` value indicates that no data was available for that interval.'
-          example:
-          - '5.1'
-          - '5.2'
-          - null
-          - '5.3'
-          maxItems: 48
-          minItems: 1
-          items:
-            type:
-            - string
-            - 'null'
-            format: decimal
-            pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
-      required:
-      - items
-    ForbiddenExceptionDto:
+    UnauthorizedExceptionDto:
       type: object
       properties:
         message:
@@ -139,15 +112,15 @@ components:
           - type: array
             items:
               type: string
-          example: Insufficient permissions
+          example: Unauthorized
         error:
           type: string
-          description: Forbidden
-          example: Forbidden
+          description: Unauthorized
+          example: Unauthorized
         status_code:
           type: number
-          description: '403'
-          example: 403
+          description: '401'
+          example: 401
       required:
       - message
       - error
@@ -175,7 +148,7 @@ components:
       - message
       - error
       - status_code
-    UnauthorizedExceptionDto:
+    ForbiddenExceptionDto:
       type: object
       properties:
         message:
@@ -185,15 +158,15 @@ components:
           - type: array
             items:
               type: string
-          example: Unauthorized
+          example: Insufficient permissions
         error:
           type: string
-          description: Unauthorized
-          example: Unauthorized
+          description: Forbidden
+          example: Forbidden
         status_code:
           type: number
-          description: '401'
-          example: 401
+          description: '403'
+          example: 403
       required:
       - message
       - error
@@ -223,6 +196,33 @@ components:
       - message
       - error
       - status_code
+    MetricsDto:
+      type: object
+      properties:
+        items:
+          type: array
+          description: 'The real-time data, in kilowatts (kW).
+
+
+            The length of the list corresponds to the amount of intervals requested. The granularity of the data is the same as the one requested.
+
+
+            A `null` value indicates that no data was available for that interval.'
+          example:
+          - '5.1'
+          - '5.2'
+          - null
+          - '5.3'
+          maxItems: 48
+          minItems: 1
+          items:
+            type:
+            - string
+            - 'null'
+            format: decimal
+            pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+      required:
+      - items
   securitySchemes:
     cloud-cloud:
       scheme: bearer

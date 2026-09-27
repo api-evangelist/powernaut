@@ -54,7 +54,7 @@ tags:
 - Grid
 apis:
 - aid: powernaut:powernaut-authentication-api
-  name: Powernaut authentication API
+  name: Powernaut Authentication API
   description: Authenticating with the Powernaut platform.
   humanURL: https://docs.powernaut.io/partner-api
   baseURL: https://api.powernaut.io
@@ -66,7 +66,7 @@ apis:
   - type: OpenAPI
     url: openapi/powernaut-authentication-api-openapi.yml
 - aid: powernaut:powernaut-baselining-api
-  name: Powernaut baselining API
+  name: Powernaut Baselining API
   description: >-
     With baselining, you indicate your normal consumption/production behaviour.
 
@@ -84,7 +84,7 @@ apis:
   - type: OpenAPI
     url: openapi/powernaut-baselining-api-openapi.yml
 - aid: powernaut:powernaut-creating-bids-api
-  name: Powernaut creating_bids API
+  name: Powernaut Creating Bids API
   description: A bid tells us how much flexibility is available in a certain time window.
   humanURL: https://docs.powernaut.io/partner-api
   baseURL: https://api.powernaut.io
@@ -95,7 +95,7 @@ apis:
   - type: OpenAPI
     url: openapi/powernaut-creating-bids-api-openapi.yml
 - aid: powernaut:powernaut-events-api
-  name: Powernaut events API
+  name: Powernaut Events API
   description: >-
     Events are EMS-initiated control actions that deviate from a resource's default behaviour (e.g. PV
     curtailment due to negative tariffs).
@@ -115,7 +115,7 @@ apis:
   - type: OpenAPI
     url: openapi/powernaut-events-api-openapi.yml
 - aid: powernaut:powernaut-getting-forecasts-api
-  name: Powernaut getting_forecasts API
+  name: Powernaut Getting Forecasts API
   description: >-
     You can retrieve forecasts to help plan your flexibility offerings and understand expected power consumption
     or production patterns.
@@ -131,7 +131,7 @@ apis:
   - type: OpenAPI
     url: openapi/powernaut-getting-forecasts-api-openapi.yml
 - aid: powernaut:powernaut-historical-data-api
-  name: Powernaut historical_data API
+  name: Powernaut Historical Data API
   description: >-
     Upload historical meter data for your sites.
 
@@ -147,7 +147,7 @@ apis:
   - type: OpenAPI
     url: openapi/powernaut-historical-data-api-openapi.yml
 - aid: powernaut:powernaut-managing-bids-api
-  name: Powernaut managing_bids API
+  name: Powernaut Managing Bids API
   description: >-
     Manage your bids. You can update, cancel and receive notifications about bids.
 
@@ -165,7 +165,7 @@ apis:
   - type: OpenAPI
     url: openapi/powernaut-managing-bids-api-openapi.yml
 - aid: powernaut:powernaut-markets-api
-  name: Powernaut markets API
+  name: Powernaut Markets API
   description: >-
     Markets are the electricity markets in which you can participate.
 
@@ -184,7 +184,7 @@ apis:
   - type: OpenAPI
     url: openapi/powernaut-markets-api-openapi.yml
 - aid: powernaut:powernaut-metrics-api
-  name: Powernaut metrics API
+  name: Powernaut Metrics API
   description: Metrics reported by resources and sites
   humanURL: https://docs.powernaut.io/partner-api
   baseURL: https://api.powernaut.io
@@ -196,7 +196,7 @@ apis:
   - type: OpenAPI
     url: openapi/powernaut-metrics-api-openapi.yml
 - aid: powernaut:powernaut-resources-api
-  name: Powernaut resources API
+  name: Powernaut Resources API
   description: >-
     Register, modify or delete flexible resources.
 
@@ -216,7 +216,7 @@ apis:
   - type: OpenAPI
     url: openapi/powernaut-resources-api-openapi.yml
 - aid: powernaut:powernaut-sensor-data-api
-  name: Powernaut sensor_data API
+  name: Powernaut Sensor Data API
   description: >-
     Read raw time series data from sensors attached to your sites, such as irradiance sensors on PV installations.
 
@@ -236,7 +236,7 @@ apis:
   - type: OpenAPI
     url: openapi/powernaut-sensor-data-api-openapi.yml
 - aid: powernaut:powernaut-sites-api
-  name: Powernaut sites API
+  name: Powernaut Sites API
   description: >-
     Register, modify or delete sites.
 
@@ -257,7 +257,7 @@ apis:
   - type: OpenAPI
     url: openapi/powernaut-sites-api-openapi.yml
 - aid: powernaut:powernaut-uploading-forecasts-api
-  name: Powernaut uploading_forecasts API
+  name: Powernaut Uploading Forecasts API
   description: >-
     Sharing your forecasts helps us better understand your resources' expected behaviour, leading to improved
     flexibility opportunities and optimised market participation.

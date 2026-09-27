@@ -80,27 +80,29 @@ paths:
       - Events
 components:
   schemas:
-    CreateResourceEventDto:
+    UnauthorizedExceptionDto:
       type: object
       properties:
-        event_type:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Unauthorized
+        error:
           type: string
-          description: 'Type of events
-
-            - `PV_CURTAILMENT_SCHEDULED`: report periods of PV curtailment
-
-            - `MFRR_ACTIVATION`: report mFRR pool curtailment dispatched to a gateway'
-          enum:
-          - PV_CURTAILMENT_SCHEDULED
-          - MFRR_ACTIVATION
-          example: PV_CURTAILMENT_SCHEDULED
-        payload:
-          description: Event-specific payload data, usually a time window.
-          allOf:
-          - $ref: '#/components/schemas/PVCurtailmentScheduledPayloadDto'
+          description: Unauthorized
+          example: Unauthorized
+        status_code:
+          type: number
+          description: '401'
+          example: 401
       required:
-      - event_type
-      - payload
+      - message
+      - error
+      - status_code
     PVCurtailmentScheduledPayloadDto:
       type: object
       properties:
@@ -140,29 +142,6 @@ components:
       - message
       - error
       - status_code
-    UnauthorizedExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Unauthorized
-        error:
-          type: string
-          description: Unauthorized
-          example: Unauthorized
-        status_code:
-          type: number
-          description: '401'
-          example: 401
-      required:
-      - message
-      - error
-      - status_code
     BadRequestExceptionDto:
       type: object
       properties:
@@ -188,6 +167,27 @@ components:
       - message
       - error
       - status_code
+    CreateResourceEventDto:
+      type: object
+      properties:
+        event_type:
+          type: string
+          description: 'Type of events
+
+            - `PV_CURTAILMENT_SCHEDULED`: report periods of PV curtailment
+
+            - `MFRR_ACTIVATION`: report mFRR pool curtailment dispatched to a gateway'
+          enum:
+          - PV_CURTAILMENT_SCHEDULED
+          - MFRR_ACTIVATION
+          example: PV_CURTAILMENT_SCHEDULED
+        payload:
+          description: Event-specific payload data, usually a time window.
+          allOf:
+          - $ref: '#/components/schemas/PVCurtailmentScheduledPayloadDto'
+      required:
+      - event_type
+      - payload
   securitySchemes:
     cloud-cloud:
       scheme: bearer

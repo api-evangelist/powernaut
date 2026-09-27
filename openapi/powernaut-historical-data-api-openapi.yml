@@ -112,27 +112,29 @@ paths:
         label: cURL
 components:
   schemas:
-    CreateUploadUrlApiDto:
+    UnauthorizedExceptionDto:
       type: object
       properties:
-        target_type:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Unauthorized
+        error:
           type: string
-          description: The type of target entity. Currently only `site` is supported.
-          example: site
-          enum:
-          - site
-        target_id:
-          type: string
-          description: The UUID of the target entity (site).
-          format: uuid
-        file_name:
-          type: string
-          description: The name of the CSV file to upload.
-          example: meter-data-2024.csv
+          description: Unauthorized
+          example: Unauthorized
+        status_code:
+          type: number
+          description: '401'
+          example: 401
       required:
-      - target_type
-      - target_id
-      - file_name
+      - message
+      - error
+      - status_code
     UploadUrlResponseDto:
       type: object
       properties:
@@ -169,7 +171,7 @@ components:
       - message
       - error
       - status_code
-    UnauthorizedExceptionDto:
+    BadRequestExceptionDto:
       type: object
       properties:
         message:
@@ -179,15 +181,17 @@ components:
           - type: array
             items:
               type: string
-          example: Unauthorized
+          example:
+          - Invalid datetime
+          - Invalid page size
         error:
           type: string
-          description: Unauthorized
-          example: Unauthorized
+          description: Bad Request
+          example: Bad Request
         status_code:
           type: number
-          description: '401'
-          example: 401
+          description: '400'
+          example: 400
       required:
       - message
       - error
@@ -215,31 +219,27 @@ components:
       - message
       - error
       - status_code
-    BadRequestExceptionDto:
+    CreateUploadUrlApiDto:
       type: object
       properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example:
-          - Invalid datetime
-          - Invalid page size
-        error:
+        target_type:
           type: string
-          description: Bad Request
-          example: Bad Request
-        status_code:
-          type: number
-          description: '400'
-          example: 400
+          description: The type of target entity. Currently only `site` is supported.
+          example: site
+          enum:
+          - site
+        target_id:
+          type: string
+          description: The UUID of the target entity (site).
+          format: uuid
+        file_name:
+          type: string
+          description: The name of the CSV file to upload.
+          example: meter-data-2024.csv
       required:
-      - message
-      - error
-      - status_code
+      - target_type
+      - target_id
+      - file_name
   securitySchemes:
     cloud-cloud:
       scheme: bearer

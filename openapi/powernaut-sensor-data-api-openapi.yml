@@ -209,174 +209,6 @@ paths:
       - Sensor Data
 components:
   schemas:
-    SensorMeasurementDto:
-      type: object
-      properties:
-        key:
-          type: string
-          description: Machine-readable name of the measurement channel, used as the field name in raw data (e.g. `irradiance`).
-          example: irradiance
-        unit:
-          type: string
-          description: Physical unit of the measurement, expressed as a short symbol (e.g. `W/m2`).
-          example: W/m2
-      required:
-      - key
-      - unit
-    NotFoundDto_U2l0ZSBub3QgZm91bmQ:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Site not found
-        error:
-          type: string
-          description: Not Found
-          example: Not Found
-        status_code:
-          type: number
-          description: '404'
-          example: 404
-      required:
-      - message
-      - error
-      - status_code
-    ForbiddenDto_Rm9yYmlkZGVu:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Forbidden
-        error:
-          type: string
-          description: Forbidden
-          example: Forbidden
-        status_code:
-          type: number
-          description: '403'
-          example: 403
-      required:
-      - message
-      - error
-      - status_code
-    BadRequestDto_SW52YWxpZCB0aW1lIHdpbmRvdyBvciBwYWdpbmF0aW9uIHBhcmFtZXRlcnMu:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Invalid time window or pagination parameters.
-        error:
-          type: string
-          description: Bad Request
-          example: Bad Request
-        status_code:
-          type: number
-          description: '400'
-          example: 400
-      required:
-      - message
-      - error
-      - status_code
-    SensorReadingDto:
-      type: object
-      properties:
-        timestamp:
-          type: string
-          description: Start of the 15-minute bucket the reading represents (ISO 8601 UTC).
-          format: date-time
-          example: '2026-01-15T10:00:00Z'
-        value:
-          type: number
-          description: Average of the raw samples the sensor emitted within this 15-minute bucket. The unit is advertised by the sensor metadata endpoint and is the same for every row in a response.
-          example: 612.4
-      required:
-      - timestamp
-      - value
-    ForbiddenExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Insufficient permissions
-        error:
-          type: string
-          description: Forbidden
-          example: Forbidden
-        status_code:
-          type: number
-          description: '403'
-          example: 403
-      required:
-      - message
-      - error
-      - status_code
-    SensorDto:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the sensor.
-          format: uuid
-        external_id:
-          type: string
-          description: Identifier of the sensor in the source gateway (e.g. the Webdyn device key such as `capteur-1`). Unique within the connection point.
-        connection_point_id:
-          type: string
-          description: Connection point the sensor is attached to.
-          format: uuid
-        measurements:
-          description: Measurement channels the sensor reports, each with the unit you'll see in the readings endpoint.
-          type: array
-          items:
-            $ref: '#/components/schemas/SensorMeasurementDto'
-      required:
-      - id
-      - external_id
-      - connection_point_id
-      - measurements
-    UnauthorizedDto_VW5hdXRob3JpemVk:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Unauthorized
-        error:
-          type: string
-          description: Unauthorized
-          example: Unauthorized
-        status_code:
-          type: number
-          description: '401'
-          example: 401
-      required:
-      - message
-      - error
-      - status_code
     UnauthorizedExceptionDto:
       type: object
       properties:
@@ -423,6 +255,29 @@ components:
       - message
       - error
       - status_code
+    NotFoundDto_U2l0ZSBub3QgZm91bmQ:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Site not found
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
     SensorReadingsListDto:
       type: object
       properties:
@@ -438,6 +293,113 @@ components:
       required:
       - data
       - total
+    ForbiddenExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Insufficient permissions
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
+    SensorReadingDto:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: Start of the 15-minute bucket the reading represents (ISO 8601 UTC).
+          format: date-time
+          example: '2026-01-15T10:00:00Z'
+        value:
+          type: number
+          description: Average of the raw samples the sensor emitted within this 15-minute bucket. The unit is advertised by the sensor metadata endpoint and is the same for every row in a response.
+          example: 612.4
+      required:
+      - timestamp
+      - value
+    ForbiddenDto_Rm9yYmlkZGVu:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Forbidden
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
+    UnauthorizedDto_VW5hdXRob3JpemVk:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Unauthorized
+        error:
+          type: string
+          description: Unauthorized
+          example: Unauthorized
+        status_code:
+          type: number
+          description: '401'
+          example: 401
+      required:
+      - message
+      - error
+      - status_code
+    BadRequestDto_SW52YWxpZCB0aW1lIHdpbmRvdyBvciBwYWdpbmF0aW9uIHBhcmFtZXRlcnMu:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Invalid time window or pagination parameters.
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
+      required:
+      - message
+      - error
+      - status_code
     BadRequestExceptionDto:
       type: object
       properties:
@@ -463,6 +425,44 @@ components:
       - message
       - error
       - status_code
+    SensorDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the sensor.
+          format: uuid
+        external_id:
+          type: string
+          description: Identifier of the sensor in the source gateway (e.g. the Webdyn device key such as `capteur-1`). Unique within the connection point.
+        connection_point_id:
+          type: string
+          description: Connection point the sensor is attached to.
+          format: uuid
+        measurements:
+          description: Measurement channels the sensor reports, each with the unit you'll see in the readings endpoint.
+          type: array
+          items:
+            $ref: '#/components/schemas/SensorMeasurementDto'
+      required:
+      - id
+      - external_id
+      - connection_point_id
+      - measurements
+    SensorMeasurementDto:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Machine-readable name of the measurement channel, used as the field name in raw data (e.g. `irradiance`).
+          example: irradiance
+        unit:
+          type: string
+          description: Physical unit of the measurement, expressed as a short symbol (e.g. `W/m2`).
+          example: W/m2
+      required:
+      - key
+      - unit
   securitySchemes:
     cloud-cloud:
       scheme: bearer

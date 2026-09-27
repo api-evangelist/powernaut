@@ -121,49 +121,7 @@ paths:
       - Markets
 components:
   schemas:
-    MarketUnavailableDto:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the market
-        status:
-          type: string
-          description: This market is not eligible for the site (for example due to technical, or geographical reasons).
-          example: ineligible
-          enum:
-          - ineligible
-      required:
-      - name
-      - status
-    MarketActionRequiredDto:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the market
-        status:
-          type: string
-          description: Further action is required from the end-consumer to activate this market. Look at the `action` property for more information.
-          example: action_required
-          enum:
-          - action_required
-        action:
-          description: The action required to activate the market.
-          oneOf:
-          - $ref: '#/components/schemas/MarketActionConsentRequiredDto'
-            title: Consent Required
-          discriminator:
-            propertyName: action
-            mapping:
-              consent_required: '#/components/schemas/MarketActionConsentRequiredDto'
-          allOf:
-          - $ref: '#/components/schemas/MarketActionConsentRequiredDto'
-      required:
-      - name
-      - status
-      - action
-    ForbiddenExceptionDto:
+    UnauthorizedExceptionDto:
       type: object
       properties:
         message:
@@ -173,38 +131,15 @@ components:
           - type: array
             items:
               type: string
-          example: Insufficient permissions
+          example: Unauthorized
         error:
           type: string
-          description: Forbidden
-          example: Forbidden
+          description: Unauthorized
+          example: Unauthorized
         status_code:
           type: number
-          description: '403'
-          example: 403
-      required:
-      - message
-      - error
-      - status_code
-    NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Site does not exist
-        error:
-          type: string
-          description: Not Found
-          example: Not Found
-        status_code:
-          type: number
-          description: '404'
-          example: 404
+          description: '401'
+          example: 401
       required:
       - message
       - error
@@ -240,22 +175,7 @@ components:
       required:
       - name
       - url
-    MarketActiveDto:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the market
-        status:
-          type: string
-          description: The site is active on this market.
-          example: active
-          enum:
-          - active
-      required:
-      - name
-      - status
-    UnauthorizedExceptionDto:
+    NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA:
       type: object
       properties:
         message:
@@ -265,15 +185,38 @@ components:
           - type: array
             items:
               type: string
-          example: Unauthorized
+          example: Site does not exist
         error:
           type: string
-          description: Unauthorized
-          example: Unauthorized
+          description: Not Found
+          example: Not Found
         status_code:
           type: number
-          description: '401'
-          example: 401
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
+    ForbiddenExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Insufficient permissions
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
       required:
       - message
       - error
@@ -303,6 +246,63 @@ components:
       - message
       - error
       - status_code
+    MarketActionRequiredDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the market
+        status:
+          type: string
+          description: Further action is required from the end-consumer to activate this market. Look at the `action` property for more information.
+          example: action_required
+          enum:
+          - action_required
+        action:
+          description: The action required to activate the market.
+          oneOf:
+          - $ref: '#/components/schemas/MarketActionConsentRequiredDto'
+            title: Consent Required
+          discriminator:
+            propertyName: action
+            mapping:
+              consent_required: '#/components/schemas/MarketActionConsentRequiredDto'
+          allOf:
+          - $ref: '#/components/schemas/MarketActionConsentRequiredDto'
+      required:
+      - name
+      - status
+      - action
+    MarketUnavailableDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the market
+        status:
+          type: string
+          description: This market is not eligible for the site (for example due to technical, or geographical reasons).
+          example: ineligible
+          enum:
+          - ineligible
+      required:
+      - name
+      - status
+    MarketActiveDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the market
+        status:
+          type: string
+          description: The site is active on this market.
+          example: active
+          enum:
+          - active
+      required:
+      - name
+      - status
   securitySchemes:
     cloud-cloud:
       scheme: bearer

@@ -122,6 +122,29 @@ paths:
         label: cURL
 components:
   schemas:
+    ForbiddenDto_SW52YWxpZCBjcmVkZW50aWFscw:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Invalid credentials
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
     BadRequestExceptionDto:
       type: object
       properties:
@@ -143,29 +166,6 @@ components:
           type: number
           description: '400'
           example: 400
-      required:
-      - message
-      - error
-      - status_code
-    ForbiddenDto_SW52YWxpZCBjcmVkZW50aWFscw:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Invalid credentials
-        error:
-          type: string
-          description: Forbidden
-          example: Forbidden
-        status_code:
-          type: number
-          description: '403'
-          example: 403
       required:
       - message
       - error

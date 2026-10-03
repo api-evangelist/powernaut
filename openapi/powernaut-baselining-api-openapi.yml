@@ -228,6 +228,71 @@ paths:
       - baselining
 components:
   schemas:
+    CreateBaselineDto:
+      type: object
+      properties:
+        start:
+          type: string
+          description: 'Start of window (ISO 8601). Must be a perfect quarter-hour.
+
+
+            **Constraints**: This must be at least the current quarter-hour, and cannot be more than 192 quarter-hours in the future.
+
+
+            **Length**: Each baseline value is for a period of a quarter-hour, so the length of this period is defined by the amount of elements in `values`.
+
+
+            **Note**: To avoid timezone issues, we perform an additional check for the presence of timezone information. You should always include either UTC with `Z`, or an offset like `+01:00`.'
+          example: '2024-07-01T14:00:00Z'
+        power_type:
+          type: string
+          description: Type of power for this baseline (active vs. reactive). Defaults to `active`.
+          enum:
+          - active
+          - reactive
+          example: active
+        values:
+          description: 'The baseline values, starting from timestamp `start`.
+
+
+            This is the active/reactive power that will be imported/exported (in `kW` or `kVAR`, depending on the power type). Use a positive number for grid import and negative for export to the grid.
+
+
+            Supports up to 192 elements.'
+          minItems: 1
+          maxItems: 192
+          type: array
+          items:
+            type: string
+        skip_activated_windows:
+          type: boolean
+          description: When true, windows with activations are skipped instead of failing the request.
+      required:
+      - start
+      - values
+    ConflictDto_Q2Fubm90IHVwZGF0ZSBiYXNlbGluZTogdGhlcmUgaGF2ZSBiZWVuIGFjdGl2YXRpb25zIGluIHRoaXMgdGltZSB3aW5kb3c:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: 'Cannot update baseline: there have been activations in this time window'
+        error:
+          type: string
+          description: Conflict
+          example: Conflict
+        status_code:
+          type: number
+          description: '409'
+          example: 409
+      required:
+      - message
+      - error
+      - status_code
     UnauthorizedExceptionDto:
       type: object
       properties:
@@ -247,6 +312,69 @@ components:
           type: number
           description: '401'
           example: 401
+      required:
+      - message
+      - error
+      - status_code
+    BaselineDto:
+      type: object
+      properties:
+        items:
+          description: 'The baseline values, starting from timestamp `start`.
+
+
+            This is the `active` power that will be imported/exported. A positive number indicates grid import and negative indicates grid export.'
+          minItems: 1
+          maxItems: 192
+          type: array
+          items:
+            type: string
+      required:
+      - items
+    ForbiddenExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Insufficient permissions
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
+    BadRequestExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example:
+          - Invalid datetime
+          - Invalid page size
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
       required:
       - message
       - error
@@ -297,134 +425,6 @@ components:
       - message
       - error
       - status_code
-    ConflictDto_Q2Fubm90IHVwZGF0ZSBiYXNlbGluZTogdGhlcmUgaGF2ZSBiZWVuIGFjdGl2YXRpb25zIGluIHRoaXMgdGltZSB3aW5kb3c:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: 'Cannot update baseline: there have been activations in this time window'
-        error:
-          type: string
-          description: Conflict
-          example: Conflict
-        status_code:
-          type: number
-          description: '409'
-          example: 409
-      required:
-      - message
-      - error
-      - status_code
-    ForbiddenExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Insufficient permissions
-        error:
-          type: string
-          description: Forbidden
-          example: Forbidden
-        status_code:
-          type: number
-          description: '403'
-          example: 403
-      required:
-      - message
-      - error
-      - status_code
-    BadRequestExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example:
-          - Invalid datetime
-          - Invalid page size
-        error:
-          type: string
-          description: Bad Request
-          example: Bad Request
-        status_code:
-          type: number
-          description: '400'
-          example: 400
-      required:
-      - message
-      - error
-      - status_code
-    BaselineDto:
-      type: object
-      properties:
-        items:
-          description: 'The baseline values, starting from timestamp `start`.
-
-
-            This is the `active` power that will be imported/exported. A positive number indicates grid import and negative indicates grid export.'
-          minItems: 1
-          maxItems: 192
-          type: array
-          items:
-            type: string
-      required:
-      - items
-    CreateBaselineDto:
-      type: object
-      properties:
-        start:
-          type: string
-          description: 'Start of window (ISO 8601). Must be a perfect quarter-hour.
-
-
-            **Constraints**: This must be at least the current quarter-hour, and cannot be more than 192 quarter-hours in the future.
-
-
-            **Length**: Each baseline value is for a period of a quarter-hour, so the length of this period is defined by the amount of elements in `values`.
-
-
-            **Note**: To avoid timezone issues, we perform an additional check for the presence of timezone information. You should always include either UTC with `Z`, or an offset like `+01:00`.'
-          example: '2024-07-01T14:00:00Z'
-        power_type:
-          type: string
-          description: Type of power for this baseline (active vs. reactive). Defaults to `active`.
-          enum:
-          - active
-          - reactive
-          example: active
-        values:
-          description: 'The baseline values, starting from timestamp `start`.
-
-
-            This is the active/reactive power that will be imported/exported (in `kW` or `kVAR`, depending on the power type). Use a positive number for grid import and negative for export to the grid.
-
-
-            Supports up to 192 elements.'
-          minItems: 1
-          maxItems: 192
-          type: array
-          items:
-            type: string
-        skip_activated_windows:
-          type: boolean
-          description: When true, windows with activations are skipped instead of failing the request.
-      required:
-      - start
-      - values
   securitySchemes:
     cloud-cloud:
       scheme: bearer

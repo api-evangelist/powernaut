@@ -135,19 +135,6 @@ components:
       - message
       - error
       - status_code
-    UploadUrlResponseDto:
-      type: object
-      properties:
-        import_id:
-          type: string
-          description: Unique identifier for this import operation.
-          format: uuid
-        upload_url:
-          type: string
-          description: Pre-signed S3 PUT URL for uploading the CSV file.
-      required:
-      - import_id
-      - upload_url
     ForbiddenExceptionDto:
       type: object
       properties:
@@ -167,6 +154,29 @@ components:
           type: number
           description: '403'
           example: 403
+      required:
+      - message
+      - error
+      - status_code
+    NotFoundDto_U2l0ZSBub3QgZm91bmQgb3Igc2l0ZSBkb2VzIG5vdCBoYXZlIGEgY29ubmVjdGlvbiBwb2ludA:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Site not found or site does not have a connection point
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
       required:
       - message
       - error
@@ -196,29 +206,19 @@ components:
       - message
       - error
       - status_code
-    NotFoundDto_U2l0ZSBub3QgZm91bmQgb3Igc2l0ZSBkb2VzIG5vdCBoYXZlIGEgY29ubmVjdGlvbiBwb2ludA:
+    UploadUrlResponseDto:
       type: object
       properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Site not found or site does not have a connection point
-        error:
+        import_id:
           type: string
-          description: Not Found
-          example: Not Found
-        status_code:
-          type: number
-          description: '404'
-          example: 404
+          description: Unique identifier for this import operation.
+          format: uuid
+        upload_url:
+          type: string
+          description: Pre-signed S3 PUT URL for uploading the CSV file.
       required:
-      - message
-      - error
-      - status_code
+      - import_id
+      - upload_url
     CreateUploadUrlApiDto:
       type: object
       properties:

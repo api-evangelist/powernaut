@@ -144,6 +144,33 @@ components:
       - message
       - error
       - status_code
+    MarketActionRequiredDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the market
+        status:
+          type: string
+          description: Further action is required from the end-consumer to activate this market. Look at the `action` property for more information.
+          example: action_required
+          enum:
+          - action_required
+        action:
+          description: The action required to activate the market.
+          oneOf:
+          - $ref: '#/components/schemas/MarketActionConsentRequiredDto'
+            title: Consent Required
+          discriminator:
+            propertyName: action
+            mapping:
+              consent_required: '#/components/schemas/MarketActionConsentRequiredDto'
+          allOf:
+          - $ref: '#/components/schemas/MarketActionConsentRequiredDto'
+      required:
+      - name
+      - status
+      - action
     MarketActionConsentRequiredDto:
       type: object
       properties:
@@ -175,29 +202,6 @@ components:
       required:
       - name
       - url
-    NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Site does not exist
-        error:
-          type: string
-          description: Not Found
-          example: Not Found
-        status_code:
-          type: number
-          description: '404'
-          example: 404
-      required:
-      - message
-      - error
-      - status_code
     ForbiddenExceptionDto:
       type: object
       properties:
@@ -221,58 +225,6 @@ components:
       - message
       - error
       - status_code
-    BadRequestExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example:
-          - Invalid datetime
-          - Invalid page size
-        error:
-          type: string
-          description: Bad Request
-          example: Bad Request
-        status_code:
-          type: number
-          description: '400'
-          example: 400
-      required:
-      - message
-      - error
-      - status_code
-    MarketActionRequiredDto:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the market
-        status:
-          type: string
-          description: Further action is required from the end-consumer to activate this market. Look at the `action` property for more information.
-          example: action_required
-          enum:
-          - action_required
-        action:
-          description: The action required to activate the market.
-          oneOf:
-          - $ref: '#/components/schemas/MarketActionConsentRequiredDto'
-            title: Consent Required
-          discriminator:
-            propertyName: action
-            mapping:
-              consent_required: '#/components/schemas/MarketActionConsentRequiredDto'
-          allOf:
-          - $ref: '#/components/schemas/MarketActionConsentRequiredDto'
-      required:
-      - name
-      - status
-      - action
     MarketUnavailableDto:
       type: object
       properties:
@@ -303,6 +255,54 @@ components:
       required:
       - name
       - status
+    BadRequestExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example:
+          - Invalid datetime
+          - Invalid page size
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
+      required:
+      - message
+      - error
+      - status_code
+    NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Site does not exist
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
   securitySchemes:
     cloud-cloud:
       scheme: bearer

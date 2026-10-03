@@ -721,6 +721,37 @@ paths:
       - Sites
 components:
   schemas:
+    GeoLocationDto:
+      type: object
+      properties:
+        latitude:
+          type: string
+          description: Latitude of the location
+          example: '4.4764595'
+          format: decimal
+        longitude:
+          type: string
+          description: Longitude of the location
+          example: '50.5010789'
+          format: decimal
+      required:
+      - latitude
+      - longitude
+    ConfirmImportResponseDto:
+      type: object
+      properties:
+        status:
+          type: string
+          description: The current status of the import
+          enum:
+          - pending
+          - processing
+          - completed
+          - partially_failed
+          - failed
+          example: processing
+      required:
+      - status
     SupplyPointDto:
       type: object
       properties:
@@ -743,22 +774,165 @@ components:
       required:
       - grid_identifier
       - direction
-    GeoLocationDto:
+    UnauthorizedExceptionDto:
       type: object
       properties:
-        latitude:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Unauthorized
+        error:
           type: string
-          description: Latitude of the location
-          example: '4.4764595'
-          format: decimal
-        longitude:
-          type: string
-          description: Longitude of the location
-          example: '50.5010789'
-          format: decimal
+          description: Unauthorized
+          example: Unauthorized
+        status_code:
+          type: number
+          description: '401'
+          example: 401
       required:
-      - latitude
-      - longitude
+      - message
+      - error
+      - status_code
+    ConnectionPointDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the site.
+          format: uuid
+        status:
+          type: string
+          description: The status of the (downstream) site, whether it has resources or not, etc.
+          enum:
+          - no_resources
+          - onboarded
+          - paused
+          - deleted
+        upstream_status:
+          type: string
+          description: The upstream status of the site, whether or not a matching upstream site exists, it has an active contract or not, etc.
+          enum:
+          - no_upstream_registered
+          - no_contract
+          - contract_needs_agreement
+          - contract_pending
+          - contract_active
+          - contract_inactive
+          - paused
+          - pending_steering_readiness
+          - deleted
+          - pending
+          - connected
+          - disconnected
+        location:
+          description: Location of the site, can either be coordinates or a full-text address (incl. country).
+          oneOf:
+          - $ref: '#/components/schemas/AddressLocationDto'
+          - $ref: '#/components/schemas/GeoLocationDto'
+        grid_identifier:
+          type: string
+          description: 'The primary grid identifier for this site (e.g. EAN/MPAN/...).
+
+
+            Common prefixes will be stripped. Check the `supply_points` property for optional secondary grid identifiers.'
+          example: '00000000'
+        external_id:
+          type:
+          - string
+          - 'null'
+          description: Reference of the site in an external system (gateway, API, ...), used for mapping identifiers.
+          example: NCC-1701
+        supply_points:
+          description: List of supply points linked to this site.
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplyPointDto'
+            maxLength: 2
+            minLength: 1
+        infer_meter_data_from_resources:
+          type: boolean
+          description: 'Whether site meter readings can be calculated by summing the meter readings from all individual resources at the site. When enabled, the site''s net meter value is derived from the sum of all resource meter readings rather than using direct site-level meter data.
+
+
+            **Important:** This is only supported for sites that:
+
+            - Do not have a baseload
+
+            - Have all resources actively submitting meter data'
+        head_meter_resource_id:
+          type:
+          - object
+          - 'null'
+          description: The physical head meter resource for this site.
+          format: uuid
+        created_at:
+          type: string
+          description: Timestamp for creation of the site (ISO 8601)
+          format: date-time
+          example: '2024-01-05T11:30:15Z'
+        modified_at:
+          type: string
+          description: Timestamp for last modification of the site (ISO 8601)
+          format: date-time
+          example: '2024-01-05T11:30:15Z'
+        last_seen_at:
+          type:
+          - string
+          - 'null'
+          description: Timestamp of the last metric sent to the platform (ISO 8601)
+          format: date-time
+          example: '2025-01-07T15:08:22Z'
+      required:
+      - id
+      - status
+      - upstream_status
+      - location
+      - grid_identifier
+      - supply_points
+      - infer_meter_data_from_resources
+      - created_at
+      - modified_at
+      - last_seen_at
+    CreateConnectionPointCredentialDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Logical name for this credential set within the site. Use "Default" to create the primary slot if it does not exist.
+          minLength: 1
+          maxLength: 512
+      required:
+      - name
+    ConnectionPointStoredCredentialDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Human-readable credential set name.
+        key:
+          type: string
+          description: Credential key identifier (MQTT username equivalent). Never includes the plaintext secret.
+        is_rotating:
+          type: boolean
+          description: Whether this credential row represents the retiring key pair whilst rotation is underway.
+      required:
+      - name
+      - key
+      - is_rotating
+    ConnectionPointStoredCredentialListDto:
+      type: object
+      properties:
+        items:
+          description: All stored credential rows for this site without secrets (includes both keys during rotation).
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectionPointStoredCredentialDto'
+      required:
+      - items
     BadRequestExceptionDto:
       type: object
       properties:
@@ -784,73 +958,6 @@ components:
       - message
       - error
       - status_code
-    NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Site does not exist
-        error:
-          type: string
-          description: Not Found
-          example: Not Found
-        status_code:
-          type: number
-          description: '404'
-          example: 404
-      required:
-      - message
-      - error
-      - status_code
-    ConflictDto_SW1wb3J0IGlzIG5vdCBpbiBwZW5kaW5nIHN0YXR1cw:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Import is not in pending status
-        error:
-          type: string
-          description: Conflict
-          example: Conflict
-        status_code:
-          type: number
-          description: '409'
-          example: 409
-      required:
-      - message
-      - error
-      - status_code
-    CreateSupplyPointDto:
-      type: object
-      properties:
-        grid_identifier:
-          type: string
-          description: 'The grid identifier for this supply point (e.g. EAN/MPAN/...).
-
-
-            Common prefixes will be stripped.'
-          example: '00000000'
-        direction:
-          type: string
-          description: The direction of the supply point
-          example: bidirectional
-          enum:
-          - offtake
-          - injection
-          - bidirectional
-          default: bidirectional
-      required:
-      - grid_identifier
     CreateConnectionPointDto:
       type: object
       properties:
@@ -892,6 +999,61 @@ components:
       required:
       - location
       - supply_points
+    AddressLocationDto:
+      type: object
+      properties:
+        address:
+          type: string
+          description: Full-text address, including country
+          example: Full-text address, including country
+      required:
+      - address
+    NotFoundDto_SGlzdG9yaWNhbCBkYXRhIGltcG9ydCBub3QgZm91bmQ:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Historical data import not found
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
+    ForbiddenDto_SW1wb3J0IGRvZXMgbm90IGJlbG9uZyB0byB0aGUgYXV0aGVudGljYXRlZCB1c2Vy:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Import does not belong to the authenticated user
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
     ConnectionPointWithCredentialsDto:
       type: object
       properties:
@@ -997,49 +1159,6 @@ components:
       - modified_at
       - last_seen_at
       - credentials
-    ForbiddenExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Insufficient permissions
-        error:
-          type: string
-          description: Forbidden
-          example: Forbidden
-        status_code:
-          type: number
-          description: '403'
-          example: 403
-      required:
-      - message
-      - error
-      - status_code
-    ConnectionPointStoredCredentialListDto:
-      type: object
-      properties:
-        items:
-          description: All stored credential rows for this site without secrets (includes both keys during rotation).
-          type: array
-          items:
-            $ref: '#/components/schemas/ConnectionPointStoredCredentialDto'
-      required:
-      - items
-    CreateConnectionPointCredentialDto:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Logical name for this credential set within the site. Use "Default" to create the primary slot if it does not exist.
-          minLength: 1
-          maxLength: 512
-      required:
-      - name
     ConnectionPointListDto:
       type: object
       properties:
@@ -1055,7 +1174,7 @@ components:
       required:
       - total
       - items
-    UnauthorizedExceptionDto:
+    ConflictDto_SW1wb3J0IGlzIG5vdCBpbiBwZW5kaW5nIHN0YXR1cw:
       type: object
       properties:
         message:
@@ -1065,135 +1184,83 @@ components:
           - type: array
             items:
               type: string
-          example: Unauthorized
+          example: Import is not in pending status
         error:
           type: string
-          description: Unauthorized
-          example: Unauthorized
+          description: Conflict
+          example: Conflict
         status_code:
           type: number
-          description: '401'
-          example: 401
+          description: '409'
+          example: 409
       required:
       - message
       - error
       - status_code
-    ConnectionPointStoredCredentialDto:
+    ConnectionPointCredentialDto:
       type: object
       properties:
         name:
           type: string
-          description: Human-readable credential set name.
+          description: Logical name of this credential slot (for example `"Default"` for the primary MQTT credential set).
+          minLength: 1
+          maxLength: 512
         key:
           type: string
-          description: Credential key identifier (MQTT username equivalent). Never includes the plaintext secret.
-        is_rotating:
-          type: boolean
-          description: Whether this credential row represents the retiring key pair whilst rotation is underway.
+          description: The credential key used for authenticating this site.
+          format: uuid
+        secret:
+          type: string
+          description: The credential secret (only available once upon creation).
+          example: secret
       required:
       - name
       - key
-      - is_rotating
-    ConnectionPointDto:
+      - secret
+    NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA:
       type: object
       properties:
-        id:
-          type: string
-          description: Unique identifier for the site.
-          format: uuid
-        status:
-          type: string
-          description: The status of the (downstream) site, whether it has resources or not, etc.
-          enum:
-          - no_resources
-          - onboarded
-          - paused
-          - deleted
-        upstream_status:
-          type: string
-          description: The upstream status of the site, whether or not a matching upstream site exists, it has an active contract or not, etc.
-          enum:
-          - no_upstream_registered
-          - no_contract
-          - contract_needs_agreement
-          - contract_pending
-          - contract_active
-          - contract_inactive
-          - paused
-          - pending_steering_readiness
-          - deleted
-          - pending
-          - connected
-          - disconnected
-        location:
-          description: Location of the site, can either be coordinates or a full-text address (incl. country).
+        message:
+          description: One or more specific error messages
           oneOf:
-          - $ref: '#/components/schemas/AddressLocationDto'
-          - $ref: '#/components/schemas/GeoLocationDto'
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Site does not exist
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
+    CreateSupplyPointDto:
+      type: object
+      properties:
         grid_identifier:
           type: string
-          description: 'The primary grid identifier for this site (e.g. EAN/MPAN/...).
+          description: 'The grid identifier for this supply point (e.g. EAN/MPAN/...).
 
 
-            Common prefixes will be stripped. Check the `supply_points` property for optional secondary grid identifiers.'
+            Common prefixes will be stripped.'
           example: '00000000'
-        external_id:
-          type:
-          - string
-          - 'null'
-          description: Reference of the site in an external system (gateway, API, ...), used for mapping identifiers.
-          example: NCC-1701
-        supply_points:
-          description: List of supply points linked to this site.
-          type: array
-          items:
-            $ref: '#/components/schemas/SupplyPointDto'
-            maxLength: 2
-            minLength: 1
-        infer_meter_data_from_resources:
-          type: boolean
-          description: 'Whether site meter readings can be calculated by summing the meter readings from all individual resources at the site. When enabled, the site''s net meter value is derived from the sum of all resource meter readings rather than using direct site-level meter data.
-
-
-            **Important:** This is only supported for sites that:
-
-            - Do not have a baseload
-
-            - Have all resources actively submitting meter data'
-        head_meter_resource_id:
-          type:
-          - object
-          - 'null'
-          description: The physical head meter resource for this site.
-          format: uuid
-        created_at:
+        direction:
           type: string
-          description: Timestamp for creation of the site (ISO 8601)
-          format: date-time
-          example: '2024-01-05T11:30:15Z'
-        modified_at:
-          type: string
-          description: Timestamp for last modification of the site (ISO 8601)
-          format: date-time
-          example: '2024-01-05T11:30:15Z'
-        last_seen_at:
-          type:
-          - string
-          - 'null'
-          description: Timestamp of the last metric sent to the platform (ISO 8601)
-          format: date-time
-          example: '2025-01-07T15:08:22Z'
+          description: The direction of the supply point
+          example: bidirectional
+          enum:
+          - offtake
+          - injection
+          - bidirectional
+          default: bidirectional
       required:
-      - id
-      - status
-      - upstream_status
-      - location
       - grid_identifier
-      - supply_points
-      - infer_meter_data_from_resources
-      - created_at
-      - modified_at
-      - last_seen_at
     UpdateConnectionPointDto:
       type: object
       properties:
@@ -1238,42 +1305,7 @@ components:
           - 'null'
           description: The physical head meter resource for this site.
           format: uuid
-    ConnectionPointCredentialDto:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Logical name of this credential slot (for example `"Default"` for the primary MQTT credential set).
-          minLength: 1
-          maxLength: 512
-        key:
-          type: string
-          description: The credential key used for authenticating this site.
-          format: uuid
-        secret:
-          type: string
-          description: The credential secret (only available once upon creation).
-          example: secret
-      required:
-      - name
-      - key
-      - secret
-    ConfirmImportResponseDto:
-      type: object
-      properties:
-        status:
-          type: string
-          description: The current status of the import
-          enum:
-          - pending
-          - processing
-          - completed
-          - partially_failed
-          - failed
-          example: processing
-      required:
-      - status
-    NotFoundDto_SGlzdG9yaWNhbCBkYXRhIGltcG9ydCBub3QgZm91bmQ:
+    ForbiddenExceptionDto:
       type: object
       properties:
         message:
@@ -1283,15 +1315,15 @@ components:
           - type: array
             items:
               type: string
-          example: Historical data import not found
+          example: Insufficient permissions
         error:
           type: string
-          description: Not Found
-          example: Not Found
+          description: Forbidden
+          example: Forbidden
         status_code:
           type: number
-          description: '404'
-          example: 404
+          description: '403'
+          example: 403
       required:
       - message
       - error
@@ -1319,38 +1351,6 @@ components:
       - message
       - error
       - status_code
-    ForbiddenDto_SW1wb3J0IGRvZXMgbm90IGJlbG9uZyB0byB0aGUgYXV0aGVudGljYXRlZCB1c2Vy:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Import does not belong to the authenticated user
-        error:
-          type: string
-          description: Forbidden
-          example: Forbidden
-        status_code:
-          type: number
-          description: '403'
-          example: 403
-      required:
-      - message
-      - error
-      - status_code
-    AddressLocationDto:
-      type: object
-      properties:
-        address:
-          type: string
-          description: Full-text address, including country
-          example: Full-text address, including country
-      required:
-      - address
   securitySchemes:
     cloud-cloud:
       scheme: bearer

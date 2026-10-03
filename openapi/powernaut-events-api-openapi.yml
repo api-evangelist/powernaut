@@ -103,22 +103,6 @@ components:
       - message
       - error
       - status_code
-    PVCurtailmentScheduledPayloadDto:
-      type: object
-      properties:
-        start:
-          type: string
-          description: Start time of the action. Should be a perfect quarter-hour.
-          example: '2025-09-19T12:30:00Z'
-          format: date-time
-        end:
-          type: string
-          description: End time of the action. Should be a perfect quarter-hour.
-          example: '2025-09-19T14:00:00Z'
-          format: date-time
-      required:
-      - start
-      - end
     ForbiddenExceptionDto:
       type: object
       properties:
@@ -167,6 +151,22 @@ components:
       - message
       - error
       - status_code
+    PVCurtailmentScheduledPayloadDto:
+      type: object
+      properties:
+        start:
+          type: string
+          description: Start time of the action. Should be a perfect quarter-hour.
+          example: '2025-09-19T12:30:00Z'
+          format: date-time
+        end:
+          type: string
+          description: End time of the action. Should be a perfect quarter-hour.
+          example: '2025-09-19T14:00:00Z'
+          format: date-time
+      required:
+      - start
+      - end
     CreateResourceEventDto:
       type: object
       properties:

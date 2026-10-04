@@ -228,6 +228,29 @@ paths:
       - baselining
 components:
   schemas:
+    NotFoundDto_UmVzb3VyY2UgZG9lcyBub3QgZXhpc3Q:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Resource does not exist
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
     CreateBaselineDto:
       type: object
       properties:
@@ -270,6 +293,29 @@ components:
       required:
       - start
       - values
+    NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Site does not exist
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
     ConflictDto_Q2Fubm90IHVwZGF0ZSBiYXNlbGluZTogdGhlcmUgaGF2ZSBiZWVuIGFjdGl2YXRpb25zIGluIHRoaXMgdGltZSB3aW5kb3c:
       type: object
       properties:
@@ -375,52 +421,6 @@ components:
           type: number
           description: '400'
           example: 400
-      required:
-      - message
-      - error
-      - status_code
-    NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Site does not exist
-        error:
-          type: string
-          description: Not Found
-          example: Not Found
-        status_code:
-          type: number
-          description: '404'
-          example: 404
-      required:
-      - message
-      - error
-      - status_code
-    NotFoundDto_UmVzb3VyY2UgZG9lcyBub3QgZXhpc3Q:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Resource does not exist
-        error:
-          type: string
-          description: Not Found
-          example: Not Found
-        status_code:
-          type: number
-          description: '404'
-          example: 404
       required:
       - message
       - error

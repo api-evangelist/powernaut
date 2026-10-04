@@ -196,52 +196,6 @@ paths:
       - getting_forecasts
 components:
   schemas:
-    UnauthorizedExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Unauthorized
-        error:
-          type: string
-          description: Unauthorized
-          example: Unauthorized
-        status_code:
-          type: number
-          description: '401'
-          example: 401
-      required:
-      - message
-      - error
-      - status_code
-    NotFoundDto_Rm9yZWNhc3Qgbm90IGZvdW5kIGZvciB0aGlzIHNpdGUu:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Forecast not found for this site.
-        error:
-          type: string
-          description: Not Found
-          example: Not Found
-        status_code:
-          type: number
-          description: '404'
-          example: 404
-      required:
-      - message
-      - error
-      - status_code
     NotFoundDto_Rm9yZWNhc3Qgbm90IGZvdW5kIGZvciB0aGlzIHJlc291cmNlLg:
       type: object
       properties:
@@ -265,7 +219,7 @@ components:
       - message
       - error
       - status_code
-    ForbiddenExceptionDto:
+    UnauthorizedExceptionDto:
       type: object
       properties:
         message:
@@ -275,15 +229,15 @@ components:
           - type: array
             items:
               type: string
-          example: Insufficient permissions
+          example: Unauthorized
         error:
           type: string
-          description: Forbidden
-          example: Forbidden
+          description: Unauthorized
+          example: Unauthorized
         status_code:
           type: number
-          description: '403'
-          example: 403
+          description: '401'
+          example: 401
       required:
       - message
       - error
@@ -351,6 +305,52 @@ components:
             $ref: '#/components/schemas/ForecastElementDto'
       required:
       - data
+    ForbiddenExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Insufficient permissions
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
+    NotFoundDto_Rm9yZWNhc3Qgbm90IGZvdW5kIGZvciB0aGlzIHNpdGUu:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Forecast not found for this site.
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
     BadRequestExceptionDto:
       type: object
       properties:

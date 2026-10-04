@@ -303,44 +303,6 @@ paths:
       - managing_bids
 components:
   schemas:
-    NotFoundDto_QmlkIGRvZXMgbm90IGV4aXN0:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Bid does not exist
-        error:
-          type: string
-          description: Not Found
-          example: Not Found
-        status_code:
-          type: number
-          description: '404'
-          example: 404
-      required:
-      - message
-      - error
-      - status_code
-    BidListDto:
-      type: object
-      properties:
-        total:
-          type: integer
-          description: Total amount of results that match the query
-          minimum: 0
-        items:
-          description: Paginated items
-          type: array
-          items:
-            $ref: '#/components/schemas/BidDto'
-      required:
-      - total
-      - items
     BidDto:
       type: object
       properties:
@@ -441,52 +403,6 @@ components:
       - status
       - created_at
       - modified_at
-    UnauthorizedExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Unauthorized
-        error:
-          type: string
-          description: Unauthorized
-          example: Unauthorized
-        status_code:
-          type: number
-          description: '401'
-          example: 401
-      required:
-      - message
-      - error
-      - status_code
-    ForbiddenExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Insufficient permissions
-        error:
-          type: string
-          description: Forbidden
-          example: Forbidden
-        status_code:
-          type: number
-          description: '403'
-          example: 403
-      required:
-      - message
-      - error
-      - status_code
     BidWebhooksDto:
       type: object
       properties:
@@ -498,97 +414,6 @@ components:
             This is optional, and if not provided, activation via MQTT will be used instead. For more information on other notification options, see [this guide](/guides/connect/activating-flexibility/activating).'
           example: https://domain.tld/path
           format: uri
-    PricePointDto:
-      type: object
-      properties:
-        value:
-          type: string
-          description: 'The value of the bid, i.e. the active/reactive power you''re willing to import/export for the price point (in `kW` or `kVAR`, depending on the bid''s power type). Use a positive number for grid import (more consumption/less production) and negative for export to the grid (more production/less consumption).
-
-
-            This cannot exceed the maximum power constraints for the resource.'
-          example: '5.1'
-          format: decimal
-          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
-        price:
-          type: string
-          description: "The unit price constraint for which this price point is valid (e.g. €/kWh or €/kVARh).\n For example, you might not want to activate your flexible power if the value of flexibility at that point is less than 0.30 EUR/kWh.\n\nThis can be left empty, in which case the bid is always valid (no matter the price for flexibility at that point).\n\n**Note:** The currency is automatically inferred based on the site."
-          example: '5.1'
-          format: decimal
-          pattern: ^-?[0-9]{1,15}(.[0-9]{1,5}?)$
-      required:
-      - value
-    BadRequestDto_SW52YWxpZCBleHBpcnkgZGF0ZQ:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Invalid expiry date
-        error:
-          type: string
-          description: Bad Request
-          example: Bad Request
-        status_code:
-          type: number
-          description: '400'
-          example: 400
-      required:
-      - message
-      - error
-      - status_code
-    ConflictDto_QmlkIGNhbiBubyBsb25nZXIgYmUgdXBkYXRlZA:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Bid can no longer be updated
-        error:
-          type: string
-          description: Conflict
-          example: Conflict
-        status_code:
-          type: number
-          description: '409'
-          example: 409
-      required:
-      - message
-      - error
-      - status_code
-    BadRequestExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example:
-          - Invalid datetime
-          - Invalid page size
-        error:
-          type: string
-          description: Bad Request
-          example: Bad Request
-        status_code:
-          type: number
-          description: '400'
-          example: 400
-      required:
-      - message
-      - error
-      - status_code
     UpdateBidDto:
       type: object
       properties:
@@ -621,28 +446,29 @@ components:
           description: Webhooks related to this bid, for example to be notified about a bid's acceptance.
           allOf:
           - $ref: '#/components/schemas/BidWebhooksDto'
-    TimeWindowDto:
+    NotFoundDto_QmlkIGRvZXMgbm90IGV4aXN0:
       type: object
       properties:
-        start:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Bid does not exist
+        error:
           type: string
-          description: 'Start of window (ISO 8601). Must be a perfect quarter-hour.
-
-
-            **Note**: To avoid timezone issues, we perform an additional check for the presence of timezone information. You should always include either UTC with `Z`, or an offset like `+01:00`.'
-          format: date-time
-          example: '2024-07-01T14:00:00Z'
-        end:
-          type: string
-          description: 'End of window (ISO 8601). Must be a perfect quarter-hour, and exactly one quarter hour after `start`.
-
-
-            **Note**: To avoid timezone issues, we perform an additional check for the presence of timezone information. You should always include either UTC with `Z`, or an offset like `+01:00`.'
-          format: date-time
-          example: '2024-07-01T14:15:00Z'
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
       required:
-      - start
-      - end
+      - message
+      - error
+      - status_code
     NotFoundDto_QmlkIG5vdCBmb3VuZA:
       type: object
       properties:
@@ -712,6 +538,89 @@ components:
       - price
       - created_at
       - type
+    UnauthorizedExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Unauthorized
+        error:
+          type: string
+          description: Unauthorized
+          example: Unauthorized
+        status_code:
+          type: number
+          description: '401'
+          example: 401
+      required:
+      - message
+      - error
+      - status_code
+    TimeWindowDto:
+      type: object
+      properties:
+        start:
+          type: string
+          description: 'Start of window (ISO 8601). Must be a perfect quarter-hour.
+
+
+            **Note**: To avoid timezone issues, we perform an additional check for the presence of timezone information. You should always include either UTC with `Z`, or an offset like `+01:00`.'
+          format: date-time
+          example: '2024-07-01T14:00:00Z'
+        end:
+          type: string
+          description: 'End of window (ISO 8601). Must be a perfect quarter-hour, and exactly one quarter hour after `start`.
+
+
+            **Note**: To avoid timezone issues, we perform an additional check for the presence of timezone information. You should always include either UTC with `Z`, or an offset like `+01:00`.'
+          format: date-time
+          example: '2024-07-01T14:15:00Z'
+      required:
+      - start
+      - end
+    BadRequestDto_SW52YWxpZCBleHBpcnkgZGF0ZQ:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Invalid expiry date
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
+      required:
+      - message
+      - error
+      - status_code
+    BidListDto:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total amount of results that match the query
+          minimum: 0
+        items:
+          description: Paginated items
+          type: array
+          items:
+            $ref: '#/components/schemas/BidDto'
+      required:
+      - total
+      - items
     BidReportDto:
       type: object
       properties:
@@ -753,6 +662,97 @@ components:
       - energy_requested
       - energy_delivered
       - extra_energy_delivered
+    ForbiddenExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Insufficient permissions
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
+    ConflictDto_QmlkIGNhbiBubyBsb25nZXIgYmUgdXBkYXRlZA:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Bid can no longer be updated
+        error:
+          type: string
+          description: Conflict
+          example: Conflict
+        status_code:
+          type: number
+          description: '409'
+          example: 409
+      required:
+      - message
+      - error
+      - status_code
+    PricePointDto:
+      type: object
+      properties:
+        value:
+          type: string
+          description: 'The value of the bid, i.e. the active/reactive power you''re willing to import/export for the price point (in `kW` or `kVAR`, depending on the bid''s power type). Use a positive number for grid import (more consumption/less production) and negative for export to the grid (more production/less consumption).
+
+
+            This cannot exceed the maximum power constraints for the resource.'
+          example: '5.1'
+          format: decimal
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+        price:
+          type: string
+          description: "The unit price constraint for which this price point is valid (e.g. €/kWh or €/kVARh).\n For example, you might not want to activate your flexible power if the value of flexibility at that point is less than 0.30 EUR/kWh.\n\nThis can be left empty, in which case the bid is always valid (no matter the price for flexibility at that point).\n\n**Note:** The currency is automatically inferred based on the site."
+          example: '5.1'
+          format: decimal
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,5}?)$
+      required:
+      - value
+    BadRequestExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example:
+          - Invalid datetime
+          - Invalid page size
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
+      required:
+      - message
+      - error
+      - status_code
   securitySchemes:
     cloud-cloud:
       scheme: bearer

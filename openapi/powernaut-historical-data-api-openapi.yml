@@ -112,6 +112,19 @@ paths:
         label: cURL
 components:
   schemas:
+    UploadUrlResponseDto:
+      type: object
+      properties:
+        import_id:
+          type: string
+          description: Unique identifier for this import operation.
+          format: uuid
+        upload_url:
+          type: string
+          description: Pre-signed S3 PUT URL for uploading the CSV file.
+      required:
+      - import_id
+      - upload_url
     UnauthorizedExceptionDto:
       type: object
       properties:
@@ -158,6 +171,27 @@ components:
       - message
       - error
       - status_code
+    CreateUploadUrlApiDto:
+      type: object
+      properties:
+        target_type:
+          type: string
+          description: The type of target entity. Currently only `site` is supported.
+          example: site
+          enum:
+          - site
+        target_id:
+          type: string
+          description: The UUID of the target entity (site).
+          format: uuid
+        file_name:
+          type: string
+          description: The name of the CSV file to upload.
+          example: meter-data-2024.csv
+      required:
+      - target_type
+      - target_id
+      - file_name
     NotFoundDto_U2l0ZSBub3QgZm91bmQgb3Igc2l0ZSBkb2VzIG5vdCBoYXZlIGEgY29ubmVjdGlvbiBwb2ludA:
       type: object
       properties:
@@ -206,40 +240,6 @@ components:
       - message
       - error
       - status_code
-    UploadUrlResponseDto:
-      type: object
-      properties:
-        import_id:
-          type: string
-          description: Unique identifier for this import operation.
-          format: uuid
-        upload_url:
-          type: string
-          description: Pre-signed S3 PUT URL for uploading the CSV file.
-      required:
-      - import_id
-      - upload_url
-    CreateUploadUrlApiDto:
-      type: object
-      properties:
-        target_type:
-          type: string
-          description: The type of target entity. Currently only `site` is supported.
-          example: site
-          enum:
-          - site
-        target_id:
-          type: string
-          description: The UUID of the target entity (site).
-          format: uuid
-        file_name:
-          type: string
-          description: The name of the CSV file to upload.
-          example: meter-data-2024.csv
-      required:
-      - target_type
-      - target_id
-      - file_name
   securitySchemes:
     cloud-cloud:
       scheme: bearer

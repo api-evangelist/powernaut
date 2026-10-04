@@ -175,52 +175,6 @@ paths:
       - uploading_forecasts
 components:
   schemas:
-    NotFoundDto_U2l0ZSBub3QgZm91bmQ:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Site not found
-        error:
-          type: string
-          description: Not Found
-          example: Not Found
-        status_code:
-          type: number
-          description: '404'
-          example: 404
-      required:
-      - message
-      - error
-      - status_code
-    BadRequestDto_SW52YWxpZCBmb3JlY2FzdCBkYXRh:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Invalid forecast data
-        error:
-          type: string
-          description: Bad Request
-          example: Bad Request
-        status_code:
-          type: number
-          description: '400'
-          example: 400
-      required:
-      - message
-      - error
-      - status_code
     NotFoundDto_UmVzb3VyY2Ugbm90IGZvdW5k:
       type: object
       properties:
@@ -244,51 +198,24 @@ components:
       - message
       - error
       - status_code
-    ForbiddenDto_Rm9yYmlkZGVu:
+    UploadForecastResponseDto:
       type: object
       properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Forbidden
-        error:
-          type: string
-          description: Forbidden
-          example: Forbidden
-        status_code:
-          type: number
-          description: '403'
-          example: 403
-      required:
-      - message
-      - error
-      - status_code
-    UploadConnectionPointForecastDto:
-      type: object
-      properties:
-        model_id:
-          type: string
-          description: 'Identifier for the specific forecast model used.
-
-            This helps track which model version or configuration was used for any given forecast.'
-          example: external-model-v1
-          minLength: 1
-          maxLength: 100
-        items:
-          description: Array of forecast data points (maximum 192 points for 48 hours at 15-minute intervals). All timestamps must be perfect quarter-hours. Past timestamps will be ignored.
-          minItems: 1
-          maxItems: 192
+        inserted:
+          description: Successfully inserted forecast data points
+          type: array
+          items:
+            $ref: '#/components/schemas/ForecastDataPointUploadDto'
+        ignored:
+          description: Forecast data points that were ignored (e.g., those in the past)
+          example: []
           type: array
           items:
             $ref: '#/components/schemas/ForecastDataPointUploadDto'
       required:
-      - model_id
-      - items
-    BadRequestDto_SW52YWxpZCBmb3JlY2FzdCBkYXRhIG9yIHBvd2VyIHZhbHVlcyBleGNlZWQgcmVzb3VyY2UgY29uc3RyYWludHM:
+      - inserted
+      - ignored
+    BadRequestDto_SW52YWxpZCBmb3JlY2FzdCBkYXRh:
       type: object
       properties:
         message:
@@ -298,7 +225,7 @@ components:
           - type: array
             items:
               type: string
-          example: Invalid forecast data or power values exceed resource constraints
+          example: Invalid forecast data
         error:
           type: string
           description: Bad Request
@@ -332,23 +259,52 @@ components:
       required:
       - model_id
       - items
-    UploadForecastResponseDto:
+    ForbiddenDto_Rm9yYmlkZGVu:
       type: object
       properties:
-        inserted:
-          description: Successfully inserted forecast data points
-          type: array
-          items:
-            $ref: '#/components/schemas/ForecastDataPointUploadDto'
-        ignored:
-          description: Forecast data points that were ignored (e.g., those in the past)
-          example: []
-          type: array
-          items:
-            $ref: '#/components/schemas/ForecastDataPointUploadDto'
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Forbidden
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
       required:
-      - inserted
-      - ignored
+      - message
+      - error
+      - status_code
+    BadRequestDto_SW52YWxpZCBmb3JlY2FzdCBkYXRhIG9yIHBvd2VyIHZhbHVlcyBleGNlZWQgcmVzb3VyY2UgY29uc3RyYWludHM:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Invalid forecast data or power values exceed resource constraints
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
+      required:
+      - message
+      - error
+      - status_code
     ForecastDataPointUploadDto:
       type: object
       properties:
@@ -395,6 +351,50 @@ components:
           type: number
           description: '401'
           example: 401
+      required:
+      - message
+      - error
+      - status_code
+    UploadConnectionPointForecastDto:
+      type: object
+      properties:
+        model_id:
+          type: string
+          description: 'Identifier for the specific forecast model used.
+
+            This helps track which model version or configuration was used for any given forecast.'
+          example: external-model-v1
+          minLength: 1
+          maxLength: 100
+        items:
+          description: Array of forecast data points (maximum 192 points for 48 hours at 15-minute intervals). All timestamps must be perfect quarter-hours. Past timestamps will be ignored.
+          minItems: 1
+          maxItems: 192
+          type: array
+          items:
+            $ref: '#/components/schemas/ForecastDataPointUploadDto'
+      required:
+      - model_id
+      - items
+    NotFoundDto_U2l0ZSBub3QgZm91bmQ:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Site not found
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
       required:
       - message
       - error

@@ -80,6 +80,22 @@ paths:
       - Events
 components:
   schemas:
+    PVCurtailmentScheduledPayloadDto:
+      type: object
+      properties:
+        start:
+          type: string
+          description: Start time of the action. Should be a perfect quarter-hour.
+          example: '2025-09-19T12:30:00Z'
+          format: date-time
+        end:
+          type: string
+          description: End time of the action. Should be a perfect quarter-hour.
+          example: '2025-09-19T14:00:00Z'
+          format: date-time
+      required:
+      - start
+      - end
     UnauthorizedExceptionDto:
       type: object
       properties:
@@ -126,6 +142,27 @@ components:
       - message
       - error
       - status_code
+    CreateResourceEventDto:
+      type: object
+      properties:
+        event_type:
+          type: string
+          description: 'Type of events
+
+            - `PV_CURTAILMENT_SCHEDULED`: report periods of PV curtailment
+
+            - `MFRR_ACTIVATION`: report mFRR pool curtailment dispatched to a gateway'
+          enum:
+          - PV_CURTAILMENT_SCHEDULED
+          - MFRR_ACTIVATION
+          example: PV_CURTAILMENT_SCHEDULED
+        payload:
+          description: Event-specific payload data, usually a time window.
+          allOf:
+          - $ref: '#/components/schemas/PVCurtailmentScheduledPayloadDto'
+      required:
+      - event_type
+      - payload
     BadRequestExceptionDto:
       type: object
       properties:
@@ -151,43 +188,6 @@ components:
       - message
       - error
       - status_code
-    PVCurtailmentScheduledPayloadDto:
-      type: object
-      properties:
-        start:
-          type: string
-          description: Start time of the action. Should be a perfect quarter-hour.
-          example: '2025-09-19T12:30:00Z'
-          format: date-time
-        end:
-          type: string
-          description: End time of the action. Should be a perfect quarter-hour.
-          example: '2025-09-19T14:00:00Z'
-          format: date-time
-      required:
-      - start
-      - end
-    CreateResourceEventDto:
-      type: object
-      properties:
-        event_type:
-          type: string
-          description: 'Type of events
-
-            - `PV_CURTAILMENT_SCHEDULED`: report periods of PV curtailment
-
-            - `MFRR_ACTIVATION`: report mFRR pool curtailment dispatched to a gateway'
-          enum:
-          - PV_CURTAILMENT_SCHEDULED
-          - MFRR_ACTIVATION
-          example: PV_CURTAILMENT_SCHEDULED
-        payload:
-          description: Event-specific payload data, usually a time window.
-          allOf:
-          - $ref: '#/components/schemas/PVCurtailmentScheduledPayloadDto'
-      required:
-      - event_type
-      - payload
   securitySchemes:
     cloud-cloud:
       scheme: bearer

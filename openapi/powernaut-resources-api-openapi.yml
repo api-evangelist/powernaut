@@ -429,80 +429,7 @@ paths:
       - Resources
 components:
   schemas:
-    UpdateResourceDto:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Human-readable name for this resource. Useful for reporting, but not required.
-          example: Home Battery
-          minLength: 1
-        external_id:
-          type:
-          - string
-          - 'null'
-          description: Reference of the resource in external system (gateway, API, ...), used for mapping identifiers.
-          example: NCC-1701
-          minLength: 1
-        type:
-          type: string
-          description: Type of energy resource (battery, heat pump, solar, etc.).
-          enum:
-          - static_battery
-          - heat_pump
-          - electric_vehicle
-          - electric_vehicle_charging_point
-          - photovoltaic
-          - wind
-          - group
-          - other
-          - meter
-          example: static_battery
-        power:
-          description: Power constraints for this resource.
-          allOf:
-          - $ref: '#/components/schemas/ResourcePowerDto'
-        capacity:
-          description: 'Capacity constraints for this resource (in kWh).
-
-
-            This property is currently only required for battery resources.'
-          allOf:
-          - $ref: '#/components/schemas/ResourcePowerConstraints'
-        parent_id:
-          type:
-          - string
-          - 'null'
-          description: 'Identifier of the physical parent resource in the site topology.
-
-
-            Set this field to `null` to remove the parent relationship.
-
-
-            Constraints:
-
-            - Parent must exist and belong to the same site
-
-            - Only meter-type resources can be parents
-
-            - Group resources cannot have a parent
-
-            - Hierarchy is limited to 10 levels deep'
-          format: uuid
-        webhooks:
-          description: Webhooks related to this resource, for example to be notified about the acceptance of a bid for this resource.
-          allOf:
-          - $ref: '#/components/schemas/ResourceWebhooksDto'
-        group_id:
-          type:
-          - string
-          - 'null'
-          description: 'Identifier of the resource group that this resource should belong to.
-
-
-            Set this field to `null` to remove a resource from its existing group.'
-          format: uuid
-    UnauthorizedExceptionDto:
+    NotFoundDto_UmVzb3VyY2UgZG9lcyBub3QgZXhpc3Q:
       type: object
       properties:
         message:
@@ -512,64 +439,52 @@ components:
           - type: array
             items:
               type: string
-          example: Unauthorized
+          example: Resource does not exist
         error:
           type: string
-          description: Unauthorized
-          example: Unauthorized
+          description: Not Found
+          example: Not Found
         status_code:
           type: number
-          description: '401'
-          example: 401
+          description: '404'
+          example: 404
       required:
       - message
       - error
       - status_code
-    ForbiddenExceptionDto:
+    ResourcePowerConstraints:
       type: object
       properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Insufficient permissions
-        error:
+        minimum:
           type: string
-          description: Forbidden
-          example: Forbidden
-        status_code:
-          type: number
-          description: '403'
-          example: 403
+          description: Minimum level
+          example: '-5.1'
+          format: decimal
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+        maximum:
+          type: string
+          description: Maximum level
+          example: '5.1'
+          format: decimal
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
       required:
-      - message
-      - error
-      - status_code
-    ResourcePowerDto:
+      - minimum
+      - maximum
+    ProviderActivationSummaryListDto:
       type: object
       properties:
-        active:
-          description: 'Active power constraints (minimum, maximum) this resource can import/export (in kW).
-
-
-            Positive values indicate consumption, negative values indicate production.
-
-
-            A battery would typically have a value set for both an active import and export.'
-          allOf:
-          - $ref: '#/components/schemas/ResourcePowerConstraints'
-        reactive:
-          description: 'Reactive power constraints (minimum, maximum) this resource can import/export (in kVAR).
-
-
-            Positive values indicate lag, negative values indicate lead.'
-          allOf:
-          - $ref: '#/components/schemas/ResourcePowerConstraints'
+        total:
+          type: integer
+          description: Total amount of results that match the query
+          minimum: 0
+        items:
+          description: Activations for the current page
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderActivationSummaryDto'
       required:
-      - active
+      - total
+      - items
     CreateResourceDto:
       type: object
       properties:
@@ -646,55 +561,6 @@ components:
       - type
       - power
       - site_id
-    EnergyDto:
-      type: object
-      properties:
-        delivered:
-          type:
-          - string
-          - 'null'
-          description: 'The actual energy delivered by the resource, in `kWh` or `kVARh`, verified by real-time metering.
-
-            It can be negative if, for example, a resources increases its consumption when a decrease was requested.
-
-
-            This is only available after the activation has been verified, which happens a few minutes after the activation''s time window.'
-          format: decimal
-          example: '5.1'
-          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
-        requested:
-          type: string
-          description: The energy requested by the activation, in `kWh` or `kVARh`, based on an initial estimate of available flexibility.
-          format: decimal
-          example: '5.1'
-          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
-        extra_delivered:
-          type:
-          - string
-          - 'null'
-          description: Extra energy delivered beyond the requested amount for procurements without a delivery limit (in `kWh` or `kVARh`). `null` before verification or for procurements with a fixed delivery limit (where overdelivery is not tracked).
-          format: decimal
-          example: '1.2'
-          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
-      required:
-      - delivered
-      - requested
-      - extra_delivered
-    ConnectionPointResourcesListDto:
-      type: object
-      properties:
-        total:
-          type: integer
-          description: Total amount of results that match the query
-          minimum: 0
-        items:
-          description: Paginated items
-          type: array
-          items:
-            $ref: '#/components/schemas/ResourceDto'
-      required:
-      - total
-      - items
     ProviderActivationSummaryDto:
       type: object
       properties:
@@ -760,6 +626,62 @@ components:
       - resource_type
       - site_id
       - bid_id
+    ResourcePowerDto:
+      type: object
+      properties:
+        active:
+          description: 'Active power constraints (minimum, maximum) this resource can import/export (in kW).
+
+
+            Positive values indicate consumption, negative values indicate production.
+
+
+            A battery would typically have a value set for both an active import and export.'
+          allOf:
+          - $ref: '#/components/schemas/ResourcePowerConstraints'
+        reactive:
+          description: 'Reactive power constraints (minimum, maximum) this resource can import/export (in kVAR).
+
+
+            Positive values indicate lag, negative values indicate lead.'
+          allOf:
+          - $ref: '#/components/schemas/ResourcePowerConstraints'
+      required:
+      - active
+    EnergyDto:
+      type: object
+      properties:
+        delivered:
+          type:
+          - string
+          - 'null'
+          description: 'The actual energy delivered by the resource, in `kWh` or `kVARh`, verified by real-time metering.
+
+            It can be negative if, for example, a resources increases its consumption when a decrease was requested.
+
+
+            This is only available after the activation has been verified, which happens a few minutes after the activation''s time window.'
+          format: decimal
+          example: '5.1'
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+        requested:
+          type: string
+          description: The energy requested by the activation, in `kWh` or `kVARh`, based on an initial estimate of available flexibility.
+          format: decimal
+          example: '5.1'
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+        extra_delivered:
+          type:
+          - string
+          - 'null'
+          description: Extra energy delivered beyond the requested amount for procurements without a delivery limit (in `kWh` or `kVARh`). `null` before verification or for procurements with a fixed delivery limit (where overdelivery is not tracked).
+          format: decimal
+          example: '1.2'
+          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+      required:
+      - delivered
+      - requested
+      - extra_delivered
     ResourceDto:
       type: object
       properties:
@@ -851,24 +773,151 @@ components:
       - created_at
       - modified_at
       - last_seen_at
-    ResourcePowerConstraints:
+    UnauthorizedExceptionDto:
       type: object
       properties:
-        minimum:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Unauthorized
+        error:
           type: string
-          description: Minimum level
-          example: '-5.1'
-          format: decimal
-          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
-        maximum:
-          type: string
-          description: Maximum level
-          example: '5.1'
-          format: decimal
-          pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+          description: Unauthorized
+          example: Unauthorized
+        status_code:
+          type: number
+          description: '401'
+          example: 401
       required:
-      - minimum
-      - maximum
+      - message
+      - error
+      - status_code
+    ConnectionPointResourcesListDto:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total amount of results that match the query
+          minimum: 0
+        items:
+          description: Paginated items
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceDto'
+      required:
+      - total
+      - items
+    UpdateResourceDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Human-readable name for this resource. Useful for reporting, but not required.
+          example: Home Battery
+          minLength: 1
+        external_id:
+          type:
+          - string
+          - 'null'
+          description: Reference of the resource in external system (gateway, API, ...), used for mapping identifiers.
+          example: NCC-1701
+          minLength: 1
+        type:
+          type: string
+          description: Type of energy resource (battery, heat pump, solar, etc.).
+          enum:
+          - static_battery
+          - heat_pump
+          - electric_vehicle
+          - electric_vehicle_charging_point
+          - photovoltaic
+          - wind
+          - group
+          - other
+          - meter
+          example: static_battery
+        power:
+          description: Power constraints for this resource.
+          allOf:
+          - $ref: '#/components/schemas/ResourcePowerDto'
+        capacity:
+          description: 'Capacity constraints for this resource (in kWh).
+
+
+            This property is currently only required for battery resources.'
+          allOf:
+          - $ref: '#/components/schemas/ResourcePowerConstraints'
+        parent_id:
+          type:
+          - string
+          - 'null'
+          description: 'Identifier of the physical parent resource in the site topology.
+
+
+            Set this field to `null` to remove the parent relationship.
+
+
+            Constraints:
+
+            - Parent must exist and belong to the same site
+
+            - Only meter-type resources can be parents
+
+            - Group resources cannot have a parent
+
+            - Hierarchy is limited to 10 levels deep'
+          format: uuid
+        webhooks:
+          description: Webhooks related to this resource, for example to be notified about the acceptance of a bid for this resource.
+          allOf:
+          - $ref: '#/components/schemas/ResourceWebhooksDto'
+        group_id:
+          type:
+          - string
+          - 'null'
+          description: 'Identifier of the resource group that this resource should belong to.
+
+
+            Set this field to `null` to remove a resource from its existing group.'
+          format: uuid
+    ForbiddenExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Insufficient permissions
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
+      required:
+      - message
+      - error
+      - status_code
+    ResourceWebhooksDto:
+      type: object
+      properties:
+        accepted:
+          type: string
+          description: 'Webhook at which you''d like to receive a notification of acceptance for bids made for this resource. For more information on the webhook content, see [the specifications](#tag/accepting_bids/operation/WebhookBidAccepted).
+
+
+            This is optional, and if not provided, activation via MQTT will be used instead. For more information on other notification options, see [this guide](/guides/connect/activating-flexibility/activating).'
+          example: https://domain.tld/path
+          format: uri
     BadRequestExceptionDto:
       type: object
       properties:
@@ -894,55 +943,6 @@ components:
       - message
       - error
       - status_code
-    NotFoundDto_UmVzb3VyY2UgZG9lcyBub3QgZXhpc3Q:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Resource does not exist
-        error:
-          type: string
-          description: Not Found
-          example: Not Found
-        status_code:
-          type: number
-          description: '404'
-          example: 404
-      required:
-      - message
-      - error
-      - status_code
-    ResourceWebhooksDto:
-      type: object
-      properties:
-        accepted:
-          type: string
-          description: 'Webhook at which you''d like to receive a notification of acceptance for bids made for this resource. For more information on the webhook content, see [the specifications](#tag/accepting_bids/operation/WebhookBidAccepted).
-
-
-            This is optional, and if not provided, activation via MQTT will be used instead. For more information on other notification options, see [this guide](/guides/connect/activating-flexibility/activating).'
-          example: https://domain.tld/path
-          format: uri
-    ProviderActivationSummaryListDto:
-      type: object
-      properties:
-        total:
-          type: integer
-          description: Total amount of results that match the query
-          minimum: 0
-        items:
-          description: Activations for the current page
-          type: array
-          items:
-            $ref: '#/components/schemas/ProviderActivationSummaryDto'
-      required:
-      - total
-      - items
   securitySchemes:
     cloud-cloud:
       scheme: bearer

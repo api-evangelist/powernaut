@@ -121,6 +121,44 @@ paths:
       - Markets
 components:
   schemas:
+    MarketActiveDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the market
+        status:
+          type: string
+          description: The site is active on this market.
+          example: active
+          enum:
+          - active
+      required:
+      - name
+      - status
+    NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Site does not exist
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
     UnauthorizedExceptionDto:
       type: object
       properties:
@@ -140,6 +178,44 @@ components:
           type: number
           description: '401'
           example: 401
+      required:
+      - message
+      - error
+      - status_code
+    MarketUnavailableDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the market
+        status:
+          type: string
+          description: This market is not eligible for the site (for example due to technical, or geographical reasons).
+          example: ineligible
+          enum:
+          - ineligible
+      required:
+      - name
+      - status
+    ForbiddenExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Insufficient permissions
+        error:
+          type: string
+          description: Forbidden
+          example: Forbidden
+        status_code:
+          type: number
+          description: '403'
+          example: 403
       required:
       - message
       - error
@@ -202,59 +278,6 @@ components:
       required:
       - name
       - url
-    ForbiddenExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Insufficient permissions
-        error:
-          type: string
-          description: Forbidden
-          example: Forbidden
-        status_code:
-          type: number
-          description: '403'
-          example: 403
-      required:
-      - message
-      - error
-      - status_code
-    MarketUnavailableDto:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the market
-        status:
-          type: string
-          description: This market is not eligible for the site (for example due to technical, or geographical reasons).
-          example: ineligible
-          enum:
-          - ineligible
-      required:
-      - name
-      - status
-    MarketActiveDto:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the market
-        status:
-          type: string
-          description: The site is active on this market.
-          example: active
-          enum:
-          - active
-      required:
-      - name
-      - status
     BadRequestExceptionDto:
       type: object
       properties:
@@ -276,29 +299,6 @@ components:
           type: number
           description: '400'
           example: 400
-      required:
-      - message
-      - error
-      - status_code
-    NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Site does not exist
-        error:
-          type: string
-          description: Not Found
-          example: Not Found
-        status_code:
-          type: number
-          description: '404'
-          example: 404
       required:
       - message
       - error

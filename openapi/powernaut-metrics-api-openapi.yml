@@ -102,6 +102,56 @@ paths:
       - Metrics
 components:
   schemas:
+    MetricsDto:
+      type: object
+      properties:
+        items:
+          type: array
+          description: 'The real-time data, in kilowatts (kW).
+
+
+            The length of the list corresponds to the amount of intervals requested. The granularity of the data is the same as the one requested.
+
+
+            A `null` value indicates that no data was available for that interval.'
+          example:
+          - '5.1'
+          - '5.2'
+          - null
+          - '5.3'
+          maxItems: 48
+          minItems: 1
+          items:
+            type:
+            - string
+            - 'null'
+            format: decimal
+            pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
+      required:
+      - items
+    NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Site does not exist
+        error:
+          type: string
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
+      required:
+      - message
+      - error
+      - status_code
     UnauthorizedExceptionDto:
       type: object
       properties:
@@ -173,56 +223,6 @@ components:
       - message
       - error
       - status_code
-    NotFoundDto_U2l0ZSBkb2VzIG5vdCBleGlzdA:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Site does not exist
-        error:
-          type: string
-          description: Not Found
-          example: Not Found
-        status_code:
-          type: number
-          description: '404'
-          example: 404
-      required:
-      - message
-      - error
-      - status_code
-    MetricsDto:
-      type: object
-      properties:
-        items:
-          type: array
-          description: 'The real-time data, in kilowatts (kW).
-
-
-            The length of the list corresponds to the amount of intervals requested. The granularity of the data is the same as the one requested.
-
-
-            A `null` value indicates that no data was available for that interval.'
-          example:
-          - '5.1'
-          - '5.2'
-          - null
-          - '5.3'
-          maxItems: 48
-          minItems: 1
-          items:
-            type:
-            - string
-            - 'null'
-            format: decimal
-            pattern: ^-?[0-9]{1,15}(.[0-9]{1,6}?)$
-      required:
-      - items
   securitySchemes:
     cloud-cloud:
       scheme: bearer

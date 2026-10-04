@@ -232,7 +232,36 @@ components:
       - message
       - error
       - status_code
-    NotFoundDto_U2Vuc29yIG5vdCBmb3VuZA:
+    SensorReadingDto:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: Start of the 15-minute bucket the reading represents (ISO 8601 UTC).
+          format: date-time
+          example: '2026-01-15T10:00:00Z'
+        value:
+          type: number
+          description: Average of the raw samples the sensor emitted within this 15-minute bucket. The unit is advertised by the sensor metadata endpoint and is the same for every row in a response.
+          example: 612.4
+      required:
+      - timestamp
+      - value
+    SensorMeasurementDto:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Machine-readable name of the measurement channel, used as the field name in raw data (e.g. `irradiance`).
+          example: irradiance
+        unit:
+          type: string
+          description: Physical unit of the measurement, expressed as a short symbol (e.g. `W/m2`).
+          example: W/m2
+      required:
+      - key
+      - unit
+    ForbiddenDto_Rm9yYmlkZGVu:
       type: object
       properties:
         message:
@@ -242,15 +271,15 @@ components:
           - type: array
             items:
               type: string
-          example: Sensor not found
+          example: Forbidden
         error:
           type: string
-          description: Not Found
-          example: Not Found
+          description: Forbidden
+          example: Forbidden
         status_code:
           type: number
-          description: '404'
-          example: 404
+          description: '403'
+          example: 403
       required:
       - message
       - error
@@ -278,20 +307,44 @@ components:
       - message
       - error
       - status_code
-    SensorMeasurementDto:
+    NotFoundDto_U2Vuc29yIG5vdCBmb3VuZA:
       type: object
       properties:
-        key:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example: Sensor not found
+        error:
           type: string
-          description: Machine-readable name of the measurement channel, used as the field name in raw data (e.g. `irradiance`).
-          example: irradiance
-        unit:
-          type: string
-          description: Physical unit of the measurement, expressed as a short symbol (e.g. `W/m2`).
-          example: W/m2
+          description: Not Found
+          example: Not Found
+        status_code:
+          type: number
+          description: '404'
+          example: 404
       required:
-      - key
-      - unit
+      - message
+      - error
+      - status_code
+    SensorReadingsListDto:
+      type: object
+      properties:
+        data:
+          description: Readings for the requested sensor and time window, ordered by `timestamp` ascending. Intervals without a reading are omitted.
+          type: array
+          items:
+            $ref: '#/components/schemas/SensorReadingDto'
+        total:
+          type: integer
+          description: Total number of readings matching the filter across all pages.
+          example: 70080
+      required:
+      - data
+      - total
     ForbiddenExceptionDto:
       type: object
       properties:
@@ -315,21 +368,6 @@ components:
       - message
       - error
       - status_code
-    SensorReadingDto:
-      type: object
-      properties:
-        timestamp:
-          type: string
-          description: Start of the 15-minute bucket the reading represents (ISO 8601 UTC).
-          format: date-time
-          example: '2026-01-15T10:00:00Z'
-        value:
-          type: number
-          description: Average of the raw samples the sensor emitted within this 15-minute bucket. The unit is advertised by the sensor metadata endpoint and is the same for every row in a response.
-          example: 612.4
-      required:
-      - timestamp
-      - value
     BadRequestDto_SW52YWxpZCB0aW1lIHdpbmRvdyBvciBwYWdpbmF0aW9uIHBhcmFtZXRlcnMu:
       type: object
       properties:
@@ -353,69 +391,6 @@ components:
       - message
       - error
       - status_code
-    ForbiddenDto_Rm9yYmlkZGVu:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example: Forbidden
-        error:
-          type: string
-          description: Forbidden
-          example: Forbidden
-        status_code:
-          type: number
-          description: '403'
-          example: 403
-      required:
-      - message
-      - error
-      - status_code
-    BadRequestExceptionDto:
-      type: object
-      properties:
-        message:
-          description: One or more specific error messages
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          example:
-          - Invalid datetime
-          - Invalid page size
-        error:
-          type: string
-          description: Bad Request
-          example: Bad Request
-        status_code:
-          type: number
-          description: '400'
-          example: 400
-      required:
-      - message
-      - error
-      - status_code
-    SensorReadingsListDto:
-      type: object
-      properties:
-        data:
-          description: Readings for the requested sensor and time window, ordered by `timestamp` ascending. Intervals without a reading are omitted.
-          type: array
-          items:
-            $ref: '#/components/schemas/SensorReadingDto'
-        total:
-          type: integer
-          description: Total number of readings matching the filter across all pages.
-          example: 70080
-      required:
-      - data
-      - total
     UnauthorizedDto_VW5hdXRob3JpemVk:
       type: object
       properties:
@@ -463,6 +438,31 @@ components:
       - external_id
       - connection_point_id
       - measurements
+    BadRequestExceptionDto:
+      type: object
+      properties:
+        message:
+          description: One or more specific error messages
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          example:
+          - Invalid datetime
+          - Invalid page size
+        error:
+          type: string
+          description: Bad Request
+          example: Bad Request
+        status_code:
+          type: number
+          description: '400'
+          example: 400
+      required:
+      - message
+      - error
+      - status_code
   securitySchemes:
     cloud-cloud:
       scheme: bearer
